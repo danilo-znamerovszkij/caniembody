@@ -1,12 +1,12 @@
 // Presentation vocabulary. No node imports — shipped to the browser with the matrix island.
 export const STATE_META: Record<string, { label: string; glyph: string; desc: string }> = {
   works: { label: 'works', glyph: '✓', desc: 'Verified running, as documented' },
-  'works-with-caveats': { label: 'works with caveats', glyph: '✓', desc: 'Runs, with a named limitation' },
-  partial: { label: 'partial', glyph: '◐', desc: 'Some capability only' },
-  'not-supported': { label: 'not supported', glyph: '✕', desc: 'Known incompatible, with a stated reason' },
-  planned: { label: 'planned', glyph: '→', desc: 'Upstream has publicly committed' },
-  untested: { label: 'untested', glyph: '○', desc: 'No evidence, but both sides are integrated in LeRobot (inferred, T4). Display-only' },
-  unknown: { label: 'not yet verified', glyph: '·', desc: 'No evidence found yet; no claim either way' },
+  'works-with-caveats': { label: 'works with caveats', glyph: '✓*', desc: 'Runs, with a named limitation' },
+  partial: { label: 'partial', glyph: 'P', desc: 'Some capability only, e.g. training but no documented deployment' },
+  'not-supported': { label: 'not supported', glyph: '×', desc: 'Known incompatible, with a stated reason' },
+  planned: { label: 'planned', glyph: '…', desc: 'Upstream has publicly committed' },
+  untested: { label: 'no verified evidence', glyph: '?', desc: 'No evidence; both sides are available in LeRobot (ecosystem context, not compatibility)' },
+  unknown: { label: 'no verified evidence', glyph: '?', desc: 'No evidence found yet; no claim either way' },
 };
 export const TIER_META: Record<string, { short: string; label: string; desc: string }> = {
   'upstream-documented': { short: 'T1', label: 'upstream documented', desc: 'Official docs, model card or release notes state it' },

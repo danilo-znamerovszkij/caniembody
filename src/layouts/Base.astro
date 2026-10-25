@@ -1,9 +1,14 @@
 ---
-import '@fontsource-variable/geist';
-import '@fontsource-variable/geist-mono';
+import '@fontsource/ibm-plex-sans/400.css';
+import '@fontsource/ibm-plex-sans/500.css';
+import '@fontsource/ibm-plex-sans/600.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
 import '../styles/global.css';
 import { SITE, GH } from '../site.ts';
 import { clip } from '../lib/seo.ts';
+import Logo from '../components/Logo.astro';
+import Icon from '../components/Icon.astro';
 
 interface Props {
   title: string;
@@ -34,8 +39,8 @@ const beacon = import.meta.env.PUBLIC_CF_BEACON;
   <meta name="description" content={description} />
   <link rel="canonical" href={canonical} />
   {noindex && <meta name="robots" content="noindex, follow" />}
-  <meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#1a1916" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#151b23" media="(prefers-color-scheme: dark)" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="sitemap" href="/sitemap-index.xml" />
   <meta property="og:type" content="website" />
@@ -61,17 +66,17 @@ const beacon = import.meta.env.PUBLIC_CF_BEACON;
       <header class="top">
         <div class="wrap">
           <a href="/" class="brand" aria-label={`${SITE.title} home`}>
-            <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <Logo size={20} />
             <span class="brand-text">{SITE.name}</span>
           </a>
           <nav class="nav" aria-label="Primary">
             {nav.map(([href, label]) => (
               <a href={href} aria-current={(href === '/' ? path === '/' : path.startsWith(href)) ? 'page' : undefined}>{label}</a>
             ))}
-            <a href={GH}>GitHub</a>
+            <a href={GH}>GitHub<Icon name="external" /></a>
           </nav>
-          <button class="theme-btn" type="button" aria-label="Toggle colour theme" id="theme">
-            <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm0 1.5v11a5.5 5.5 0 0 1 0-11Z"/></svg>
+          <button class="theme-btn" type="button" aria-label="Switch between light and dark theme" title="Switch theme" id="theme">
+            <span class="moon"><Icon name="moon" /></span><span class="sun"><Icon name="sun" /></span>
           </button>
         </div>
       </header>

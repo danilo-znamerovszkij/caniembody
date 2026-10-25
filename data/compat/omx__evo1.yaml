@@ -1,13 +1,24 @@
 robot: omx
 policy: evo1
-state: partial
-partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+state: works-with-caveats
 framework: lerobot
+caveats:
+  - "Physical-run evidence is post-0.6.1, unreleased LeRobot main (remote-inference docs, PR #4937); no released LeRobot version documents it."
+  - "No source names the robot for the EVO1 run: upstream lists the checkpoint imstevenpmwork/super_chatton_evo1_stage1_pro under Remote HW and says EVO1 checkpoints ran on real robots; OMX is attributed only because that checkpoint was trained solely on an omx_follower dataset."
+  - "No task success rate, trial count or latency is published for this run."
 capabilities:
   train:
     state: works
     evidence:
     - ev-hub-maximellerbach-evo1-omx
+    - ev-hub-imstevenpmwork-evo1-omx
+  inference_real:
+    state: works-with-caveats
+    notes: "Remote-inference hardware run of an OMX-trained EVO1 checkpoint per LeRobot main docs; the robot is not named by the source."
+    evidence:
+    - ev-lerobot-main-remote-readme
+    - ev-lerobot-main-remote-guide
+    - ev-hub-imstevenpmwork-evo1-omx
 evidence:
 - id: ev-hub-maximellerbach-evo1-omx
   tier: community-reported
@@ -15,3 +26,29 @@ evidence:
   url: https://huggingface.co/maximellerbach/omx_pickandplace_evo1
   verified_on: '2026-10-24'
   summary: "config.json type=evo1; train_config.json dataset maximellerbach/omx_pickandplace whose meta/info.json robot_type=omx_follower (50 episodes); 5000 steps."
+- id: ev-hub-imstevenpmwork-evo1-omx
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/imstevenpmwork/super_chatton_evo1_stage1_pro/blob/80cd23cdd4f20ee1d4203888d5d9fa088704d8aa/README.md
+  date: '2026-07-02'
+  verified_on: '2026-10-25'
+  versions: {lerobot: "0.5.2"}
+  summary: "config.json type=evo1 (5000 steps); train_config.json dataset imstevenpmwork/super_chatton whose meta/info.json robot_type=omx_follower (100 episodes, front + wrist cameras, 6-D action). Auto-generated card; its rollout command is a placeholder template."
+- id: ev-lerobot-main-remote-readme
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/huggingface/lerobot/blob/d3793b7e36522321c1c455f0dc4826db3793dceb/src/lerobot/remote_inference/README.md
+  date: '2026-10-14'
+  verified_on: '2026-10-25'
+  versions: {lerobot: "main@d3793b7e36522321c1c455f0dc4826db3793dceb"}
+  summary: "Post-0.6.1 (unreleased main) remote-inference reference: the policy-support table's 'Execution evidence' column lists imstevenpmwork/super_chatton_evo1_stage1_pro under Remote HW. It names the checkpoint, not the robot."
+  quote: "Remote HW: `imstevenpmwork/super_chatton_evo1_stage1_pro`."
+- id: ev-lerobot-main-remote-guide
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/huggingface/lerobot/blob/d3793b7e36522321c1c455f0dc4826db3793dceb/docs/source/remote_inference.mdx
+  date: '2026-10-14'
+  verified_on: '2026-10-25'
+  versions: {lerobot: "main@d3793b7e36522321c1c455f0dc4826db3793dceb"}
+  summary: "Post-0.6.1 (unreleased main) remote-inference user guide: states EVO1 checkpoints have run on real robots through the remote-inference path (robots not named)."
+  quote: "ACT, SmolVLA, XVLA, EVO1 and LaWAM checkpoints have run on real robots through this path."

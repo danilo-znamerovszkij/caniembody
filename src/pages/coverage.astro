@@ -92,7 +92,7 @@ const pct = (n: number, d: number) => (d ? (100 * n) / d : 0);
   .stats span { font-size: 12px; color: var(--fg-3); }
   .bar { display: flex; height: 12px; border-radius: 99px; overflow: hidden; gap: 2px; margin-bottom: 12px; }
   .seg { min-width: 3px; background: var(--fg-4); }
-  .seg[data-s='works'] { background: var(--works); } .seg[data-s='works-with-caveats'] { background: var(--caveat); }
+  .seg[data-s='works'] { background: var(--works); } .seg[data-s='works-with-caveats'] { background: color-mix(in srgb, var(--works) 55%, var(--bg-elev)); }
   .seg[data-s='partial'] { background: var(--partial); } .seg[data-s='not-supported'] { background: var(--nosupport); }
   .seg[data-s='planned'] { background: var(--planned); } .seg[data-s='unknown'] { background: var(--line-2); }
   .tbl.mini { width: auto; min-width: 320px; }

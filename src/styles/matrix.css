@@ -1,7 +1,7 @@
 /* Homepage: inspector (answer) + matrix. Rules: one job first, quiet unknowns, status before provenance. */
 .hero { padding: 28px 0 18px; }
-.hero h1 { font-size: clamp(22px, 2.6vw, 28px); }
-.hero-sub { margin: 6px 0 0; color: var(--fg-2); font-size: 15px; }
+.hero h1 { font-size: 28px; line-height: 34px; }
+.hero-sub { margin: 6px 0 0; color: var(--fg-2); font-size: 16px; line-height: 24px; }
 .hero-meta { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 10px 0 0; font-size: 12.5px; color: var(--fg-3); }
 .hero-meta a { color: var(--fg-2); }
 
@@ -38,14 +38,15 @@
 .mx-q a { color: var(--fg); font-weight: 600; text-decoration: none; }
 .mx-q a:hover { text-decoration: underline; text-decoration-color: var(--accent); }
 .mx-verdict { display: flex; gap: 12px; align-items: center; }
-.mx-vstate { font-size: 18px; font-weight: 600; letter-spacing: -.01em; }
+.mx-vstate { font-size: 22px; line-height: 28px; font-weight: 600; letter-spacing: -.01em; }
 .mx-vtier { margin-top: 4px; }
 .mx-line { margin: 0; font-size: 13px; color: var(--fg-2); line-height: 1.5; }
 .mx-line.num, .mx-line.meta { font-family: var(--mono); font-size: 12px; }
 .mx-line.meta { color: var(--fg-3); }
 .mx-line.warn { color: var(--partial); }
 .mx-line.inf { color: var(--partial); font-style: italic; }
-.mx-line.inferred { color: var(--fg-2); font-style: italic; }
+.mx-line.context { padding: 8px 10px; border-left: 2px solid var(--line-2); background: var(--bg-sunk); }
+.mx-line.context b { font-weight: 500; color: var(--fg); }
 .mx-go { justify-self: start; margin-top: 2px; }
 .mx-list { display: grid; gap: 12px; }
 .mx-lhead { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; color: var(--fg); }
@@ -67,7 +68,7 @@
 .mx-filters summary { list-style: none; display: flex; align-items: center; gap: 6px; height: var(--ctl); padding: 0 12px; border: 1px solid var(--line-2); border-radius: var(--r); background: var(--bg-elev); cursor: pointer; font-size: 13px; font-weight: 500; user-select: none; transition: border-color var(--dur-1) ease; }
 .mx-filters summary:hover, .mx-filters[open] summary { border-color: var(--fg-4); }
 .mx-filters summary::-webkit-details-marker { display: none; }
-.mx-filters .count { font: 600 10.5px/16px var(--mono); min-width: 16px; text-align: center; border-radius: 99px; background: var(--accent); color: #fff; padding: 0 4px; }
+.mx-filters .count { font: 600 11px/16px var(--mono); min-width: 16px; text-align: center; border-radius: var(--r); background: var(--accent); color: var(--accent-ink); padding: 0 4px; }
 .mx-panel { position: absolute; top: calc(100% + 6px); right: 0; width: min(340px, 100%); display: grid; gap: 10px; padding: 14px; background: var(--bg-elev); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow); animation: pop var(--dur-2) var(--ease-out); transform-origin: top right; }
 @keyframes pop { from { opacity: 0; transform: scale(.97) translateY(-2px); } }
 .mx-field { display: grid; gap: 4px; font-size: 12px; color: var(--fg-2); font-weight: 500; }
@@ -75,26 +76,25 @@
 .mx-check input { accent-color: var(--accent); }
 .mx-note { font-size: 12px; color: var(--fg-3); margin: 0; }
 
-.mx-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; margin: 0 0 10px; font-size: 12.5px; color: var(--fg-2); }
-.mx-legend > span { display: inline-flex; align-items: center; gap: 6px; }
-.mx-legend b { font: 500 11.5px var(--mono); color: var(--fg-3); }
-.mx-legend .zero { opacity: .55; }
-.mx-total { margin-left: auto; font-size: 12.5px; color: var(--fg-3); }
+.mx-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; margin: 0 0 10px; font-size: 13px; color: var(--fg-2); }
+.mx-legend > span { display: inline-flex; align-items: center; gap: 4px; }
+.mx-total { margin-left: auto; font-size: 13px; color: var(--fg-3); }
+.mx-total b { color: var(--fg); font-weight: 600; }
 
-/* state swatch: same encoding as a matrix cell (glyph + fill/outline), used in legend, inspector, lists */
-.mx-sw { --c: var(--fg-3); display: inline-grid; place-items: center; width: 20px; height: 18px; border-radius: 4px; font: 600 11px/1 var(--mono); font-style: normal; color: var(--c); flex: none; }
-.mx-sw.big { width: 36px; height: 32px; font-size: 16px; border-radius: 7px; }
+/* status notation: bare marks in a fixed box so every glyph aligns; colour carries meaning, never decoration */
+.mx-sw { --c: var(--fg-3); display: inline-grid; place-items: center; min-width: 20px; height: 18px; font: 600 12.5px/1 var(--mono); font-style: normal; color: var(--c); flex: none; }
+.mx-sw.big { min-width: 36px; height: 32px; font-size: 20px; border: 1px solid var(--line); border-radius: var(--r-lg); }
 
 /* ---------- grid ---------- */
 .mx-scroll { overflow: auto; max-height: calc(100dvh - 140px); border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--bg-elev); overscroll-behavior-x: contain; outline: 0; }
 .mx-table { border-collapse: separate; border-spacing: 0; font-size: 13px; min-width: 100%; }
 .mx-table th { font-weight: 500; }
 .mx-table thead th { position: sticky; top: 0; z-index: 3; background: var(--bg-elev); }
-.mx-fam th { height: 28px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--fg-3); text-align: left; padding: 0 8px; border-bottom: 1px solid var(--line); border-left: 1px solid var(--line); white-space: nowrap; }
+.mx-fam th { height: 28px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .02em; color: var(--fg-3); text-align: left; padding: 0 8px; border-bottom: 1px solid var(--line); border-left: 1px solid var(--line); white-space: nowrap; }
 .mx-pol th { top: 28px; height: 116px; vertical-align: bottom; padding: 0 0 10px; border-bottom: 1px solid var(--line-2); min-width: var(--cell); }
 .mx-pol th a { text-decoration: none; display: flex; justify-content: center; color: var(--fg-2); }
-.mx-pol th span { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 12.5px; font-weight: 500; white-space: nowrap; }
-.mx-pol th a:hover, .mx-pol th.hl a { color: var(--fg); }
+.mx-pol th span { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 13px; font-weight: 500; white-space: nowrap; }
+.mx-pol th a:hover, .mx-pol th.hl a { color: var(--accent); }
 .mx-pol th.hl { box-shadow: inset 0 -2px 0 var(--accent); }
 .mx-fitrow th { top: 144px; height: 26px; border-bottom: 1px solid var(--line-2); text-align: center; padding: 0; }
 .fit { font: 500 10.5px/1 var(--mono); }
@@ -109,26 +109,35 @@
 .mx-rowh { position: sticky; left: 0; z-index: 2; background: var(--bg-elev); text-align: left; padding: 0 12px; height: var(--rowh); white-space: nowrap; border-right: 1px solid var(--line-2); font-size: 13px; }
 .mx-rowh a { text-decoration: none; color: var(--fg); }
 .mx-rowh.hl { box-shadow: inset 2px 0 0 var(--accent); }
-.mx-group th { position: sticky; left: 0; z-index: 2; text-align: left; padding: 14px 12px 6px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--fg-3); background: var(--bg-elev); }
+.mx-group th { position: sticky; left: 0; z-index: 2; text-align: left; padding: 14px 12px 6px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .02em; color: var(--fg-3); background: var(--bg-elev); }
 .mx-group th span { position: sticky; left: 12px; }
 .mx-table td { padding: 2px 3px; text-align: center; height: var(--rowh); }
 .mx-table td.dim { opacity: .3; }
 /* crosshair: tint the inspected row and column */
-.mx-table tbody tr.hl td, .mx-table tbody tr.hl .mx-rowh, .mx-table td.colhl { background: color-mix(in srgb, var(--accent) 6%, var(--bg-elev)); }
+.mx-table tbody tr.hl td, .mx-table tbody tr.hl .mx-rowh, .mx-table td.colhl { background: color-mix(in srgb, var(--accent) 5%, var(--bg-elev)); }
+.mx-rowh.hl a { color: var(--accent); }
 
-/* cells: glyph + fill/outline carry the state; tier, dates and counts live in the inspector */
-.mx-cell { --c: var(--fg-3); position: relative; display: grid; place-items: center; width: 28px; height: 24px; margin: 0 auto; border-radius: 5px; color: var(--c); text-decoration: none; font: 600 12px/1 var(--mono); transition: color var(--dur-2) ease, background-color var(--dur-2) ease, box-shadow var(--dur-1) ease; }
-.mx-cell:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; z-index: 1; }
-.mx-cell.sel { box-shadow: 0 0 0 2px var(--fg); z-index: 1; }
-@media (hover: hover) and (pointer: fine) { .mx-cell:hover { box-shadow: 0 0 0 1.5px var(--c); z-index: 1; } .mx-cell.sel:hover { box-shadow: 0 0 0 2px var(--fg); } }
-.mx-cell[data-s='works'], .mx-sw[data-s='works'] { --c: var(--works); background: var(--works-bg); }
-.mx-cell[data-s='works-with-caveats'], .mx-sw[data-s='works-with-caveats'] { --c: var(--works); background: transparent; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--works) 45%, transparent); }
-.mx-cell[data-s='partial'], .mx-sw[data-s='partial'] { --c: var(--partial); background: var(--partial-bg); }
-.mx-cell[data-s='not-supported'], .mx-sw[data-s='not-supported'] { --c: var(--nosupport); background: var(--nosupport-bg); }
-.mx-cell[data-s='planned'], .mx-sw[data-s='planned'] { --c: var(--planned); background: transparent; box-shadow: inset 0 0 0 1.5px var(--planned); }
-.mx-cell[data-s='untested'], .mx-sw[data-s='untested'] { --c: var(--fg-4); background: transparent; font-size: 13px; font-weight: 400; }
-.mx-cell[data-s='unknown'], .mx-sw[data-s='unknown'] { --c: var(--fg-4); background: transparent; font-size: 16px; font-weight: 400; }
-@media (hover: hover) and (pointer: fine) { .mx-cell[data-s='works-with-caveats']:hover, .mx-cell[data-s='planned']:hover { box-shadow: inset 0 0 0 1.5px var(--c), 0 0 0 1.5px var(--c); } }
+/* cells: the mark only. No per-cell containers; selection is the one strong treatment. */
+.mx-cell { --c: var(--fg-4); position: relative; display: grid; place-items: center; width: 28px; height: 24px; margin: 0 auto; border-radius: var(--r); color: var(--c); text-decoration: none; font: 600 13px/1 var(--mono); transition: color var(--dur-2) ease, background-color var(--dur-1) ease, box-shadow var(--dur-1) ease; }
+.mx-cell:focus-visible { outline: 2px solid var(--focus); outline-offset: 0; z-index: 1; }
+.mx-cell.sel { box-shadow: inset 0 0 0 2px var(--accent); background: var(--accent-soft); z-index: 1; }
+@media (hover: hover) and (pointer: fine) { .mx-cell:hover { background: var(--bg-sunk); } .mx-cell.sel:hover { background: var(--accent-soft); } }
+.mx-cell[data-s='works'], .mx-sw[data-s='works'],
+.mx-cell[data-s='works-with-caveats'], .mx-sw[data-s='works-with-caveats'] { --c: var(--works); }
+.mx-cell[data-s='partial'], .mx-sw[data-s='partial'] { --c: var(--partial); }
+.mx-cell[data-s='not-supported'], .mx-sw[data-s='not-supported'] { --c: var(--nosupport); }
+.mx-cell[data-s='planned'], .mx-sw[data-s='planned'] { --c: var(--planned); }
+.mx-cell[data-s='untested'], .mx-sw[data-s='untested'],
+.mx-cell[data-s='unknown'], .mx-sw[data-s='unknown'] { --c: var(--fg-4); font-weight: 500; }
+.mx-cell[data-s='works'], .mx-cell[data-s='works-with-caveats'] { font-size: 15px; }
+.mx-cell[data-s='works-with-caveats'] { letter-spacing: -.08em; }
+.mx-sw[data-s='works'], .mx-sw[data-s='works-with-caveats'] { font-size: 14px; }
+
+/* full status on hover and keyboard focus: instant, no motion (it follows the pointer across hundreds of cells) */
+.mx-label { position: fixed; z-index: 50; transform: translate(-50%, -100%); padding: 5px 8px; border-radius: var(--r); background: var(--fg); color: var(--bg-elev); font-size: 12px; line-height: 16px; white-space: nowrap; pointer-events: none; box-shadow: var(--shadow); }
+.mx-label.below { transform: translate(-50%, 0); }
+.mx-label b { font-weight: 600; }
+.mx-label .muted { color: color-mix(in srgb, var(--bg-elev) 70%, transparent); }
 .mx-cell .stale { position: absolute; top: -2px; right: -2px; width: 7px; height: 7px; border-radius: 50%; background: var(--partial); box-shadow: 0 0 0 1.5px var(--bg-elev); }
 .mx-cell .disp { position: absolute; top: -2px; left: -2px; width: 7px; height: 7px; transform: rotate(45deg); background: var(--nosupport); box-shadow: 0 0 0 1.5px var(--bg-elev); }
 .mx-foot { margin: 10px 0 0; font-size: 12px; color: var(--fg-3); }

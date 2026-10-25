@@ -1,12 +1,23 @@
 robot: agilex-piper
 policy: diffusion
-state: partial
-partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+state: works-with-caveats
 framework: lerobot
+caveats:
+  - "Community-reported only; not documented upstream or maintainer-tested."
+  - "The only physical run uses PCD-LeRobot, a research codebase with its own vendored LeRobot copy (pyproject version 0.3.4) and its own piper robot type; LeRobot has no built-in Piper robot type."
+  - "The unmodified Diffusion Policy baseline succeeded 15% of the time on one bowl-on-plate task (50 demonstrations, one ROS RGB camera, 10 Hz inference); the trial count is not stated."
 capabilities:
   train:
     state: works
-    evidence: [ev-hub-aachen-diffusion]
+    evidence: [ev-hub-aachen-diffusion, ev-pcd-lerobot-piper-diffusion]
+  inference_real:
+    state: works-with-caveats
+    notes: "15% baseline success on one task; trial count not stated."
+    evidence: [ev-pcd-lerobot-piper-diffusion]
+  teleop_record:
+    state: works
+    notes: "Leader-follower recording with --robot.type=piper_follower and --teleop.type=piper_leader in the PCD-LeRobot codebase."
+    evidence: [ev-pcd-lerobot-piper-diffusion]
 evidence:
   - id: ev-hub-aachen-diffusion
     tier: community-reported
@@ -15,3 +26,12 @@ evidence:
     date: 2026-10-20
     verified_on: 2026-10-24
     summary: "config.json type=diffusion; trained on Samisaliveagain/piper-hexagonal-bolt-insertion-100-demos-v1 whose meta/info.json robot_type=piper_follower. Card states it has not yet been evaluated on the robot."
+  - id: ev-pcd-lerobot-piper-diffusion
+    tier: community-reported
+    type: source-code
+    url: https://github.com/pcd-robot/PCD-LeRobot/blob/519b4a814e85bf9b786677d90b0ff07218729bb2/README.md
+    date: 2025-11-25
+    verified_on: 2026-10-25
+    versions: {lerobot: "0.3.4 (vendored copy in PCD-LeRobot)"}
+    summary: "README of the Policy Contrastive Decoding (PCD) authors' LeRobot-based code gives AgileX PiPER recording, Diffusion Policy training and 10 Hz on-robot inference commands; its real-robot results table reports 15% success for the plain Diffusion Policy (45% with PCD), without a trial count."
+    quote: "We designed a \"place bowl on plate\" task using an AGILEX PIPER robotic arm, collected 50 demonstration trajectories and trained a Diffusion Policy from scratch."

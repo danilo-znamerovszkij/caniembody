@@ -1,0 +1,31 @@
+robot: omx
+policy: multitask-dit
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+caveats:
+  - "LeRobot main's (post-0.6.1) remote-inference runner does not yet support Multi-task DiT: its history/queue preparation needs adaptation to the current-observation contract."
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-imstevenpmwork-dit-omx
+evidence:
+- id: ev-hub-imstevenpmwork-dit-omx
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/imstevenpmwork/dit_super_chatton_4549-ema/blob/9360c6071fb6dc944dc4db0612268d366cf1ac67/README.md
+  date: '2026-09-08'
+  verified_on: '2026-10-25'
+  versions: {lerobot: "0.6.2 (unreleased dev version per card; latest release is 0.6.1)"}
+  summary: "config.json type=multi_task_dit (20000 steps); train_config.json dataset imstevenpmwork/super_chatton whose meta/info.json robot_type=omx_follower (100 episodes, front + wrist cameras). Auto-generated card with a placeholder rollout command and no evaluation results."
+  quote: "- **Robot type:** `omx_follower`"
+- id: ev-lerobot-main-remote-readme
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/huggingface/lerobot/blob/d3793b7e36522321c1c455f0dc4826db3793dceb/src/lerobot/remote_inference/README.md
+  date: '2026-10-14'
+  verified_on: '2026-10-25'
+  versions: {lerobot: "main@d3793b7e36522321c1c455f0dc4826db3793dceb"}
+  summary: "Post-0.6.1 (unreleased main) remote-inference reference: Diffusion, Multi-task DiT and VQ-BeT need sampling/preparation and horizon adaptation before the remote runner can serve them."
+  quote: "Default history and/or per-step queue preparation do not satisfy the direct current-observation contract."

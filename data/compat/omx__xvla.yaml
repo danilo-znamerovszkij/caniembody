@@ -1,14 +1,25 @@
 robot: omx
 policy: xvla
-state: partial
-partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+state: works-with-caveats
 framework: lerobot
+caveats:
+  - "Physical-run evidence is post-0.6.1, unreleased LeRobot main (remote-inference docs, PR #4937); no released LeRobot version documents it."
+  - "The upstream support table names the checkpoint (imstevenpmwork/xvla_super_chatton_2), not the robot; OMX comes from that checkpoint's training dataset (robot_type=omx_follower) and from the PR's 'OMX/XVLA checks' hardware note."
+  - "Upstream notes X-VLA runs chunk-only through the remote-inference runner; no task success rate, trial count or latency is published."
 capabilities:
   train:
     state: works
     evidence:
     - ev-hub-mingminng-xvla-omx
     - ev-hub-mingminng-xvla-omx-2
+    - ev-hub-imstevenpmwork-xvla-omx
+  inference_real:
+    state: works-with-caveats
+    notes: "Remote-inference hardware rollouts (pause/resume, starvation recovery, DAgger-style recording) per LeRobot main docs and PR #4937; no success metrics."
+    evidence:
+    - ev-lerobot-main-remote-readme
+    - ev-lerobot-main-remote-guide
+    - ev-lerobot-pr-4937
 evidence:
 - id: ev-hub-mingminng-xvla-omx
   tier: community-reported
@@ -22,3 +33,38 @@ evidence:
   url: https://huggingface.co/Mingminng/xvla_omx_pick_motor2
   verified_on: '2026-10-24'
   summary: "config.json type=xvla; train_config.json dataset Mingminng/omx_pick_motor7 whose meta/info.json robot_type=omx_follower (10 episodes); fine-tuned from lerobot/xvla-base."
+- id: ev-hub-imstevenpmwork-xvla-omx
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/imstevenpmwork/xvla_super_chatton_2/blob/36fbf138211f3084e8bcd1c1c9a506ab522bb85d/README.md
+  date: '2026-07-20'
+  verified_on: '2026-10-25'
+  versions: {lerobot: "0.6.1"}
+  summary: "config.json type=xvla (fine-tuned from lerobot/xvla-base, 10000 steps); train_config.json dataset imstevenpmwork/super_chatton whose meta/info.json robot_type=omx_follower (100 episodes, front + wrist cameras). Auto-generated card; its rollout command is a placeholder template."
+- id: ev-lerobot-main-remote-readme
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/huggingface/lerobot/blob/d3793b7e36522321c1c455f0dc4826db3793dceb/src/lerobot/remote_inference/README.md
+  date: '2026-10-14'
+  verified_on: '2026-10-25'
+  versions: {lerobot: "main@d3793b7e36522321c1c455f0dc4826db3793dceb"}
+  summary: "Post-0.6.1 (unreleased main) remote-inference reference: the policy-support table's 'Execution evidence' column lists imstevenpmwork/xvla_super_chatton_2 under Remote HW. It names the checkpoint, not the robot."
+  quote: "Remote HW: `imstevenpmwork/xvla_super_chatton_2`."
+- id: ev-lerobot-main-remote-guide
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/huggingface/lerobot/blob/d3793b7e36522321c1c455f0dc4826db3793dceb/docs/source/remote_inference.mdx
+  date: '2026-10-14'
+  verified_on: '2026-10-25'
+  versions: {lerobot: "main@d3793b7e36522321c1c455f0dc4826db3793dceb"}
+  summary: "Post-0.6.1 (unreleased main) remote-inference user guide: states XVLA checkpoints have run on real robots through the remote-inference path (robots not named)."
+  quote: "ACT, SmolVLA, XVLA, EVO1 and LaWAM checkpoints have run on real robots through this path."
+- id: ev-lerobot-pr-4937
+  tier: community-reported
+  type: github-pr
+  url: https://github.com/huggingface/lerobot/pull/4937
+  date: '2026-10-13'
+  verified_on: '2026-10-25'
+  versions: {lerobot: "main@ae2b57f12223c8c5184fcd814eb63cd9ce7de203"}
+  summary: "Remote-inference PR by imstevenpmwork (LeRobot collaborator; merged into main as ae2b57f, after v0.6.1) names OMX/XVLA for its hardware checks of pause/resume, starvation recovery and recording strategies."
+  quote: "OMX/XVLA checks covered pause/resume, starvation recovery/expiry and Sentry, Highlight, Episodic and corrections-only DAgger recording; uploaded datasets and videos were inspected."

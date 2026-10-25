@@ -68,7 +68,7 @@ const desc = inGrid
           </table></div>
         ) : <p class="empty">No policy has sourced evidence on {r.name} yet, so every cell is unknown.</p>}
         {inGrid && untested.length > 0 && (
-          <p class="small muted" style="margin-top:12px"><span class="st" data-s="untested" aria-hidden="true">○</span> Untested, but both sides are in LeRobot (inferred): {untested.map(({ p }, i) => <>{i ? ', ' : ''}<a href={`/compat/${r.id}/${p.id}`}>{p.name}</a></>)}.</p>
+          <p class="small muted" style="margin-top:12px"><span class="st" data-s="untested" aria-hidden="true">?</span> No verified evidence, but both are available in LeRobot (ecosystem context): {untested.map(({ p }, i) => <>{i ? ', ' : ''}<a href={`/compat/${r.id}/${p.id}`}>{p.name}</a></>)}.</p>
         )}
         {inGrid && unknown.length > 0 && (
           <p class="small muted" style="margin-top:12px">Not yet verified: {unknown.map(({ p }, i) => <>{i ? ', ' : ''}<a href={`/compat/${r.id}/${p.id}`}>{p.name}</a></>)}. <a href="/methodology#contribute">Have evidence?</a></p>

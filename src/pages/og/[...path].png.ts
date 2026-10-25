@@ -4,9 +4,8 @@ import { loadAll, pagePairs, stats, inferredPair } from '../../lib/data.ts';
 import { STATE_META, TIER_META, fmtParams } from '../../lib/ui.ts';
 import { SITE } from '../../site.ts';
 
-const C: Record<string, [string, string]> = {
-  works: ['#2f8f5b', '#e1f1e6'], 'works-with-caveats': ['#6d8f2a', '#edf2dc'], partial: ['#b7791f', '#f8ecd4'],
-  'not-supported': ['#b83a3a', '#f6dfdc'], planned: ['#4a6fb5', '#e2e9f6'], untested: ['#67665f', '#efede6'], unknown: ['#8a8880', '#efede6'],
+const C: Record<string, string> = {
+  works: '#1d7a4b', 'works-with-caveats': '#1d7a4b', partial: '#94590a', 'not-supported': '#b93a30', planned: '#2457d6', untested: '#526170', unknown: '#526170',
 };
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 type Card = { kicker: string; title: string; state?: string; lines: string[] };
@@ -18,17 +17,17 @@ function wrap(s: string, max: number) {
 }
 function svg({ kicker, title, state, lines }: Card) {
   const t = wrap(title, 30);
-  const [fg, bg] = C[state ?? 'unknown'];
+  const fg = C[state ?? 'unknown'];
   const ty = 250;
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630">
-  <rect width="1200" height="630" fill="#faf9f5"/>
-  <rect x="0" y="0" width="1200" height="6" fill="#d97757"/>
-  <g transform="translate(72,64)"><rect width="20" height="20" rx="4" fill="#141413"/><rect x="24" width="20" height="20" rx="4" fill="#d97757"/><rect x="1" y="25" width="18" height="18" rx="3.5" fill="none" stroke="#a3a19a" stroke-width="2" stroke-dasharray="4 3"/><rect x="24" y="24" width="20" height="20" rx="4" fill="#73726c" opacity=".55"/>
-  <text x="64" y="30" font-family="DejaVu Sans Mono, Menlo, monospace" font-size="26" font-weight="700" fill="#141413">${SITE.name}</text></g>
-  <text x="72" y="168" font-family="DejaVu Sans Mono, Menlo, monospace" font-size="24" fill="#73726c" letter-spacing="1">${esc(kicker)}</text>
-  ${t.map((l, i) => `<text x="72" y="${ty + i * 72}" font-family="Helvetica, Arial, DejaVu Sans, sans-serif" font-size="64" font-weight="700" fill="#141413" letter-spacing="-1.5">${esc(l)}</text>`).join('')}
-  ${state ? `<g transform="translate(72,${ty + t.length * 72 + 10})"><rect width="${88 + STATE_META[state].label.length * 22}" height="64" rx="12" fill="${bg}"/><text x="24" y="44" font-family="DejaVu Sans Mono, Menlo, monospace" font-size="32" font-weight="700" fill="${fg}">${esc(STATE_META[state].glyph)} ${esc(STATE_META[state].label)}</text></g>` : ''}
-  ${lines.map((l, i) => `<text x="72" y="${560 - (lines.length - 1 - i) * 36}" font-family="DejaVu Sans Mono, Menlo, monospace" font-size="24" fill="#3d3d3a">${esc(l)}</text>`).join('')}
+  <rect width="1200" height="630" fill="#f7f8fa"/>
+  <rect x="0" y="0" width="1200" height="6" fill="#2457d6"/>
+  <g transform="translate(72,58)"><g fill="none" stroke="#18212b" stroke-width="2.6"><rect x="1.3" y="1.3" width="16" height="16" rx="2.5"/><rect x="24.7" y="1.3" width="16" height="16" rx="2.5"/><rect x="1.3" y="24.7" width="16" height="16" rx="2.5"/></g><rect x="23" y="23" width="19.4" height="19.4" rx="3" fill="#2457d6"/>
+  <text x="62" y="31" font-family="IBM Plex Sans, Helvetica, Arial, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#18212b">${SITE.name}</text></g>
+  <text x="72" y="168" font-family="IBM Plex Mono, DejaVu Sans Mono, Menlo, monospace" font-size="24" fill="#526170" letter-spacing="1">${esc(kicker)}</text>
+  ${t.map((l, i) => `<text x="72" y="${ty + i * 72}" font-family="IBM Plex Sans, Helvetica, Arial, DejaVu Sans, sans-serif" font-size="64" font-weight="600" fill="#18212b" letter-spacing="-1">${esc(l)}</text>`).join('')}
+  ${state ? `<text x="72" y="${ty + t.length * 72 + 40}" font-family="IBM Plex Mono, DejaVu Sans Mono, Menlo, monospace" font-size="36" font-weight="600" fill="${fg}">${esc(STATE_META[state].glyph)}  ${esc(STATE_META[state].label)}</text>` : ''}
+  ${lines.map((l, i) => `<text x="72" y="${560 - (lines.length - 1 - i) * 36}" font-family="IBM Plex Mono, DejaVu Sans Mono, Menlo, monospace" font-size="24" fill="#33404d">${esc(l)}</text>`).join('')}
 </svg>`;
 }
 

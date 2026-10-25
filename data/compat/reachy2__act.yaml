@@ -1,13 +1,20 @@
 robot: reachy2
 policy: act
-state: partial
-partial_scope: "Training ACT on a Reachy 2 dataset recorded with lerobot-record is documented upstream. The page's evaluation step runs lerobot-eval with --robot.* flags, but lerobot-eval in v0.6.1 evaluates in a simulation env (its config has an env field and no robot field), so on-robot inference is not validly documented."
+state: works-with-caveats
 framework: lerobot
 framework_version_tested: "0.6.1"
+caveats:
+  - "On-robot inference is community-reported only. Upstream documents training and recording; its evaluation step uses lerobot-eval, which in v0.6.1 evaluates in a simulation env, so it does not document on-robot inference."
+  - "The only result is a score of 5 under a 'Performance (10/10)' header in a community README, with no stated protocol; the README does not say explicitly that the score came from physical trials, though its documented ACT deployment targets the physical robot r2-0008."
+  - "Tested configuration: both arms, neck and torso camera at 640x480; mobile base, antennas and teleop cameras disabled. The LeRobot version used is not stated."
 capabilities:
   train:
     state: works
-    evidence: [ev-lerobot-reachy2-train]
+    evidence: [ev-lerobot-reachy2-train, ev-hub-erlhub-act-reachy2]
+  inference_real:
+    state: works-with-caveats
+    notes: "Community deployment via lerobot-record --policy.path on a physical Reachy 2; scored 5 on an undefined /10 scale."
+    evidence: [ev-reachy-pollen-act-deploy, ev-reachy-pollen-registry]
   teleop_record:
     state: works
     notes: "Recording uses --robot.type=reachy2 with --teleop.type=reachy2_teleoperator; the page also documents Pollen's own VR data-acquisition app."
@@ -40,3 +47,26 @@ evidence:
     versions: {lerobot: "0.6.1"}
     summary: "In v0.6.1, EvalPipelineConfig (the lerobot-eval CLI config) has a required env field and no robot field."
     quote: "env: envs.EnvConfig\n    eval: EvalConfig = field(default_factory=EvalConfig)\n    policy: PreTrainedConfig | None = None"
+  - id: ev-hub-erlhub-act-reachy2
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/erl-hub/reachy-act-execute-pick-and-place
+    date: 2026-04-13
+    verified_on: 2026-10-25
+    summary: "config.json type=act; train_config.json dataset erl-hub/reachy-pick-and-place-images whose meta/info.json robot_type=reachy2."
+  - id: ev-reachy-pollen-act-deploy
+    tier: community-reported
+    type: source-code
+    url: https://github.com/NikolaRaicevic2001/reachy_pollen/blob/ae76a3eedbe07a7a900262b31e986e2e4bec45a2/README.md
+    date: 2026-04-14
+    verified_on: 2026-10-25
+    summary: "Community README's 'Deploying policies on reachy2' section runs lerobot-record with --robot.type=reachy2 on robot r2-0008 at 192.168.10.172 (the same address its VR-teleoperation section uses for the physical robot) and --policy.path=erl-hub/reachy-act-execute-pick-and-place."
+    quote: "--policy.path=erl-hub/reachy-act-execute-pick-and-place"
+  - id: ev-reachy-pollen-registry
+    tier: community-reported
+    type: source-code
+    url: https://github.com/NikolaRaicevic2001/reachy_pollen/blob/7edb3a080d1cd68d88a0f03a518589260e9110dd/README.md
+    date: 2026-08-21
+    verified_on: 2026-10-25
+    summary: "The README's policy registry ('policies you train or deploy') scores the ACT run trained on erl-hub/reachy-pick-and-place-images 5 under a 'Performance (10/10)' header; no scoring protocol is given."
+    quote: "| `act` | Action Chunking Transformer (`--policy.type=act`) | 250MB | 2026-04-14_01-02-26-erl-hub-reachy-pick-and-place-images_s7908 | CPU; Intel Core 9 (RTX GeForce 2080+) | 5 |"

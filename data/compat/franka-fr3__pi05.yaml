@@ -1,12 +1,20 @@
 robot: franka-fr3
 policy: pi05
-state: partial
-partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
-framework: lerobot
+state: works-with-caveats
+framework: openpi
+caveats:
+  - "Community-reported only; not documented upstream or maintainer-tested."
+  - "The physical deployment is through OpenPI (pi05_droid config, 15 Hz: seven FR3 joint velocities plus gripper closedness) with the authors' guarded client; the LeRobot evidence here is a training checkpoint only."
+  - "No aggregate success metrics are published; the authors withhold them until their v3_12000 validation ledger is reviewed, and the only public rollout evidence is a linked demo video."
+  - "The checkpoint is tied to one cube pick-and-place workcell (two RealSense cameras, its calibration and safety guards) and the authors say not to use it on another workcell without commissioning."
 capabilities:
   train:
     state: works
-    evidence: [ev-hub-bekhzod-pi05]
+    evidence: [ev-hub-bekhzod-pi05, ev-card-msbutt1-pi05-fr3]
+  inference_real:
+    state: works-with-caveats
+    notes: "Guarded live evaluation on a Franka Research 3 via OpenPI serve_policy; no success rate published."
+    evidence: [ev-card-msbutt1-pi05-fr3, ev-repo-msbutt1-fr3]
 evidence:
   - id: ev-hub-bekhzod-pi05
     tier: community-reported
@@ -15,3 +23,19 @@ evidence:
     date: 2026-07-17
     verified_on: 2026-10-24
     summary: "config.json type=pi05 (pretrained_path lerobot/pi05_base); train_config dataset Bekhzod/fr3_pickplace_fixed_goal_robustness_recovery_merged_data (350 episodes, front + top cameras), whose meta/info.json robot_type=FR3WMS. Auto-generated card, no rollout results."
+  - id: ev-card-msbutt1-pi05-fr3
+    tier: community-reported
+    type: model-card
+    url: https://huggingface.co/msbutt1/pi0.5-fr3-v3-pick-place/blob/46173e13f41e5dc8dba8e1ee29f4fbf71a95c236/README.md
+    date: 2026-07-22
+    verified_on: 2026-10-25
+    summary: "OpenPI checkpoint card: pi0.5-DROID fine-tuned on a Franka Research 3 (FR3, not Panda) cube pick-and-place dataset; deployment uses a local FR3 reference streamer, workspace/joint guards, grasp verification and an E-stop; aggregate success metrics intentionally not reported."
+    quote: "This checkpoint is a pi0.5-DROID policy fine-tuned for real-world\npick-and-place with a Franka Research 3 (FR3) robot."
+  - id: ev-repo-msbutt1-fr3
+    tier: community-reported
+    type: source-code
+    url: https://github.com/msbutt1/franka-fr3-robot-learning/blob/14760a4f6738e393ea9815d539b8ac05e4ad88a2/README.md
+    date: 2026-10-02
+    verified_on: 2026-10-25
+    summary: "The authors' FR3 repo documents serving this checkpoint with OpenPI and running it from a libfranka/FCI robot workstation, and links a Live Policy Evaluations wiki page whose 'Pick and Place' entry is a demo video (title read via oEmbed; footage not independently reviewed). It also warns the bracket/bolt collection config uses a different absolute-joint action schema."
+    quote: "The released cube policy and the dated bracket evaluation use pi0.5-DROID\njoint-velocity actions: seven FR3 joint velocities plus gripper closedness at\n15 Hz."

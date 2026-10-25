@@ -17,9 +17,10 @@ export interface MData {
 const TIER_ORDER = ['upstream-documented', 'maintainer-tested', 'community-reported', 'inferred'];
 const SHOWN_STATES = ['works', 'works-with-caveats', 'partial', 'not-supported', 'planned'];
 const NO_EVIDENCE = new Set(['untested', 'unknown']);
-type Filters = { q: string; compute: string; r: string; p: string; fw: string; cls: string; fam: string; oss: boolean; price: string; hide: boolean; tier: string; sensor: string };
-const DEFAULTS: Filters = { q: '', compute: '', r: '', p: '', fw: '', cls: '', fam: '', oss: false, price: '', hide: false, tier: '', sensor: '' };
-const FILTER_KEYS = ['fw', 'cls', 'fam', 'oss', 'price', 'hide', 'tier', 'sensor'] as const;
+type Filters = { q: string; compute: string; r: string; p: string; fw: string; cls: string; fam: string; oss: boolean; price: string; hide: boolean; tier: string; sensor: string; st: string };
+const DEFAULTS: Filters = { q: '', compute: '', r: '', p: '', fw: '', cls: '', fam: '', oss: false, price: '', hide: false, tier: '', sensor: '', st: '' };
+const FILTER_KEYS = ['st', 'fw', 'cls', 'fam', 'oss', 'price', 'hide', 'tier', 'sensor'] as const;
+const STATUS_FILTER: [string, string][] = [['works', 'Works'], ['works-with-caveats', 'Works with caveats'], ['partial', 'Partial'], ['not-supported', 'Not supported'], ['planned', 'Planned'], ['untested', 'No verified evidence, both in LeRobot'], ['unknown', 'No verified evidence, other']];
 
 function readUrl(): Filters {
   const u = new URLSearchParams(location.search);
@@ -42,7 +43,7 @@ const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matche
 export default function Matrix({ data }: { data: MData }) {
   const [f, setF] = useState<Filters>(DEFAULTS);
   const [ready, setReady] = useState(false);
-  const [hover, setHover] = useState<{ r: string; p: string } | null>(null);
+  const [hover, setHover] = useState<{ r: string; p: string; x: number; y: number; below: boolean } | null>(null);
   const [focus, setFocus] = useState<[number, number]>([0, 0]);
   const tableRef = useRef<HTMLTableElement>(null);
   const inspectorRef = useRef<HTMLElement>(null);
@@ -100,6 +101,10 @@ export default function Matrix({ data }: { data: MData }) {
 
   // crosshair: hovered cell wins, else the selected one
   const hl = hover ?? (f.r || f.p ? { r: f.r, p: f.p } : null);
+  const inspect = (r: string, p: string, el: HTMLElement) => {
+    const b = el.getBoundingClientRect(), below = b.top < 200;
+    setHover({ r, p, x: b.left + b.width / 2, y: below ? b.bottom + 6 : b.top - 6, below });
+  };
 
   // ---- selection ----
   const select = (r: string, p: string) => {
@@ -172,14 +177,15 @@ export default function Matrix({ data }: { data: MData }) {
         <div class="mx-main">
           <div class="mx-toolbar" role="search">
             <label class="mx-search">
-              <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M7 1.5a5.5 5.5 0 1 0 3.4 9.83l3.13 3.14a.75.75 0 1 0 1.06-1.06l-3.13-3.14A5.5 5.5 0 0 0 7 1.5ZM3 7a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z"/></svg>
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
               <span class="sr-only">Filter rows and columns by name</span>
               <input type="search" placeholder="Filter robots and policies" value={f.q} onInput={(e) => set('q', (e.target as HTMLInputElement).value)} />
               <kbd aria-hidden="true">/</kbd>
             </label>
             <details class="mx-filters">
-              <summary>Filters{activeFilters ? <span class="count">{activeFilters}</span> : null}</summary>
+              <summary><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8.5V19l-4 2v-7.5z" /></svg>Filters{activeFilters ? <span class="count">{activeFilters}</span> : null}</summary>
               <div class="mx-panel">
+                <Sel label="Status" v={f.st} on={(v) => set('st', v)} opts={STATUS_FILTER.map(([id, name]) => [id, `${name} (${counts[id] ?? 0})`])} />
                 <Sel label="Framework" v={f.fw} on={(v) => set('fw', v)} opts={data.frameworks.map((x) => [x.id, x.name])} />
                 <Sel label="Robot class" v={f.cls} on={(v) => set('cls', v)} opts={CLASS_ORDER.filter((c) => data.robots.some((r) => r.class === c)).map((c) => [c, CLASS_LABEL[c]])} />
                 <Sel label="Policy family" v={f.fam} on={(v) => set('fam', v)} opts={FAMILY_ORDER.filter((x) => data.policies.some((p) => FAMILY_LABEL[p.family] === x)).map((x) => [x, x])} />
@@ -191,16 +197,15 @@ export default function Matrix({ data }: { data: MData }) {
                 <label class="mx-check"><input type="checkbox" checked={f.oss} onChange={(e) => set('oss', (e.target as HTMLInputElement).checked)} /> Open hardware and open weights only</label>
                 <label class="mx-check"><input type="checkbox" checked={f.hide} onChange={(e) => set('hide', (e.target as HTMLInputElement).checked)} /> Hide rows and columns with no evidence</label>
                 {f.price ? <p class="mx-note">Robots without a sourced price are hidden while a price ceiling is set.</p> : null}
-                <button type="button" class="btn" onClick={() => setF((o) => ({ ...o, fw: '', cls: '', fam: '', oss: false, price: '', hide: false, tier: '', sensor: '' }))}>Reset filters</button>
+                <button type="button" class="btn" onClick={() => setF((o) => ({ ...o, st: '', fw: '', cls: '', fam: '', oss: false, price: '', hide: false, tier: '', sensor: '' }))}>Reset filters</button>
               </div>
             </details>
           </div>
 
           <div class="mx-legend" aria-label="Legend">
-            {[...SHOWN_STATES, 'untested', 'unknown'].map((s) => (
-              <span class={counts[s] ? '' : 'zero'}><i class="mx-sw" data-s={s} aria-hidden="true">{STATE_META[s].glyph}</i>{s === 'unknown' ? 'not yet verified' : s === 'untested' ? 'untested, both in LeRobot' : STATE_META[s].label}<b>{counts[s] ?? 0}</b></span>
-            ))}
-            <span class="mx-total">{withEvidence} of {total} with evidence</span>
+            {SHOWN_STATES.filter((x) => counts[x]).map((x) => <span><i class="mx-sw" data-s={x} aria-hidden="true">{STATE_META[x].glyph}</i>{STATE_META[x].label}</span>)}
+            <span><i class="mx-sw" data-s="unknown" aria-hidden="true">?</i>no verified evidence</span>
+            <span class="mx-total"><b class="tnum">{withEvidence} / {total}</b> pairs have evidence · <a href="/coverage">Coverage</a></span>
           </div>
 
           {rows.length && cols.length ? (
@@ -235,7 +240,7 @@ export default function Matrix({ data }: { data: MData }) {
                           <th scope="row" class={`mx-rowh${rowHl ? ' hl' : ''}`}><a href={`/robot/${r.id}`} tabIndex={-1}>{r.name}</a></th>
                           {cols.map((p, ci) => {
                             const { c, s, demoted } = view(r.id, p.id);
-                            const dim = c?.t ? TIER_ORDER.indexOf(c.t) > minTier : false;
+                            const dim = (c?.t && c.s !== 'untested' ? TIER_ORDER.indexOf(c.t) > minTier : !!f.tier) || (!!f.st && s !== f.st);
                             const sel = f.r === r.id && f.p === p.id;
                             return (
                               <td class={`${firstOfFam.has(p.id) ? 'gstart' : ''}${dim ? ' dim' : ''}${hl?.p === p.id ? ' colhl' : ''}`}>
@@ -244,9 +249,9 @@ export default function Matrix({ data }: { data: MData }) {
                                   tabIndex={focus[0] === ri && focus[1] === ci ? 0 : -1}
                                   aria-label={cellLabel(p.name, r.name, s, c?.t) + (demoted ? `, demoted for ${compute!.name}` : '') + (c?.stale ? ', stale' : '')}
                                   aria-current={sel ? 'true' : undefined}
-                                  title={`${p.name} on ${r.name}: ${s === 'unknown' ? 'not yet verified' : STATE_META[s].label}`}
-                                  onMouseEnter={() => setHover({ r: r.id, p: p.id })}
-                                  onFocus={() => { setFocus([ri, ci]); setHover({ r: r.id, p: p.id }); }}
+                                  onMouseEnter={(e) => inspect(r.id, p.id, e.currentTarget)}
+                                  onFocus={(e) => { setFocus([ri, ci]); inspect(r.id, p.id, e.currentTarget); }}
+                                  onBlur={() => setHover(null)}
                                   onClick={(e) => onCellClick(e as unknown as MouseEvent, r.id, p.id)}
                                   onKeyDown={(e) => { if (e.key === 'Enter' && !sel) { e.preventDefault(); select(r.id, p.id); } }}
                                 >
@@ -267,7 +272,16 @@ export default function Matrix({ data }: { data: MData }) {
           ) : (
             <div class="empty">Nothing matches. <button type="button" class="btn" onClick={() => setF({ ...DEFAULTS, compute: f.compute })}>Clear filter and search</button></div>
           )}
-          <p class="mx-foot">Click a cell for its answer and evidence. Arrow keys move through the grid; Enter selects. <span class="stale-key" aria-hidden="true" /> stale or version drift · <span class="disp-key" aria-hidden="true" /> open dispute.</p>
+          {hover && (() => {
+            const hr = robotById.get(hover.r), hp = policyById.get(hover.p), hv = view(hover.r, hover.p);
+            return hr && hp ? (
+              <div class={`mx-label${hover.below ? ' below' : ''}`} style={{ left: `${hover.x}px`, top: `${hover.y}px` }} role="tooltip">
+                <b>{STATE_META[hv.s].label[0].toUpperCase() + STATE_META[hv.s].label.slice(1)}</b> · {hp.name} on {hr.name}
+                {hv.c?.t && hv.s !== 'untested' ? <span class="muted"> · {TIER_META[hv.c.t].short}</span> : null}
+              </div>
+            ) : null;
+          })()}
+          <p class="mx-foot">Hover or focus a cell for its status; click or press Enter for the evidence. Arrow keys move through the grid. <span class="stale-key" aria-hidden="true" /> stale or version drift · <span class="disp-key" aria-hidden="true" /> open dispute · <a href="/methodology#states">Full key</a></p>
         </div>
       </div>
     </div>
@@ -282,13 +296,14 @@ function CellAnswer({ v, r, p, compute }: { v: ReturnType<any>; r: MRobot; p: MP
       <div class="mx-verdict">
         <i class="mx-sw big" data-s={s} aria-hidden="true">{STATE_META[s].glyph}</i>
         <div>
-          <div class="mx-vstate">{s === 'unknown' ? 'Not yet verified' : s === 'untested' ? 'Untested' : STATE_META[s].label[0].toUpperCase() + STATE_META[s].label.slice(1)}</div>
-          {c?.t && <div class="mx-vtier"><span class="tier" data-t={c.t}>{TIER_META[c.t].short} · {TIER_META[c.t].label}</span></div>}
+          <div class="mx-vstate">{STATE_META[s].label[0].toUpperCase() + STATE_META[s].label.slice(1)}</div>
+          {c?.t && s !== 'untested' && <div class="mx-vtier"><span class="tier" data-t={c.t}>{TIER_META[c.t].short} · {TIER_META[c.t].label}</span></div>}
         </div>
       </div>
       {demoted && <p class="mx-line warn">Shown as partial: “{STATE_META[c!.s].label}” in general, but not on {compute!.name}.</p>}
-      {c?.caveat && <p class={`mx-line${s === 'untested' ? ' inferred' : ''}`}>{c.caveat}</p>}
-      {!c && <p class="mx-line muted">No published evidence found yet, so this makes no claim either way.</p>}
+      {c?.caveat && s !== 'untested' && <p class="mx-line">{c.caveat}</p>}
+      {s === 'untested' && <p class="mx-line context"><b>Ecosystem context, not compatibility evidence.</b> {c!.caveat!.replace(/^Inferred: /, '')}</p>}
+      {(!c || s === 'untested') && <p class="mx-line muted">No published run found, so this makes no claim either way.</p>}
       {compute && fit && (
         <p class={`mx-line num${fit.kind === 'exceeds' ? ' inf' : ''}`}>
           {fit.kind === 'measured' ? `${fit.run.inference_hz != null ? `${+fit.run.inference_hz.toFixed(2)} Hz model calls` : 'Runs'} on ${compute.name} · ${RUNTIME_LABEL[fit.run.runtime] ?? fit.run.runtime} · ${fit.run.precision} · ${fit.run.cameras} cam` : fitText(fit, compute)}
@@ -317,11 +332,11 @@ function ListAnswer({ title, items, pick, noun, href }: { title: string; items: 
       })}
       {untested.length > 0 && (
         <div class="mx-lgroup">
-          <div class="mx-lhead"><i class="mx-sw" data-s="untested" aria-hidden="true">○</i>untested, both in LeRobot <b>{untested.length}</b></div>
+          <div class="mx-lhead"><i class="mx-sw" data-s="untested" aria-hidden="true">?</i>No verified evidence, both in LeRobot <b>{untested.length}</b></div>
           <div class="mx-chips">{untested.map((x) => <button type="button" class="chip quiet" onClick={() => pick(x.id)}>{x.name}</button>)}</div>
         </div>
       )}
-      {unknown > 0 && <p class="mx-line muted">{unknown} {noun} not yet verified.</p>}
+      {unknown > 0 && <p class="mx-line muted">{unknown} other {noun} have no verified evidence.</p>}
     </div>
   );
 }

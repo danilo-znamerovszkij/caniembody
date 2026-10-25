@@ -62,13 +62,6 @@ const jsonld = [{
     <section class="hero">
       <h1>Can this policy run on this robot?</h1>
       <p class="hero-sub">Pick a robot, a policy and your hardware. Every answer links to its source.</p>
-      <p class="hero-meta">
-        <span>{s.known} of {s.total} pairs have evidence</span>
-        <span>{s.robots} robots · {s.policies} policies · {all.runs.length} measured runs</span>
-        <span>Reviewed {s.last_full_review}{s.stale ? ` · ${s.pctStale.toFixed(0)}% stale` : ''}</span>
-        <a href="/coverage">Scope and gaps</a>
-        <a href="/methodology">How cells are judged</a>
-      </p>
     </section>
     <Matrix client:load data={data} />
   </div>

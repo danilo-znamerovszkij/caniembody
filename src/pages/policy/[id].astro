@@ -105,7 +105,7 @@ const desc = `${p.name}${p.params ? ` (${fmtParams(p.params)} params)` : ''}: VR
           </table></div>
         ) : <p class="empty">No robot has sourced evidence for {p.name} yet.</p>}
         {rows.some((x) => !x.c && inferredPair(x.r, p)) && (
-          <p class="small muted" style="margin-top:12px"><span class="st" data-s="untested" aria-hidden="true">○</span> Untested, but both sides are in LeRobot (inferred): {rows.filter((x) => !x.c && inferredPair(x.r, p)).map(({ r }, i) => <>{i ? ', ' : ''}<a href={`/compat/${r.id}/${p.id}`}>{r.name}</a></>)}.</p>
+          <p class="small muted" style="margin-top:12px"><span class="st" data-s="untested" aria-hidden="true">?</span> No verified evidence, but both are available in LeRobot (ecosystem context): {rows.filter((x) => !x.c && inferredPair(x.r, p)).map(({ r }, i) => <>{i ? ', ' : ''}<a href={`/compat/${r.id}/${p.id}`}>{r.name}</a></>)}.</p>
         )}
       </>
     )}

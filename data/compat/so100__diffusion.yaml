@@ -1,14 +1,24 @@
 robot: so100
 policy: diffusion
-state: partial
-partial_scope: Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source.
+state: works-with-caveats
 framework: lerobot
+framework_version_tested: "0.6.0"
+caveats:
+  - "Community-reported only; not documented upstream or maintainer-tested."
+  - "The physical arms are SO-100, but the run used --robot.type=so101_follower (LeLab uses that type for both arm versions); reproduce with the same driver type."
+  - "One community setup (three 640x480 cameras, one pick-and-place task): 9/10 at trained start positions, 2/2 between them, 0/2 outside the marked area."
 capabilities:
   train:
     state: works
     evidence:
     - ev-hub-hcltech-diffusion-so100
     - ev-hub-neilkim-diffusion-so100
+    - ev-van-i-so100-stand
+  inference_real:
+    state: works-with-caveats
+    notes: "9/10 at trained positions, 0/2 outside the demonstrated area; ~16 s to first arm movement."
+    evidence:
+    - ev-van-i-so100-stand
 evidence:
 - id: ev-hub-hcltech-diffusion-so100
   tier: community-reported
@@ -24,3 +34,12 @@ evidence:
   date: '2025-07-02'
   verified_on: '2026-10-24'
   summary: config.json type=diffusion; train_config.json dataset.repo_id=NeilKim/so100-teleop-record-2, whose meta/info.json robot_type=so100_follower (61 episodes).
+- id: ev-van-i-so100-stand
+  tier: community-reported
+  type: model-card
+  url: https://huggingface.co/van-i/so100-imitation-learning-stand/blob/c68846b72dea1e43f63a485684dc1a7d3e3d2ade/README.md
+  date: '2026-10-04'
+  verified_on: '2026-10-25'
+  versions: {lerobot: "0.6.0"}
+  summary: "Write-up of a self-built SO-100 leader/follower stand (LeRobot 0.6.0 via LeLab, RTX 3090): Diffusion Policy trained from scratch for 36,000 steps and tested on the physical arm, 9/10 at trained positions and 0/2 outside the marked area. States so101_follower is the LeLab driver type for both arm versions."
+  quote: "SO-100 leader (moved by hand) + SO-100 follower (does the task), built from parts"

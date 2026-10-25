@@ -1,13 +1,23 @@
 robot: reachy2
 policy: smolvla
-state: partial
-partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+state: works-with-caveats
 framework: lerobot
+caveats:
+  - "Community-reported only; not documented upstream or maintainer-tested."
+  - "The only result is a score of 6.5 under a 'Performance (10/10)' header in a community README, with no stated protocol; the README does not say explicitly that the score came from physical trials, though its deployment command runs a SmolVLA checkpoint on the physical robot r2-0008."
+  - "The scored run (erl-hub/reachy-smolvla, run s2226) and the checkpoint in the deployment command (erl-hub/reachy-smolvla-ft-execute-pick-and-place) are different Hub repos."
+  - "Tested configuration: both arms, neck and torso camera at 640x480 (SmolVLA's other two camera slots empty); mobile base, antennas and teleop cameras disabled. The LeRobot version used is not stated."
 capabilities:
   train:
     state: works
     evidence:
     - ev-hub-erlhub-smolvla-reachy2
+    - ev-hub-erlhub-smolvla-ft-reachy2
+  inference_real:
+    state: works-with-caveats
+    notes: "Community deployment via lerobot-record --policy.path on a physical Reachy 2; scored 6.5 on an undefined /10 scale."
+    evidence:
+    - ev-reachy-pollen-smolvla-deploy
 evidence:
 - id: ev-hub-erlhub-smolvla-reachy2
   tier: community-reported
@@ -15,3 +25,18 @@ evidence:
   url: https://huggingface.co/erl-hub/reachy-smolvla
   verified_on: '2026-10-24'
   summary: "Checkpoint at 2026-04-25_05-03-29-smolvla-basic-run-erl-hub-reachy-pick-and-place-images_s2226/checkpoints/020000/pretrained_model: config.json type=smolvla; train_config.json dataset erl-hub/reachy-pick-and-place-images whose meta/info.json robot_type=reachy2 (25 episodes)."
+- id: ev-hub-erlhub-smolvla-ft-reachy2
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/erl-hub/reachy-smolvla-ft-execute-pick-and-place
+  date: '2026-04-28'
+  verified_on: '2026-10-25'
+  summary: "config.json type=smolvla; train_config.json dataset erl-hub/reachy-pick-and-place-images (robot_type=reachy2). This is the checkpoint named in the community deployment command."
+- id: ev-reachy-pollen-smolvla-deploy
+  tier: community-reported
+  type: source-code
+  url: https://github.com/NikolaRaicevic2001/reachy_pollen/blob/7edb3a080d1cd68d88a0f03a518589260e9110dd/README.md
+  date: '2026-08-21'
+  verified_on: '2026-10-25'
+  summary: "Community README: 'Deploying policies on reachy2' runs lerobot-record with --robot.type=reachy2 on r2-0008 at 192.168.137.100 (the on-robot 'bedrock' host of its 'Recording: On the Robot' section) and --policy.path=erl-hub/reachy-smolvla-ft-execute-pick-and-place; its policy registry scores SmolVLA run s2226 at 6.5 under 'Performance (10/10)'."
+  quote: "| `SmolVla` | VLA (`--policy.type=SmolVla`) | 1GB | 2026-04-25_05-03-29-smolvla-basic-run-erl-hub-reachy-pick-and-place-images_s2226 | NVIDIA-L40 CPU 3.8-4.0 | 6.5 |"

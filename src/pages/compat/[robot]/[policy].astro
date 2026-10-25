@@ -49,7 +49,7 @@ const desc = `Does ${p.name} run on ${r.name}? ${answer.charAt(0).toUpperCase() 
               {c.stale && <span class="flag">stale: newest evidence older than 180 days</span>}
               {c.version_drift && <span class="flag">version drift: tested 3+ minor releases behind current</span>}
               {c.dispute && <a class="flag red" href={c.dispute}>disputed: open issue</a>}
-            </> : inf ? <span class="tier" data-t="inferred">T4 · inferred</span> : <span class="muted">{STATE_META.unknown.desc}</span>}
+            </> : inf ? <span class="pill">both available in LeRobot · no published run</span> : <span class="muted">{STATE_META.unknown.desc}</span>}
           </div>
           {c?.partial_scope && <p class="v-note"><strong>Scope:</strong> {c.partial_scope}</p>}
           {c?.reason && <p class="v-note"><strong>Reason:</strong> {c.reason}</p>}
@@ -135,8 +135,9 @@ const desc = `Does ${p.name} run on ${r.name}? ${answer.charAt(0).toUpperCase() 
 </Base>
 <style>
   .verdict { display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: start; margin-top: 18px; padding: 18px; border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--bg-elev); }
-  .st.big { width: 44px; height: 40px; font-size: 18px; border-radius: 8px; }
-  .v-state { font-size: 20px; font-weight: 600; letter-spacing: -.02em; }
+  .st.big { min-width: 44px; height: 40px; font-size: 24px; border: 1px solid var(--line); border-radius: var(--r-lg); }
+  .v-state { font-size: 22px; line-height: 28px; font-weight: 600; letter-spacing: -.01em; }
+  .v-state::first-letter { text-transform: uppercase; }
   .v-meta { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin-top: 6px; font-size: 12px; color: var(--fg-3); }
   .v-note { margin: 10px 0 0; font-size: 13.5px; color: var(--fg-2); }
   .caveats { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; }
