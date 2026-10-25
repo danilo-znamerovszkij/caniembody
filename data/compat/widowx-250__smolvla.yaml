@@ -1,0 +1,17 @@
+robot: widowx-250
+policy: smolvla
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-asatheesh-smolvla-bridge]
+evidence:
+  - id: ev-hub-asatheesh-smolvla-bridge
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/asatheesh/lerobot-smolvla-bridge
+    date: 2025-08-29
+    verified_on: 2026-10-25
+    summary: "config.json type=smolvla (init lerobot/smolvla_base); train_config.json dataset IPEC-COMMUNITY/bridge_orig_lerobot (20000 steps), the LeRobot port of BridgeData V2 (bridge_orig) whose meta/info.json robot_type=widowx (53192 episodes, end-effector state/actions). Training on Bridge data only; no deployment on a WidowX shown."

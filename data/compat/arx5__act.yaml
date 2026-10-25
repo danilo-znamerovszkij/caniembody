@@ -1,0 +1,17 @@
+robot: arx5
+policy: act
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-villekuosmanen-act]
+evidence:
+  - id: ev-hub-villekuosmanen-act
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/villekuosmanen/build_block_tower_1.0.0
+    date: 2025-12-10
+    verified_on: 2026-10-25
+    summary: "config.json type=act; train_config.json dataset villekuosmanen/build_block_tower (60000 steps), whose meta/info.json robot_type=arx5 (100 episodes, 7-D joint state, front + wrist cameras). The string is arx5, not the plugin's arx5_follower; the dataset author maintains the lerobot-arx5 plugin. Auto-generated card, no results."

@@ -1,0 +1,17 @@
+robot: unitree-g1
+policy: pi0-fast
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-eunjuri-pi0fast-g1]
+evidence:
+  - id: ev-hub-eunjuri-pi0fast-g1
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/eunjuri/pi0-fast_policy_pick_and_place_for_train_no_tac
+    date: 2026-02-23
+    verified_on: 2026-10-25
+    summary: "config.json type=pi0_fast (init lerobot/pi0fast-libero); train_config.json dataset eunjuri/pick_and_place_for_train_no_tac (10000 steps), whose meta/info.json robot_type=Unitree_G1_Inspire (1035 episodes, G1 arm + Inspire hand joints). Dataset card does not say whether it is real or simulated; auto-generated model card."

@@ -10,7 +10,7 @@ capabilities:
   train:
     state: works
     notes: "ACT fine-tuned on PhAIL's 449-episode FR3 teleoperation corpus with its default open-source recipe; the checkpoint path sits under phail_unified/lerobot/."
-    evidence: [ev-phail-card, ev-phail-act-sample-timeout]
+    evidence: [ev-phail-card, ev-phail-act-sample-timeout, ev-hub-sashopepi-act]
   inference_real:
     state: works-with-caveats
     evidence: [ev-phail-card, ev-phail-act-sample-timeout, ev-phail-act-sample-success]
@@ -39,3 +39,10 @@ evidence:
     verified_on: 2026-10-25
     summary: "Sample ACT rollout metadata (same checkpoint): Wooden spoons, 8 of 8 items moved in ~199 s, outcome Success."
     quote: "\"eval.outcome\": \"Success\""
+  - id: ev-hub-sashopepi-act
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/SashoPepi/tomato_close_box_20Ksteps
+    date: 2026-03-27
+    verified_on: 2026-10-25
+    summary: "config.json type=act; train_config.json dataset SashoPepi/tomato_close_box (20000 steps), whose meta/info.json robot_type=fr3 (257 episodes, 8-D state, two cameras). Auto-generated card, no results."

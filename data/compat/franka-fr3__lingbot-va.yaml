@@ -1,0 +1,17 @@
+robot: franka-fr3
+policy: lingbot-va
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lingbot-va
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-thu98-lingbot-fr3]
+evidence:
+  - id: ev-hub-thu98-lingbot-fr3
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/THU98/lingbotva_franka_5task_lora_10k
+    date: 2026-08-25
+    verified_on: 2026-10-25
+    summary: "Model card: LoRA adapter on robbyant/lingbot-va-base (official Robbyant/lingbot-va runtime, not LeRobot) trained 10k steps on 216 real-robot episodes from a dual Franka FR3 setup (16-D joint+gripper actions, chest + two wrist cameras). The training dataset is not published; adapter_config.json confirms the LoRA (rank 32). Card states no real-robot success-rate evaluation is published."

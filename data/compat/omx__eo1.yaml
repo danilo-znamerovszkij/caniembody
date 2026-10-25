@@ -1,0 +1,17 @@
+robot: omx
+policy: eo1
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-pepijn-eo1]
+evidence:
+  - id: ev-hub-pepijn-eo1
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/pepijn223/eo1_super_poulain_draft
+    date: 2026-05-01
+    verified_on: 2026-10-25
+    summary: "config.json type=eo1; train_config.json dataset imstevenpmwork/super_poulain_draft (10000 steps), whose meta/info.json robot_type=omx_follower (50 episodes). Repo is labelled a draft; auto-generated card, no results."

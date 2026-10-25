@@ -1,0 +1,24 @@
+robot: aloha
+policy: openvla
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: openvla
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-anjali-openvla-lora, ev-hub-anjali-openvla-full]
+evidence:
+  - id: ev-hub-anjali-openvla-lora
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/anjali209/openvla-7b-aloha-coffee-lora
+    date: 2026-08-01
+    verified_on: 2026-10-25
+    summary: "Model card: LoRA (r=32) on openvla/openvla-7b fine-tuned on 48 episodes of lerobot/aloha_static_coffee (meta/info.json robot_type=aloha, real static ALOHA, 50 episodes), using only cam_left_wrist and 14-D joint targets discretised into 256 bins. Card states it is not validated on a robot or in simulation and fails both held-out episodes offline. Not a LeRobot-format checkpoint (no config.json policy type)."
+  - id: ev-hub-anjali-openvla-full
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/anjali209/openvla-7b-aloha-coffee-full
+    date: 2026-08-01
+    verified_on: 2026-10-25
+    summary: "Model card: full fine-tune of openvla/openvla-7b on the same 48 lerobot/aloha_static_coffee episodes (single wrist camera); offline teacher-forced evaluation only, same stated limitations."

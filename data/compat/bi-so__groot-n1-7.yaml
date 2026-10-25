@@ -1,0 +1,24 @@
+robot: bi-so
+policy: groot-n1-7
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-orderdraconis-groot-v2, ev-hub-orderdraconis-groot-leo]
+evidence:
+  - id: ev-hub-orderdraconis-groot-v2
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/OrderDraconis/groot_phase2align_v2_c30
+    date: 2026-10-11
+    verified_on: 2026-10-25
+    summary: "config.json type=groot with base_model_path nvidia/GR00T-N1.7-3B; train_config.json dataset OrderDraconis/phase2_align_combined_full_V2 (40000 steps), whose meta/info.json robot_type=bi_so_follower (249 episodes). The card only gives a templated lerobot-rollout command for bi_so_follower, no results."
+  - id: ev-hub-orderdraconis-groot-leo
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/OrderDraconis/groot_align_leo
+    date: 2026-08-24
+    verified_on: 2026-10-25
+    summary: "config.json type=groot with base_model_path nvidia/GR00T-N1.7-3B; train_config.json dataset Janmeier820/align_fabric_dataset_combined (10000 steps), whose meta/info.json robot_type=bi_so_follower (173 episodes)."

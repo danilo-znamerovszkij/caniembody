@@ -1,0 +1,24 @@
+robot: franka-fr3
+policy: diffusion
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-sashopepi-diffusion-box, ev-hub-sashopepi-diffusion-tomato]
+evidence:
+  - id: ev-hub-sashopepi-diffusion-box
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/SashoPepi/lerobot_diffusion_policy_filtered
+    date: 2026-03-19
+    verified_on: 2026-10-25
+    summary: "config.json type=diffusion; train_config.json dataset SashoPepi/franka-gello-close-box-filtered (100000 steps), whose meta/info.json robot_type=fr3 (75 episodes, 8-D state, two cameras; GELLO-teleoperated per the repo names). Auto-generated card, no results."
+  - id: ev-hub-sashopepi-diffusion-tomato
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/SashoPepi/tomato_close_box_diffusion_3Ksteps
+    date: 2026-03-26
+    verified_on: 2026-10-25
+    summary: "config.json type=diffusion; train_config.json dataset SashoPepi/tomato_close_box (6000 steps), whose meta/info.json robot_type=fr3 (257 episodes)."

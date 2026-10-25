@@ -1,0 +1,17 @@
+robot: trossen-widowx
+policy: vla-jepa
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-luisd-vlajepa]
+evidence:
+  - id: ev-hub-luisd-vlajepa
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/luisd7271/vla-jepa-widgetAssembly
+    date: 2026-07-10
+    verified_on: 2026-10-25
+    summary: "config.json type=vla_jepa (init lerobot/VLA-JEPA-Pretrain); train_config.json dataset luisd7271/stationary-WidgetAssembly-Lerobot-act-v3 (10000 steps), whose meta/info.json robot_type=bi_widowxai_follower_robot (25 episodes, Trossen stationary bimanual WidowX AI)."

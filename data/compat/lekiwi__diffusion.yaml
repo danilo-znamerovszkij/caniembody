@@ -1,0 +1,24 @@
+robot: lekiwi
+policy: diffusion
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-liosgr-diffusion, ev-hub-wiscohumanoids-diffusion]
+evidence:
+  - id: ev-hub-liosgr-diffusion
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/lioSgr/dp_pick_toy_elephant
+    date: 2026-09-18
+    verified_on: 2026-10-25
+    summary: "config.json type=diffusion; train_config.json dataset lioSgr/pick_toy_elephant (100000 steps), whose meta/info.json robot_type=lekiwi_client (50 episodes; arm joints plus x/y/theta base velocities; front + wrist cameras)."
+  - id: ev-hub-wiscohumanoids-diffusion
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/wiscohumanoids/pick_up_single_colored_cube_into_tape_v7_diffusion_h128
+    date: 2026-04-15
+    verified_on: 2026-10-25
+    summary: "config.json type=diffusion; train_config.json dataset wiscohumanoids/pick_up_single_colored_cube_into_tape_v7 (80000 steps), whose meta/info.json robot_type=lekiwi_client (226 episodes)."

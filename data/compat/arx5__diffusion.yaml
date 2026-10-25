@@ -6,6 +6,10 @@ caveats:
   - "Third-party research paper (UMI on Legs, from the Diffusion Policy authors' lab), not documented in Diffusion Policy's own docs or in LeRobot; the ARX5 LeRobot plugin documents no Diffusion Policy run."
   - "The ARX5 was mounted on a Unitree Go2 quadruped and driven through a learned whole-body controller; policies were trained on handheld UMI gripper demonstrations (or the public UMI cup checkpoint), not on ARX5 robot data."
 capabilities:
+  train:
+    state: works
+    notes: "LeRobot diffusion policy trained on ARX5 robot data (public checkpoint), separate from the UMI-on-Legs evidence."
+    evidence: [ev-hub-villekuosmanen-diffusion]
   inference_real:
     state: works
     notes: "Diffusion Policy inference on a desktop RTX 4090 over the network; tasks: dynamic tossing, kettlebell pushing and in-the-wild cup rearrangement (zero-shot with the public UMI checkpoint)."
@@ -27,3 +31,10 @@ evidence:
     verified_on: 2026-10-25
     summary: "UMI on Legs, Fig. 3: the manipulation policy is a diffusion policy (Chi et al. default U-Net configuration) trained on real-world UMI demonstrations, whose end-effector trajectory drives the whole-body controller."
     quote: "infers a camera-frame end-effector trajectory using a diffusion policy (a), trained using real-world UMI demonstrations."
+  - id: ev-hub-villekuosmanen-diffusion
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/villekuosmanen/build_block_tower_diffusion
+    date: 2026-03-23
+    verified_on: 2026-10-25
+    summary: "config.json type=diffusion; train_config.json dataset villekuosmanen/build_block_tower (60000 steps), whose meta/info.json robot_type=arx5 (100 episodes, 7-D joint state, front + wrist cameras). The string is arx5, not the plugin's arx5_follower; the dataset author maintains the lerobot-arx5 plugin. Auto-generated card, no results."

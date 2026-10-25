@@ -1,0 +1,24 @@
+robot: unitree-g1
+policy: smolvla
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-qualia-smolvla-g1, ev-hub-eunjuri-smolvla-g1]
+evidence:
+  - id: ev-hub-qualia-smolvla-g1
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/qualiaadmin/68bf0913-c0a0-4b98-b1d1-c14dc1c55a44
+    date: 2026-01-15
+    verified_on: 2026-10-25
+    summary: "config.json type=smolvla; train_config.json dataset unitreerobotics/G1_Dex1_MountCamera_Dataset (Unitree's own G1 teleoperation dataset), whose meta/info.json robot_type=Unitree_G1 (351 episodes; G1 arm joints kLeftShoulderPitch... plus Dex1 grippers; four cameras). Unitree's robot_type string, not LeRobot's unitree_g1."
+  - id: ev-hub-eunjuri-smolvla-g1
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/eunjuri/smolvla_red_cup_depth
+    date: 2026-05-01
+    verified_on: 2026-10-25
+    summary: "config.json type=smolvla; train_config.json dataset eunjuri/red_cup_img_depth (10000 steps), whose meta/info.json robot_type=Unitree_G1_Inspire (83 episodes)."

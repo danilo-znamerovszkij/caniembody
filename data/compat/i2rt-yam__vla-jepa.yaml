@@ -1,0 +1,24 @@
+robot: i2rt-yam
+policy: vla-jepa
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-helen-vlajepa, ev-hub-jiafei-vlajepa]
+evidence:
+  - id: ev-hub-helen-vlajepa
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/helen9975/vla-jepa-molmoact-yam-blocks-v2
+    date: 2026-07-20
+    verified_on: 2026-10-25
+    summary: "config.json type=vla_jepa; train_config.json dataset allenai/MolmoAct2-BimanualYAM-Dataset (100000 steps, init lerobot/VLA-JEPA-Pretrain), whose meta/info.json robot_type=bi_yam_follower (bimanual YAM). Card reports only an open-loop MSE/MAE smoke test on 2 held-out episodes."
+  - id: ev-hub-jiafei-vlajepa
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/Jiafei1224/VLA-JEPA-MolmoAct2YAMData
+    date: 2026-07-11
+    verified_on: 2026-10-25
+    summary: "config.json type=vla_jepa; train_config.json dataset allenai/MolmoAct2-BimanualYAM-Dataset (100000 steps, init lerobot/VLA-JEPA-Pretrain), whose meta/info.json robot_type=bi_yam_follower."

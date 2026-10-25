@@ -1,0 +1,24 @@
+robot: trossen-widowx
+policy: xvla
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-qownscks-xvla, ev-hub-nyamamoto-xvla]
+evidence:
+  - id: ev-hub-qownscks-xvla
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/qownscks/xvlwidow
+    date: 2026-03-10
+    verified_on: 2026-10-25
+    summary: "config.json type=xvla (init lerobot/xvla-widowx); train_config.json dataset qownscks/eggplant (60000 steps), whose meta/info.json robot_type=widowxai_follower_robot (15 episodes)."
+  - id: ev-hub-nyamamoto-xvla
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/nyamamoto/20260226-daiv-red-blue-cube-xvla
+    date: 2026-02-26
+    verified_on: 2026-10-25
+    summary: "config.json type=xvla (init lerobot/xvla-widowx); train_config.json dataset nyamamoto/20260218-red-blue-cube (100000 steps), whose meta/info.json robot_type=widowxai_follower_robot (61 episodes)."

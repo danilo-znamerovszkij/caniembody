@@ -1,0 +1,24 @@
+robot: xlerobot
+policy: diffusion
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-odog16-diffusion-tool, ev-hub-odog16-diffusion-block]
+evidence:
+  - id: ev-hub-odog16-diffusion-tool
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/Odog16/tool_pickup_diffusion_1obs_policy
+    date: 2026-02-28
+    verified_on: 2026-10-25
+    summary: "config.json type=diffusion; train_config.json dataset Odog16/tool_pickup (100000 steps), whose meta/info.json robot_type=xlerobot (100 episodes; two arms plus head, head + two wrist cameras)."
+  - id: ev-hub-odog16-diffusion-block
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/Odog16/test_transfer_block_diffusion
+    date: 2026-02-04
+    verified_on: 2026-10-25
+    summary: "config.json type=diffusion; train_config.json dataset Odog16/test_transfer_block (150000 steps), whose meta/info.json robot_type=xlerobot (154 episodes)."

@@ -1,0 +1,24 @@
+robot: mobile-aloha
+policy: smolvla
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-naonaon-smolvla-cabinet, ev-hub-qualia-smolvla-elevator]
+evidence:
+  - id: ev-hub-naonaon-smolvla-cabinet
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/naonaon/smolvla_aloha_cabinet
+    date: 2025-12-27
+    verified_on: 2026-10-25
+    summary: "config.json type=smolvla (init lerobot/smolvla_base); train_config.json dataset lerobot/aloha_mobile_cabinet (50000 steps), whose meta/info.json robot_type=aloha (85 episodes at 50 fps; one of LeRobot's Mobile ALOHA datasets)."
+  - id: ev-hub-qualia-smolvla-elevator
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/qualiaadmin/6ed43167-aed0-4d17-ac0d-801cb4bab10e
+    date: 2026-01-15
+    verified_on: 2026-10-25
+    summary: "config.json type=smolvla; train_config.json dataset lerobot/aloha_mobile_elevator, whose meta/info.json robot_type=aloha (20 episodes)."
