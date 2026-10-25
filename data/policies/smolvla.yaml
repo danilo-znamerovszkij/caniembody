@@ -1,0 +1,137 @@
+id: smolvla
+name: SmolVLA
+aliases: [smolvla_base, lerobot/smolvla_base]
+family: vla
+summary: >-
+  Hugging Face's compact vision-language-action model: a SmolVLM-2 backbone with a flow-matching action expert that
+  outputs 50-step action chunks. Designed to be fine-tuned on LeRobot datasets on a single GPU.
+authors: Hugging Face (LeRobot team)
+paper_url: https://arxiv.org/abs/2506.01844
+params: 450000000
+params_note: "Authors state 450 million parameters (rounded), ~100M of which are the action expert."
+params_source_ref: ev-smolvla-paper-params
+backbone: SmolVLM-2 (SigLIP vision encoder + SmolLM2 decoder), upper layers skipped
+action_output: flow-matching
+action_chunking: true
+rtc_compatible: true
+peft_supported: true
+arch_source_ref: ev-smolvla-paper-arch
+license: Apache-2.0
+weights_license: Apache-2.0
+open_weights: true
+frameworks:
+  lerobot:
+    support: native
+    since: "0.3.2"
+    policy_type: smolvla
+    docs_url: https://huggingface.co/docs/lerobot/smolvla
+    note: "Present in v0.3.2, the first tagged LeRobot release (the only earlier PyPI release, 0.1.0 of 2024-03, predates SmolVLA). RTC per rtc.mdx; PEFT/LoRA example in peft_training.mdx."
+    source_ref: ev-lerobot-smolvla-config
+checkpoints:
+  - hub_id: lerobot/smolvla_base
+    note: "Pretrained base for fine-tuning (Apache-2.0 on the Hub)."
+requirements:
+  train:
+    vram_gb: {min: 10, max: 16}
+    batch_size: 8
+    condition: >-
+      Peak training VRAM at batch size 8 with AdamW (LeRobot default), "Small VLA" group in the LeRobot compute
+      hardware guide. The guide calls its figures indicative, order-of-magnitude numbers for picking hardware, not
+      exact predictions. Precision not stated.
+    reference_time: >-
+      ~3–6 h for 5 epochs on a ~45k-frame dataset at batch 4 on a single L4/A10G 24 GB; ~1–2 h at batch 16 on a single
+      A100 40 GB (indicative, ±50%).
+    source_ref: ev-lerobot-hw-guide
+  inference:
+    vram_gb: {measured: 1.75}
+    precision: fp32
+    condition: >-
+      Peak memory at inference measured by the LeRobot paper (Table 2): 1.75 GB on both RTX 4090 and A100, all models in
+      full fp32 precision, 10 flow-matching denoising steps. (Same table: 1.69 GB CPU-only, 555 MB on Apple MPS.)
+    source_ref: ev-lerobot-paper-mem
+observation_space:
+  state: robot sensorimotor state (proprioception), padded to max_state_dim 32
+  language: optional
+  source_ref: ev-smolvla-base-card
+notes: >-
+  The SmolVLA docs give a separate anchor: 20k fine-tuning steps take roughly 4 h on a single A100. The RTC docs
+  recommend max_guidance_weight 10.0 for SmolVLA's 10-step flow matching.
+verified_on: 2026-10-24
+sources:
+  - id: ev-smolvla-paper-params
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2506.01844
+    date: 2025-06-02
+    verified_on: 2026-10-24
+    summary: SmolVLA paper states the main model's parameter count.
+    quote: "Our main model, contains 450 million parameters, with approximately 100 million dedicated to the action expert."
+  - id: ev-smolvla-paper-arch
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2506.01844
+    date: 2025-06-02
+    verified_on: 2026-10-24
+    summary: SmolVLA is a compact VLM plus a flow-matching action expert outputting 50-action chunks.
+    quote: "SmolVLA is a lightweight VLA composed of a compact pretrained VLM, and an action expert trained with flow matching."
+  - id: ev-lerobot-smolvla-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/smolvla/configuration_smolvla.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Policy type string is `smolvla`; the same registration exists at tag v0.3.2."
+    quote: '@PreTrainedConfig.register_subclass("smolvla")'
+  - id: ev-lerobot-rtc-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/rtc.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: LeRobot RTC docs name SmolVLA as a supported flow-matching policy.
+    quote: "allows large, flow-matching based robotic policies, such as [Pi0](./pi0), [Pi0.5](./pi05), and [SmolVLA](./smolvla), to produce smooth, continuous, and reactive motion"
+  - id: ev-lerobot-peft-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/peft_training.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: LeRobot PEFT guide walks through LoRA fine-tuning of lerobot/smolvla_base.
+    quote: "In this section we'll show you how to train a pre-trained SmolVLA policy with PEFT on the libero dataset."
+  - id: ev-lerobot-hw-guide
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hardware_guide.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Compute hardware guide: Small VLA (`smolvla`) peak VRAM ~10–16GB at BS 8 with AdamW; figures are indicative."
+    quote: "| Small VLA  | `smolvla`                                   |                ~10–16GB | RTX 4080+ / L4 / A10G             |"
+  - id: ev-lerobot-paper-mem
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2602.22818
+    date: 2026-02-26
+    verified_on: 2026-10-24
+    summary: "LeRobot paper Table 2: SmolVLA (450M) peak memory 1.69GB CPU, 555MB MPS, 1.75 GB RTX 4090, 1.75 GB A100, fp32."
+    quote: "Table 2: Peak memory consumption of policy models currently supported by lerobot . All models are run in full precision (fp32). Diffusion and Flow Models are run with 10 denoising steps at inference."
+  - id: ev-smolvla-base-card
+    tier: upstream-documented
+    type: model-card
+    url: https://huggingface.co/lerobot/smolvla_base
+    date: 2025-06-01
+    verified_on: 2026-10-24
+    summary: Model card lists inputs (multi-view images, state, optional language) and the flow-matching objective.
+    quote: "- **Inputs:** images (multi-view), proprio/state, optional language instruction"
+  - id: ev-smolvla-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/smolvla.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: SmolVLA docs give a 20k-step fine-tuning time anchor on one A100.
+    quote: "Training the model for 20k steps will roughly take ~4 hrs on a single A100 GPU."

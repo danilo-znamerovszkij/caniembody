@@ -1,0 +1,10 @@
+id: hil-serl
+name: HIL-SERL (rail-berkeley/hil-serl)
+maintainer: Jianlan Luo et al. (UC Berkeley RAIL)
+repo: rail-berkeley/hil-serl
+docs_url: https://github.com/rail-berkeley/hil-serl
+license: Apache-2.0
+current_version: main
+current_version_date: 2025-10-27
+versioning: none
+notes: "HIL-SERL authors' JAX code with Franka robot infrastructure (serl_robot_infra on ROS 1 franka_ros and serl_franka_controllers). LeRobot's hil-serl is a separate reimplementation. No tagged releases; pin by commit (main at c32939bccb65, 2025-10-27)."

@@ -1,0 +1,50 @@
+id: proprioception
+term: "Proprioception"
+aka: ["proprioceptive state", "robot state", "observation.state"]
+short: "The robot's measurement of its own body state, such as joint positions, velocities and gripper opening, given to a policy alongside camera images."
+body: |
+  Proprioception is a robot's measurement of its own configuration: joint positions and, depending on the hardware, joint velocities, motor currents or torques, and gripper state. The word is borrowed from physiology, where it names the body's sense of its own position and movement. In robot learning, the proprioceptive vector is the low-dimensional "state" input that accompanies camera images.
+
+  The π0 paper (Black et al., 2024) defines its observation as "multiple RGB images, a language command, and the robot's proprioceptive state". In a [LeRobotDataset](/glossary/lerobot-dataset) it is the `observation.state` feature, stored per frame next to `action`. For an [SO-101](/robot/so101) driven by LeRobot's `so_follower` code, state is one position reading per motor, `{motor}.pos`, for its six motors (five arm joints and the gripper). Its dimensionality therefore follows the robot's [degrees of freedom](/glossary/degrees-of-freedom).
+
+  Policies treat state differently. [SmolVLA](/policy/smolvla) pads it to `max_state_dim=32` in LeRobot v0.6.1 so that robots with different joint counts share one network. LeRobot describes [GR00T N1.7](/policy/groot-n1-7) as accepting "language, images, and proprioception". [ACT](/policy/act) feeds joint positions to its transformer alongside image features.
+
+  Two misconceptions are common. First, proprioception is not touch. Joint encoders report where the arm is; contact forces at the fingertips require tactile or force-torque sensing, or must be inferred indirectly from motor current. Second, state values are not portable between robots, or even between calibrations of the same model. They depend on joint zero positions, units and normalization, which is one reason a checkpoint trained on one arm does not transfer unchanged to another (see [embodiment gap](/glossary/embodiment-gap)).
+related: [degrees-of-freedom, lerobot-dataset, vla, embodiment-gap]
+policies: [pi0, smolvla, groot-n1-7, act]
+sources:
+  - id: ev-pi0-paper-full
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/html/2410.24164
+    date: 2024-10-31
+    verified_on: 2026-10-24
+    summary: "π0 observations include proprioceptive state."
+    quote: "The observation consists of multiple RGB images, a language command, and the robot’s proprioceptive state"
+  - id: ev-lerobot-so-follower
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/robots/so_follower/so_follower.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot SO follower exposes one position feature per motor."
+    quote: "return {f\"{motor}.pos\": float for motor in self.bus.motors}"
+  - id: ev-lerobot-smolvla-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/smolvla/configuration_smolvla.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "SmolVLA pads state to 32 dimensions in LeRobot v0.6.1."
+    quote: "max_state_dim: int = 32"
+  - id: ev-lerobot-groot-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/groot.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot: GR00T accepts language, images and proprioception."
+    quote: "It is a cross-embodiment policy that accepts multimodal input, including language, images, and proprioception"

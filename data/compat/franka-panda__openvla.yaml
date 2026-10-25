@@ -1,0 +1,31 @@
+robot: franka-panda
+policy: openvla
+state: works-with-caveats
+framework: openvla
+caveats:
+  - "Panda results come from fine-tuning (10-150 demonstrations per task), not out-of-the-box use. The OpenVLA repo ships no Franka controller or deployment script."
+  - "OpenVLA takes a single image and predicts single-step actions. The Franka setups ran 5 Hz (Franka-Tabletop) and 15 Hz (Franka-DROID) non-blocking controllers."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-openvla-paper-franka]
+  inference_real:
+    state: works
+    evidence: [ev-openvla-paper-franka, ev-openvla-paper-franka-tasks]
+evidence:
+  - id: ev-openvla-paper-franka
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2406.09246v3
+    date: 2024-09-05
+    verified_on: 2026-10-24
+    summary: "OpenVLA paper, Sec. 5.2: OpenVLA is fully fine-tuned and evaluated on a table-mounted Franka Emika Panda (Franka-Tabletop) and on the DROID Franka setup."
+    quote: "We test OpenVLA in two setups: Franka-Tabletop, a stationary, table-mounted Franka Emika Panda 7-DoF robot arm; and Franka-DROID, the Franka robot arm setup from the recently released DROID dataset [11],"
+  - id: ev-openvla-paper-franka-tasks
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2406.09246v3
+    date: 2024-09-05
+    verified_on: 2026-10-24
+    summary: "OpenVLA paper, Appendix B.3: six Franka-Tabletop (Panda) tasks and one Franka-DROID task, 129 rollouts per approach."
+    quote: "We collect 10–150 demonstrations of each of seven tasks. The first six tasks correspond to a robot setup which we denote as “Franka-Tabletop” (Franka Emika Panda robot mounted on top of a table),"

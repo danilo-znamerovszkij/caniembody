@@ -1,0 +1,29 @@
+id: dagger
+term: "DAgger"
+aka: ["Dataset Aggregation"]
+short: "Dataset Aggregation: an iterative imitation-learning algorithm that runs the learned policy, has an expert label the states it visits, and retrains on the combined data."
+body: |
+  DAgger (Dataset Aggregation) is an iterative imitation-learning algorithm introduced by Ross, Gordon and Bagnell in "A Reduction of Imitation Learning and Structured Prediction to No-Regret Online Learning" (AISTATS 2011). It targets the main failure of [behavioral cloning](/glossary/behavioral-cloning). A cloned policy is trained on states the expert visited, but at deployment its own small errors carry it into states the expert never demonstrated, where errors compound. The paper frames this as a violation of the i.i.d. assumption in problems "where future observations depend on previous predictions (actions)".
+
+  The algorithm runs in rounds:
+
+  1. Train a policy on expert demonstrations.
+  2. Run that policy and record the states it actually visits.
+  3. Ask the expert which action it would have taken in each of those states.
+  4. Add the labeled states to the dataset, retrain on the aggregate, and repeat.
+
+  Ross et al. show that this yields a policy with good performance "under the distribution of observations it induces".
+
+  On real robots, labeling every visited state is impractical, so practical variants let a human take over only when the policy goes wrong and record those corrections. LeRobot's [HIL-SERL](/policy/hil-serl) workflow records such interventions during on-robot training, but uses them inside a reinforcement-learning loop rather than for pure imitation (see [human-in-the-loop RL](/glossary/human-in-the-loop-rl)).
+
+  A common misconception is that DAgger just means collecting more demonstrations. Extra demonstrations still come from states the expert chose to visit. DAgger's data comes from the *learner's* state distribution, and that is what corrects the mismatch. [Action chunking](/glossary/action-chunking) attacks the same compounding-error problem from the other side, by shortening the effective horizon instead of changing the data.
+related: [behavioral-cloning, imitation-learning, human-in-the-loop-rl, action-chunking]
+policies: [hil-serl]
+sources:
+  - id: ev-ross-2011
+    tier: upstream-documented
+    type: paper
+    url: https://proceedings.mlr.press/v15/ross11a.html
+    verified_on: 2026-10-24
+    summary: "Ross, Gordon and Bagnell (AISTATS 2011) introduce DAgger."
+    quote: "In this paper, we propose a new iterative algorithm, which trains a stationary deterministic policy, that can be seen as a no regret algorithm in an online learning setting."

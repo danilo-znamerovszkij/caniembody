@@ -1,0 +1,25 @@
+robot: franka-panda
+policy: smolvla
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+caveats:
+  - "The checkpoints' Panda identity comes from repo and robot_type naming (panda_ros_cartesian, panda_joint* states). The cards are auto-generated with no hardware description."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-tinkybala-smolvla-screwdriver, ev-hub-tinkybala-smolvla-cube]
+evidence:
+  - id: ev-hub-tinkybala-smolvla-screwdriver
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/TInkybala/Real_Panda_PickScrewdriver_smolvla_20260304_151600
+    date: 2026-03-04
+    verified_on: 2026-10-24
+    summary: "config.json type=smolvla (base lerobot/smolvla_base). train_config dataset TInkybala/Real_Panda_CartesianVel_Screwdriver_2, whose meta/info.json robot_type=panda_ros_cartesian (75 episodes, one camera)."
+  - id: ev-hub-tinkybala-smolvla-cube
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/TInkybala/Real_Panda_Fixed_Cube
+    verified_on: 2026-10-24
+    summary: "config.json type=smolvla. train_config dataset TInkybala/Real_Panda_FixedCube, whose meta/info.json robot_type=panda_ros_cartesian (24 episodes)."

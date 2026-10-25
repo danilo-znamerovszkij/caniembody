@@ -1,0 +1,101 @@
+---
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
+import '../styles/global.css';
+import { SITE, GH } from '../site.ts';
+import { clip } from '../lib/seo.ts';
+
+interface Props {
+  title: string;
+  description: string;
+  og?: string; // path to the OG image
+  jsonld?: object[];
+  modified?: string;
+  bare?: boolean; // embeds: no chrome
+  noindex?: boolean;
+}
+const { title, og, jsonld = [], modified, bare, noindex } = Astro.props;
+const description = clip(Astro.props.description);
+const canonical = new URL(Astro.url.pathname.replace(/\.html$/, '').replace(/(^|\/)index$/, '/'), SITE.url).href;
+const ogUrl = new URL(og ?? '/og/index.png', SITE.url).href;
+const path = Astro.url.pathname;
+const nav = [
+  ['/', 'Matrix'], ['/compute', 'Compute'], ['/coverage', 'Coverage'], ['/methodology', 'Methodology'],
+  ['/glossary', 'Glossary'], ['/api', 'API'],
+];
+const beacon = import.meta.env.PUBLIC_CF_BEACON;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  {noindex && <meta name="robots" content="noindex, follow" />}
+  <meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#1a1916" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content={SITE.title} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  {ogUrl && <meta property="og:image" content={ogUrl} />}
+  {ogUrl && <meta property="og:image:width" content="1200" />}
+  {ogUrl && <meta property="og:image:height" content="630" />}
+  <meta name="twitter:card" content={ogUrl ? 'summary_large_image' : 'summary'} />
+  {modified && <meta property="article:modified_time" content={modified} />}
+  {jsonld.map((j) => <script type="application/ld+json" set:html={JSON.stringify(j)} />)}
+  <script is:inline>
+    try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch {}
+  </script>
+  {beacon && <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: beacon })}></script>}
+</head>
+<body>
+  {bare ? <slot /> : (
+    <>
+      <a class="skip" href="#main">Skip to content</a>
+      <header class="top">
+        <div class="wrap">
+          <a href="/" class="brand" aria-label={`${SITE.title} home`}>
+            <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <span class="brand-text">{SITE.name}</span>
+          </a>
+          <nav class="nav" aria-label="Primary">
+            {nav.map(([href, label]) => (
+              <a href={href} aria-current={(href === '/' ? path === '/' : path.startsWith(href)) ? 'page' : undefined}>{label}</a>
+            ))}
+            <a href={GH}>GitHub</a>
+          </nav>
+          <button class="theme-btn" type="button" aria-label="Toggle colour theme" id="theme">
+            <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm0 1.5v11a5.5 5.5 0 0 1 0-11Z"/></svg>
+          </button>
+        </div>
+      </header>
+      <main id="main"><slot /></main>
+      <footer class="foot">
+        <div class="wrap">
+          <nav aria-label="Footer">
+            <a href="/methodology">Methodology</a><a href="/coverage">Coverage</a><a href="/changelog">Changelog</a>
+            <a href="/api">API</a><a href="/closed-humanoids">Why no Optimus/Figure/NEO?</a>
+            <a href={`${GH}/blob/main/CONTRIBUTING.md`}>Contribute</a><a href={`${GH}/blob/main/CITATION.cff`}>Cite</a>
+          </nav>
+          <p>Code MIT · Data <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · {SITE.scope}. Compatibility only: no success rates, no rankings.</p>
+          <p>No cookies, no tracking. Privacy-preserving aggregate analytics only. Every claim links to its source; <a href="/methodology#disputes">dispute any cell</a>.</p>
+        </div>
+      </footer>
+      <script is:inline>
+        document.getElementById('theme')?.addEventListener('click', () => {
+          const d = document.documentElement;
+          const dark = d.dataset.theme ? d.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+          d.dataset.theme = dark ? 'light' : 'dark';
+          try { localStorage.setItem('theme', d.dataset.theme); } catch {}
+        });
+      </script>
+    </>
+  )}
+</body>
+</html>

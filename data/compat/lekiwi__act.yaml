@@ -1,0 +1,44 @@
+robot: lekiwi
+policy: act
+state: works
+framework: lerobot
+framework_version_tested: "0.6.1"
+capabilities:
+  inference_real:
+    state: works
+    notes: "Upstream example examples/lekiwi/evaluate.py loads an ACTPolicy and runs it against LeKiwiClient; the script itself notes that lerobot-rollout is the production deployment path."
+    evidence: [ev-lerobot-lekiwi-doc, ev-lerobot-lekiwi-evaluate]
+  train:
+    state: works
+    evidence: [ev-hub-pepijn-act-lekiwi, ev-hub-masatoka-act-lekiwi]
+evidence:
+  - id: ev-lerobot-lekiwi-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/lekiwi.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "The LeKiwi page points policy evaluation at the examples/lekiwi/evaluate.py script."
+    quote: "To evaluate your policy run the `evaluate.py` API example, make sure to change `remote_ip`, `port`, model.."
+  - id: ev-lerobot-lekiwi-evaluate
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/examples/lekiwi/evaluate.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "The LeKiwi evaluation example instantiates LeKiwiClient and an ACTPolicy loaded from the Hub, then runs the policy on the robot."
+    quote: "robot = LeKiwiClient(robot_config)\n\n    # Create policy\n    policy = ACTPolicy.from_pretrained(HF_MODEL_ID)"
+  - id: ev-hub-pepijn-act-lekiwi
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/pepijn223/act_lekiwi
+    verified_on: 2026-10-24
+    summary: "config.json type=act; train_config.json dataset pepijn223/lekiwi_pen whose meta/info.json robot_type=lekiwi (40 episodes)."
+  - id: ev-hub-masatoka-act-lekiwi
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/masato-ka/act_lekiwi_dounut_serve_full
+    verified_on: 2026-10-24
+    summary: "config.json type=act; train_config.json dataset masato-ka/lekiwi_dounut_serve_full whose meta/info.json robot_type=lekiwi_client (60 episodes)."

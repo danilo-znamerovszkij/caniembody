@@ -1,0 +1,43 @@
+robot: openarm
+policy: groot-n1-7
+state: works-with-caveats
+framework: isaac-groot
+caveats:
+  - "Documented only in Enactic's fork of Isaac-GR00T (branch n1.7-release-ga-openarm, a single commit ahead of NVIDIA main as of 2026-10-23), not in NVIDIA's Isaac-GR00T or in LeRobot."
+  - "Bimanual OpenArm only (OPENARM_BIMANUAL_REL tag, 16-D joint actions, both wrist cameras required); robot control runs in Enactic's Dora graph, which talks to the policy server over a UNIX socket."
+  - "Isaac-GR00T's scripts/deployment tools (TensorRT, standalone inference) do not apply OpenArm camera profiles and are not supported for OpenArm checkpoints in this release."
+  - "No on-robot success rates are published; the vendor checkpoint card lists inputs, outputs and training tasks only."
+capabilities:
+  train:
+    state: works
+    notes: "Fine-tune nvidia/GR00T-N1.7-3B on OpenArm recordings converted with enactic/openarm_dataset (LeRobot v2.1 + modality.json); vendor checkpoint enactic/GR00T-N1.7-openarm-2-cell-pillow trained on five pillow tasks."
+    evidence: [ev-enactic-groot-openarm-train, ev-enactic-groot-openarm-card]
+  inference_real:
+    state: works
+    notes: "Vendor-documented deployment path: openarm_server policy server (PyTorch, 32-step chunks at 30 Hz) serving dora-openarm-local-policy-server."
+    evidence: [ev-enactic-groot-openarm-server, ev-enactic-groot-openarm-card]
+evidence:
+  - id: ev-enactic-groot-openarm-train
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/enactic/Isaac-GR00T/blob/a7772f0709dcf2d43227d8a63908af6aea8dfa0e/examples/OpenArm/README.md
+    date: 2026-10-23
+    verified_on: 2026-10-25
+    summary: "Enactic (OpenArm maker) 'OpenArm N1.7 Training' guide: fine-tune GR00T N1.7 on OpenArm relative-joint data with the OPENARM_BIMANUAL_REL embodiment tag."
+    quote: "The `OPENARM_BIMANUAL_REL` tag (projector slot 12) outputs 16D joint actions:"
+  - id: ev-enactic-groot-openarm-server
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/enactic/Isaac-GR00T/blob/a7772f0709dcf2d43227d8a63908af6aea8dfa0e/openarm_server/README.md
+    date: 2026-10-23
+    verified_on: 2026-10-25
+    summary: "Enactic 'OpenArm Policy Server' serves a GR00T N1.7 OpenArm checkpoint to dora-openarm-local-policy-server; robot control, interpolation and recording stay in the Dora graph."
+    quote: "Serves a GR00T N1.7 OpenArm checkpoint to"
+  - id: ev-enactic-groot-openarm-card
+    tier: upstream-documented
+    type: model-card
+    url: https://huggingface.co/enactic/GR00T-N1.7-openarm-2-cell-pillow
+    date: 2026-10-06
+    verified_on: 2026-10-25
+    summary: "Enactic checkpoint card: GR00T N1.7 (base nvidia/GR00T-N1.7-3B) fine-tuned for a bimanual OpenArm pillow task, served with openarm_server."
+    quote: "A GR00T N1.7 vision-language-action policy fine-tuned for the bimanual OpenArm"

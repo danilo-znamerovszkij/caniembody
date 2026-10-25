@@ -1,0 +1,54 @@
+---
+import Tier from './Tier.astro';
+import { loadAll, type Measurement, type Evidence } from '../lib/data.ts';
+import { RUNTIME_LABEL, PLATFORM_KEYS, shortCompute, fmtGB } from '../lib/ui.ts';
+type Row = Measurement & { policy?: string; evidence?: Evidence[] };
+const { runs, showCompute, showPolicy, evidence = [] } = Astro.props as { runs: Row[]; showCompute?: boolean; showPolicy?: boolean; evidence?: Evidence[] };
+const { byId } = loadAll();
+const ev = (r: Row) => (r.evidence ?? evidence).find((e) => e.id === r.source_ref);
+const sorted = [...runs].sort((a, b) => (b.inference_hz ?? 0) - (a.inference_hz ?? 0));
+// omit columns no row fills; a wall of em-dashes hides the numbers that exist
+const hasCtl = runs.some((r) => r.control_rate_hz != null), hasMem = runs.some((r) => r.vram_gb != null);
+---
+<div class="tbl-wrap"><table class="tbl runs">
+  <thead><tr>
+    {showPolicy && <th>Policy</th>}{showCompute && <th>Compute</th>}
+    <th>Runtime</th><th>Precision</th><th>Cams</th><th>p50 / p95 ms</th><th title="Model calls per second">Inference</th>{hasCtl && <th title="Executed actions per second after chunking">Control</th>}{hasMem && <th>Mem</th>}<th>Platform</th><th>Source</th>
+  </tr></thead>
+  <tbody>
+    {sorted.map((r) => {
+      const e = ev(r);
+      return (
+        <tr>
+          {showPolicy && <td><a href={`/policy/${r.policy}`}>{byId.policy[r.policy!]?.name ?? r.policy}</a></td>}
+          {showCompute && <td><a href={`/compute/${r.compute}`}>{shortCompute(byId.compute[r.compute]?.name ?? r.compute)}</a></td>}
+          <td class="mono" title={r.runtime_note}>{RUNTIME_LABEL[r.runtime] ?? r.runtime}{r.rtc_enabled && ' +RTC'}</td>
+          <td class="mono">{r.precision}</td>
+          <td class="mono">{r.cameras}{r.resolution && <span class="muted"> @{r.resolution}</span>}</td>
+          <td class="mono">{r.inference_latency_ms ? `${r.inference_latency_ms.p50 ?? r.inference_latency_ms.mean ?? '—'}${r.inference_latency_ms.mean != null && r.inference_latency_ms.p50 == null ? ' (mean)' : ''} / ${r.inference_latency_ms.p95 ?? '—'}` : '—'}</td>
+          <td class="mono">{r.outcome && r.outcome !== 'runs' ? <span class="flag red">{r.outcome}</span> : r.inference_hz != null ? `${+r.inference_hz.toFixed(2)} Hz` : '—'}</td>
+          {hasCtl && <td class="mono">{r.control_rate_hz != null ? `${r.control_rate_hz} Hz` : '—'}</td>}
+          {hasMem && <td class="mono">{fmtGB(r.vram_gb)}</td>}
+          <td class="small plat">
+            <span class="mono">{r.platform ? PLATFORM_KEYS.filter((k) => r.platform![k]).map((k) => `${k} ${r.platform![k]}`).join(' · ') || '—' : '—'}</span>
+            {(r.note || (r.platform && Object.keys(r.platform).some((k) => !PLATFORM_KEYS.includes(k)))) && (
+              <details><summary>conditions</summary>
+                {r.platform && <p class="mono">{Object.entries(r.platform).filter(([k]) => !PLATFORM_KEYS.includes(k)).map(([k, v]) => `${k}: ${v}`).join(' · ')}</p>}
+                {r.note && <p>{r.note}</p>}
+              </details>
+            )}
+          </td>
+          <td>{e ? <a href={e.url} title={e.summary}><Tier t={e.tier} /></a> : '—'}</td>
+        </tr>
+      );
+    })}
+  </tbody>
+</table></div>
+<style>
+  .runs td.plat { min-width: 220px; max-width: 340px; white-space: normal; }
+  .plat details { margin-top: 4px; }
+  .plat summary { cursor: pointer; color: var(--fg-3); font-size: 12px; }
+  .plat summary:hover { color: var(--fg); }
+  .plat details p { margin: 6px 0 0; color: var(--fg-3); font-size: 12px; line-height: 1.5; }
+  .runs td:first-child a { white-space: nowrap; }
+</style>

@@ -1,0 +1,24 @@
+name: Add a policy
+description: Propose a policy for the matrix. Needs public weights or code and a primary source.
+title: "[policy] <name>"
+labels: [policy]
+body:
+  - type: input
+    id: name
+    attributes: { label: Policy name }
+    validations: { required: true }
+  - type: dropdown
+    id: family
+    attributes: { label: Family, options: [bc, diffusion, flow, vla, world-model, rl, reward-model] }
+    validations: { required: true }
+  - type: input
+    id: framework
+    attributes: { label: Where it runs (LeRobot policy.type, or upstream repo URL) }
+    validations: { required: true }
+  - type: input
+    id: paper
+    attributes: { label: Paper URL }
+  - type: textarea
+    id: sources
+    attributes: { label: Sources (model card, docs, repo — one URL per line) }
+    validations: { required: true }

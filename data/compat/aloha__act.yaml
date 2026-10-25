@@ -1,0 +1,51 @@
+robot: aloha
+policy: act
+state: works-with-caveats
+framework: lerobot
+caveats:
+  - "LeRobot's built-in `aloha` robot type was removed in the hardware API redesign (PR #777, June 2025) and is not in v0.6.1; the documented LeRobot workflow needs a pre-redesign commit or a third-party driver."
+  - "ACT was introduced on the original ALOHA (ViperX 300 6-DoF followers) using the authors' own codebase (tonyzhaozh/act), not LeRobot."
+capabilities:
+  train: {state: works, evidence: [ev-lerobot-aloha-doc, ev-trossen-lerobot-guide, ev-act-paper, ev-hub-trossen-act-tshirt]}
+  inference_real: {state: works, evidence: [ev-act-paper, ev-lerobot-aloha-doc, ev-trossen-lerobot-guide]}
+  teleop_record: {state: works, evidence: [ev-lerobot-aloha-doc, ev-trossen-lerobot-guide]}
+  inference_sim:
+    state: works
+    notes: "Simulated ALOHA (MuJoCo / gym-aloha) only."
+    evidence: [ev-act-paper, ev-lerobot-act-aloha-sim]
+evidence:
+  - id: ev-act-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2304.13705
+    date: 2023-04-23
+    verified_on: 2026-10-24
+    summary: "The ACT paper introduces both ALOHA and ACT, and evaluates ACT on 6 real-world ALOHA tasks plus 2 simulated (MuJoCo) ALOHA tasks."
+    quote: "We present experiments to evaluate ACT’s performance on fine manipulation tasks. For ease of reproducibility, we build two simulated fine manipulation tasks in MuJoCo [63], in addition to 6 real-world tasks with ALOHA."
+  - id: ev-lerobot-aloha-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/bed90e3a41c43758c619dba66158ddd5798d361a/examples/9_use_aloha.md
+    verified_on: 2026-10-24
+    summary: "Official LeRobot ALOHA tutorial (last version before removal, commit bed90e3, May 2025): records with --robot.type=aloha, trains with --policy.type=act, and evaluates the ACT checkpoint on the robot via control_robot.py record --control.policy.path."
+    quote: "This tutorial explains how to use [Aloha and Aloha 2 stationary](https://www.trossenrobotics.com/aloha-stationary) with LeRobot."
+  - id: ev-trossen-lerobot-guide
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://docs.trossenrobotics.com/aloha_docs/2.0/training/lerobot_guide.html
+    verified_on: 2026-10-24
+    summary: "Trossen Robotics' 'LeRobot X Aloha User Guide' (ALOHA kits with ViperX 300 S followers) covers teleop, recording, ACT training (policy=act_aloha_real) and on-robot evaluation, pinned to LeRobot commit 96c7052777aca85d4e55dfba8f81586103ba8f61."
+    quote: "The policy is specified with policy=act_aloha_real."
+  - id: ev-hub-trossen-act-tshirt
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/TrossenRoboticsCommunity/act-fold-tshirt-aloha
+    verified_on: 2026-10-24
+    summary: "config.json type=act; trained on TrossenRoboticsCommunity/aloha_fold_tshirt whose meta/info.json robot_type=aloha (21 episodes, 18-dim joint state incl. shadow joints, 3 cameras). Card tags platform:aloha, robot:stationary."
+  - id: ev-lerobot-act-aloha-sim
+    tier: upstream-documented
+    type: model-card
+    url: https://huggingface.co/lerobot/act_aloha_sim_transfer_cube_human
+    verified_on: 2026-10-24
+    summary: "Official LeRobot checkpoint: config.json type=act; train_config.json dataset lerobot/aloha_sim_transfer_cube_human, env type aloha, task AlohaTransferCube-v0 (simulation, gym-aloha)."
+    quote: "trained for the `AlohaTransferCube` environment from [gym-aloha](https://github.com/huggingface/gym-aloha)."

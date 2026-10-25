@@ -1,0 +1,31 @@
+{
+  "name": "caniembody",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.23"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "npm run validate && astro build && node scripts/redirects.ts",
+    "preview": "astro preview",
+    "validate": "node scripts/validate.ts",
+    "check-links": "node scripts/check-links.ts",
+    "freshness": "node scripts/freshness.ts",
+    "stats": "node scripts/stats.ts",
+    "test": "node src/lib/md.ts && node scripts/issue-to-yaml.test.ts && node scripts/fit.test.ts",
+    "seo": "node scripts/seo-audit.ts"
+  },
+  "dependencies": {
+    "@astrojs/preact": "^6.1.1",
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource-variable/geist-mono": "^5.3.0",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "astro": "^7.4.2",
+    "preact": "^11.0.2",
+    "sharp": "^0.35.5",
+    "yaml": "^2.9.1"
+  }
+}

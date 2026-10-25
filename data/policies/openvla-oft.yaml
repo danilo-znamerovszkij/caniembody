@@ -1,0 +1,72 @@
+id: openvla-oft
+name: OpenVLA-OFT
+aliases: [openvla_oft, OpenVLA-OFT+, moojink/openvla-oft]
+family: vla
+summary: >-
+  Optimized Fine-Tuning (OFT) recipe for OpenVLA from Stanford: replaces autoregressive token decoding with parallel
+  decoding of continuous action chunks trained with an L1 regression objective (optionally FiLM for stronger
+  language grounding, "OFT+"), improving inference speed and task success when adapting OpenVLA to new robots.
+authors: Stanford University (Moo Jin Kim, Chelsea Finn, Percy Liang)
+paper_url: https://arxiv.org/abs/2502.19645
+backbone: OpenVLA (Prismatic VLM, Llama 2 language model) with an MLP action head and proprio projector
+action_output: regression
+action_chunking: true
+arch_source_ref: ev-oft-paper-recipe
+license: MIT
+weights_license: MIT
+open_weights: true
+frameworks:
+  openvla-oft:
+    support: upstream-repo
+    repo_url: https://github.com/moojink/openvla-oft
+    note: "Official code; not part of LeRobot v0.6.1 (no openvla/oft policy directory)."
+    source_ref: ev-oft-readme-hw
+checkpoints:
+  - hub_id: moojink/openvla-7b-oft-finetuned-libero-spatial
+    note: "Used in the README quick-start (MIT tag on the Hub)."
+  - hub_id: moojink/openvla-7b-oft-finetuned-libero-10
+  - hub_id: moojink/openvla-7b-oft-finetuned-libero-spatial-object-goal-10
+requirements:
+  train:
+    vram_gb: {min: 27, max: 80}
+    precision: bf16
+    condition: >-
+      Upstream openvla-oft README: between 1 and 8 GPUs with 27–80 GB each, depending on the training setup, with the
+      default bfloat16 data type. Not a LeRobot figure; batch size not stated in the README.
+    source_ref: ev-oft-readme-train
+  inference:
+    vram_gb: {min: 16}
+    condition: >-
+      Upstream openvla-oft README: 1 GPU with ~16 GB VRAM for LIBERO sim tasks (~18 GB for ALOHA robot tasks).
+      Precision not stated in this line; the quick-start loads without 8/4-bit quantization.
+    source_ref: ev-oft-readme-hw
+notes: >-
+  Not integrated in LeRobot v0.6.1. Parameter count: the paper does not restate a total for the OFT model (it builds
+  on the 7B OpenVLA plus an action head), so params is left out. The README quick-start uses two images (third-person +
+  wrist) and proprioceptive state for LIBERO.
+verified_on: 2026-10-24
+sources:
+  - id: ev-oft-paper-recipe
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2502.19645
+    date: 2025-02-27
+    verified_on: 2026-10-24
+    summary: OFT integrates parallel decoding, action chunking, continuous actions and an L1 regression objective.
+    quote: "an instantiation of an Optimized Fine-Tuning (OFT) recipe that integrates parallel decoding and action chunking, continuous action representations, and an L1 regression objective"
+  - id: ev-oft-readme-hw
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/moojink/openvla-oft/blob/e4287e94541f459edc4feabc4e181f537cd569a8/README.md
+    date: 2025-09-09
+    verified_on: 2026-10-24
+    summary: Upstream inference requirement for LIBERO sim tasks (~16 GB; ALOHA ~18 GB).
+    quote: "* 1 GPU with ~16 GB VRAM for LIBERO sim benchmark tasks"
+  - id: ev-oft-readme-train
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/moojink/openvla-oft/blob/e4287e94541f459edc4feabc4e181f537cd569a8/README.md
+    date: 2025-09-09
+    verified_on: 2026-10-24
+    summary: Upstream training requirement, 1-8 GPUs with 27-80 GB in bfloat16.
+    quote: "* Between 1-8 GPUs with 27-80 GB, depending on the desired training setup (with default bfloat16 data type)."

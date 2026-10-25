@@ -1,0 +1,31 @@
+robot: unitree-g1
+policy: act
+state: works-with-caveats
+caveats:
+  - "Documented by Unitree in its unitree_IL_lerobot repository, which pins LeRobot as a git submodule (commit a5b29d4, November 2025) and deploys with its own eval_robot/eval_g1.py script, not through LeRobot's native unitree_g1 robot or lerobot-rollout."
+  - "The documented workflow covers the G1's arms and dexterous hands (--arm G1_29/G1_23, --ee dex1/dex3/inspire1/brainco); it does not document leg or locomotion control."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-unitree-il-train]
+  inference_real:
+    state: works
+    evidence: [ev-unitree-il-eval]
+evidence:
+  - id: ev-unitree-il-train
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/unitreerobotics/unitree_IL_lerobot/blob/41c2805742de879ddab2d8d6beaeaf215f876395/README.md
+    verified_on: 2026-10-24
+    versions: {lerobot: "a5b29d4"}
+    summary: "Unitree's README gives a lerobot_train.py command for ACT (--policy.type=act) on its G1 Dex3 dataset."
+    quote: "--dataset.repo_id=unitreerobotics/G1_Dex3_ToastedBread_Dataset \\\n    --policy.push_to_hub=false \\\n    --policy.type=act"
+  - id: ev-unitree-il-eval
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/unitreerobotics/unitree_IL_lerobot/blob/41c2805742de879ddab2d8d6beaeaf215f876395/README.md
+    verified_on: 2026-10-24
+    versions: {lerobot: "a5b29d4"}
+    summary: "Unitree documents real-robot testing of a trained LeRobot policy on the G1 via eval_g1.py (its example checkpoint path is a diffusion run)."
+    quote: "To test your trained model on a real robot, you can use the eval_g1.py script located in the eval_robot folder."

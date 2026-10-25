@@ -1,0 +1,58 @@
+name: Report compatibility (works or fails)
+description: Evidence that a policy does — or does not — run on a robot. Failures are as valuable as successes. A bot turns this into a pull request.
+title: "[compat] <policy> on <robot>"
+labels: [compat, evidence]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        One public link that someone else can check is enough. Use the robot/policy ids from the site URL (`/compat/<robot>/<policy>`).
+  - type: input
+    id: robot
+    attributes: { label: Robot id, placeholder: so101 }
+    validations: { required: true }
+  - type: input
+    id: policy
+    attributes: { label: Policy id, placeholder: smolvla }
+    validations: { required: true }
+  - type: dropdown
+    id: state
+    attributes:
+      label: What happened?
+      options: [works, works-with-caveats, partial, not-supported]
+    validations: { required: true }
+  - type: dropdown
+    id: capability
+    attributes:
+      label: What did you do?
+      multiple: true
+      options: [train, inference_real, inference_sim, teleop_record]
+    validations: { required: true }
+  - type: input
+    id: url
+    attributes: { label: Evidence URL (issue, PR, checkpoint, blog post, video, log), placeholder: "https://…" }
+    validations: { required: true }
+  - type: input
+    id: summary
+    attributes: { label: One-line summary of what the link shows }
+    validations: { required: true }
+  - type: input
+    id: versions
+    attributes: { label: Exact versions, placeholder: "lerobot 0.6.1, torch 2.9, cuda 12.8" }
+    validations: { required: true }
+  - type: textarea
+    id: caveats
+    attributes: { label: Caveats / failure reason (one per line, one sentence each) }
+  - type: textarea
+    id: measurement
+    attributes:
+      label: Measurement (optional)
+      description: If you report a rate, runtime + precision + camera count are REQUIRED or it will be dropped.
+      placeholder: "compute: rtx-4090 | runtime: pytorch-eager | precision: bf16 | cameras: 2 | p50_ms: 28 | control_rate_hz: 30"
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Licensing
+      options:
+        - label: I agree this contribution is published under CC BY 4.0.
+          required: true

@@ -1,0 +1,3 @@
+id: rgb-dual
+name: "RGB, two cameras (wrist + overview)"
+description: "One wrist-mounted and one scene camera. The most common configuration in LeRobot SO-100/101 datasets."

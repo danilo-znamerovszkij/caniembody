@@ -1,0 +1,26 @@
+robot: bi-so
+policy: act
+state: partial
+partial_scope: Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source.
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-pepijn-act-biso100
+    - ev-hub-nbirukov-act-biso101
+evidence:
+- id: ev-hub-pepijn-act-biso100
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/pepijn223/bimanual-so100-handover-cube
+  date: '2025-07-16'
+  verified_on: '2026-10-24'
+  summary: config.json type=act; train_config.json dataset.repo_id=pepijn223/bimanual-so100-handover-cube, whose meta/info.json robot_type=bi_so100_follower (25 episodes).
+- id: ev-hub-nbirukov-act-biso101
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/nbirukov/act_bimanual-so101-stack-rings-fast
+  date: '2025-10-06'
+  verified_on: '2026-10-24'
+  summary: config.json type=act; train_config.json dataset.repo_id=nbirukov/bimanual-so101-stack-yellow-ring-fast-V2, whose meta/info.json robot_type=bi_so101_follower (300 episodes).

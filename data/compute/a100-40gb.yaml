@@ -1,0 +1,38 @@
+id: a100-40gb
+name: NVIDIA A100 40GB
+class: datacenter
+memory_gb: 40
+arch: Ampere
+ai_tops: BFLOAT16 Tensor Core 312 TFLOPS | 624 TFLOPS* (*with sparsity)
+power_w: 250W (PCIe) / 400W (SXM)
+notes: HBM2, PCIe or SXM4. NVIDIA's current A100 product page lists only the 80GB variants; the 40GB figures come from the A100 datasheet. Not offered as a Hugging Face Jobs flavor (Jobs' A100 is the 80 GB part). Many papers say just "A100" without the memory variant; such runs cannot be filed here.
+verified_on: '2026-10-24'
+sources:
+- id: ev-nvidia-a100-datasheet-columns
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/content/dam/en-zz/Solutions/Data-Center/a100/pdf/nvidia-a100-datasheet-us-nvidia-1758950-r4-web.pdf
+  verified_on: '2026-10-24'
+  summary: A100 datasheet spec table column order.
+  quote: 40GB PCIe 80GB PCIe 40GB SXM 80GB SXM
+- id: ev-nvidia-a100-datasheet-memory
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/content/dam/en-zz/Solutions/Data-Center/a100/pdf/nvidia-a100-datasheet-us-nvidia-1758950-r4-web.pdf
+  verified_on: '2026-10-24'
+  summary: A100 datasheet GPU Memory row (40GB PCIe, 80GB PCIe, 40GB SXM, 80GB SXM).
+  quote: GPU Memory 40GB 80GB 40GB 80GB
+- id: ev-nvidia-a100-datasheet-tdp
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/content/dam/en-zz/Solutions/Data-Center/a100/pdf/nvidia-a100-datasheet-us-nvidia-1758950-r4-web.pdf
+  verified_on: '2026-10-24'
+  summary: A100 datasheet Max TDP row (40GB PCIe, 80GB PCIe, 40GB SXM, 80GB SXM).
+  quote: 250W 300W 400W 400W
+- id: ev-nvidia-a100-datasheet-bf16
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/content/dam/en-zz/Solutions/Data-Center/a100/pdf/nvidia-a100-datasheet-us-nvidia-1758950-r4-web.pdf
+  verified_on: '2026-10-24'
+  summary: A100 datasheet BFLOAT16 Tensor Core figure (dense | sparse), same for all variants.
+  quote: 312 TFLOPS | 624 TFLOPS*

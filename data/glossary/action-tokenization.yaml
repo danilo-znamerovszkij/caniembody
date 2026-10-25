@@ -1,0 +1,47 @@
+id: action-tokenization
+term: "Action tokenization"
+aka: ["action discretization", "action tokens"]
+short: "Converting continuous robot actions into discrete tokens so that an autoregressive transformer can predict them the way it predicts text."
+body: |
+  Action tokenization maps continuous action vectors to a sequence of discrete symbols from a fixed vocabulary, so that an autoregressive model, typically a language-model backbone, can predict actions with the same next-token objective it uses for text. RT-2 (Brohan et al., 2023) established the approach for [VLAs](/glossary/vla) by expressing robot actions "as text tokens". The simplest scheme bins each action dimension independently: [OpenVLA](/policy/openvla) discretizes "each dimension of the robot actions separately into one of 256 bins", with bin edges set from the 1st and 99th percentiles of the training actions.
+
+  Per-dimension, per-timestep binning degrades at high control frequency. FAST (Pertsch et al., "FAST: Efficient Action Tokenization for Vision-Language-Action Models", 2025) found that such schemes "typically perform poorly when learning dexterous skills from high-frequency robot data". FAST instead compresses an [action chunk](/glossary/action-chunking) with the discrete cosine transform before tokenizing. [π0-FAST](/policy/pi0-fast) is π0 trained with this tokenizer. [VQ-BeT](/policy/vqbet) learns its vocabulary instead, "tokenizing continuous actions with a hierarchical vector quantization module".
+
+  Tokenization sets decoding cost. An autoregressive VLA emits tokens one forward step at a time, so latency grows with the number of tokens per chunk. Continuous heads, such as [flow matching](/glossary/flow-matching), diffusion or the L1 regression with parallel decoding used by [OpenVLA-OFT](/policy/openvla-oft), produce the whole chunk in a fixed number of passes.
+
+  A common misreading concerns FAST's headline speed-up. The FAST paper reports matching diffusion VLAs "while reducing training time by up to 5x". That figure is about training, not inference speed, and should not be quoted as a latency advantage of π0-FAST over [π0](/policy/pi0).
+related: [vla, action-chunking, flow-matching, inference-latency]
+policies: [openvla, pi0-fast, vqbet, openvla-oft, pi0]
+sources:
+  - id: ev-rt2-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2307.15818
+    date: 2023-07-28
+    verified_on: 2026-10-24
+    summary: "RT-2 expresses robot actions as text tokens."
+    quote: "we express the actions as text tokens and incorporate them directly into the training set of the model in the same way as natural language tokens."
+  - id: ev-openvla-paper-full
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/html/2406.09246
+    date: 2024-06-13
+    verified_on: 2026-10-24
+    summary: "OpenVLA bins each action dimension into 256 bins."
+    quote: "we discretize each dimension of the robot actions separately into one of 256 bins."
+  - id: ev-fast-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2501.09747
+    date: 2025-01-16
+    verified_on: 2026-10-24
+    summary: "FAST: DCT-based action tokenization; training up to 5x faster."
+    quote: "we propose a new compression-based tokenization scheme for robot actions, based on the discrete cosine transform."
+  - id: ev-vqbet-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2403.03181
+    date: 2024-03-05
+    verified_on: 2026-10-24
+    summary: "VQ-BeT tokenizes actions with hierarchical vector quantization."
+    quote: "VQ-BeT augments BeT by tokenizing continuous actions with a hierarchical vector quantization module."

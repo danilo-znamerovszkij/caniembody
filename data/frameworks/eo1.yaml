@@ -1,0 +1,9 @@
+id: eo1
+name: EO-1 (EO-Robotics/EO1)
+maintainer: EO-Robotics (EO-1 authors)
+repo: EO-Robotics/EO1
+docs_url: https://github.com/EO-Robotics/EO1
+current_version: main
+current_version_date: 2025-11-12
+versioning: none
+notes: "EO-1 authors' official training/inference code used for the paper's real-robot experiments. No tagged releases and no license declared in the GitHub repo metadata; pin by commit (main at 451c363d, 2025-11-12)."

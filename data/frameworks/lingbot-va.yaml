@@ -1,0 +1,10 @@
+id: lingbot-va
+name: LingBot-VA (Robbyant/lingbot-va)
+maintainer: Robbyant
+repo: Robbyant/lingbot-va
+docs_url: https://github.com/Robbyant/lingbot-va
+license: Apache-2.0
+current_version: main
+current_version_date: 2026-07-09
+versioning: none
+notes: "LingBot-VA authors' upstream runtime. No tagged releases; pin by commit (main at 7c6ffa9bfc4b, 2026-07-09)."

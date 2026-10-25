@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "framework-support.schema.json",
+  "description": "Map of framework id -> how this robot/policy is supported there",
+  "type": "object",
+  "propertyNames": { "$ref": "common.schema.json#/$defs/id" },
+  "additionalProperties": {
+    "type": "object",
+    "required": ["support", "source_ref"],
+    "properties": {
+      "support": { "enum": ["native", "plugin", "community", "upstream-repo", "removed", "planned"] },
+      "since": { "type": "string", "description": "First release containing it, e.g. '0.4.0', or 'main' if unreleased" },
+      "until": { "type": "string", "description": "Last release containing it (for removed)" },
+      "robot_type": { "type": "array", "items": { "type": "string" } },
+      "policy_type": { "type": "string", "description": "Exact --policy.type string" },
+      "package": { "type": "string", "description": "pip package for plugins" },
+      "repo_url": { "$ref": "common.schema.json#/$defs/url" },
+      "docs_url": { "$ref": "common.schema.json#/$defs/url" },
+      "note": { "type": "string" },
+      "source_ref": { "type": "string" }
+    },
+    "additionalProperties": false
+  }
+}

@@ -1,0 +1,85 @@
+id: stretch3
+name: Hello Robot Stretch 3
+maker: Hello Robot
+aliases: [Stretch 3, Stretch, Stretch3]
+class: mobile-manipulator
+in_grid: false
+out_of_grid_reason: >-
+  Native LeRobot support was removed in 0.4.0 (last release with it: 0.3.3). There is only one Stretch dataset in the
+  lerobot Hub org (lerobot/cmu_stretch) and no official checkpoint, so there is no current LeRobot path to evaluate
+  policies on it.
+summary: >-
+  Hello Robot's single-arm mobile manipulator. LeRobot
+  had a native `stretch3` robot type in 0.3.2–0.3.3, deprecated in 0.4.0. Hello Robot maintains its own ROS 2 and
+  Python SDK.
+arms: 1
+open_source: false
+homepage: https://hello-robot.com/
+frameworks:
+  lerobot:
+    support: removed
+    since: "0.3.2"
+    until: "0.3.3"
+    robot_type: [stretch3]
+    note: >-
+      Added on main as `stretch` (PR #409, Oct 2024) and renamed `stretch3` in the Hardware API redesign. It was
+      teleoperated with a stretch3_gamepad. Deprecated in 0.4.0 (PR #2205), and the module is absent from v0.4.0 on.
+    source_ref: ev-lerobot-v040-deprecate
+  ros2:
+    support: upstream-repo
+    repo_url: https://github.com/hello-robot/stretch_ros2
+    note: "Hello Robot's own ROS 2 Humble packages for Stretch."
+    source_ref: ev-stretch-ros2
+notes: >-
+  open_source is false for the hardware. Hello Robot states that its ROS 2 and Python SDK are open source. The
+  Stretch 3 product URL used in LeRobot 0.3.x (hello-robot.com/stretch-3-product) returned 404 on 2026-10-24, and the
+  Hello Robot homepage now promotes Stretch 4. Specs and price are not recorded.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-v040-deprecate
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.4.0
+    date: 2025-10-23
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.0"}
+    summary: "LeRobot 0.4.0 deprecated the stretch, viperx and widowx devices."
+    quote: "chore(robots): deprecate strech, vipex and widowx robots by @imstevenpmwork in https://github.com/huggingface/lerobot/pull/2205"
+  - id: ev-lerobot-stretch3-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.3.3/src/lerobot/robots/stretch3/configuration_stretch3.py
+    date: 2025-08-06
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.3.3"}
+    summary: "stretch3 robot type at v0.3.3 (last release containing it)."
+    quote: "@RobotConfig.register_subclass(\"stretch3\")"
+  - id: ev-lerobot-v032-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.3.2
+    date: 2025-08-01
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.3.2"}
+    summary: "Stretch support (PR #409) included in the first tagged release's notes."
+    quote: "Add support for Stretch (hello-robot) by @aliberts in https://github.com/huggingface/lerobot/pull/409"
+  - id: ev-hub-cmu-stretch
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/datasets/lerobot/cmu_stretch
+    verified_on: 2026-10-24
+    summary: "The only Stretch dataset found in the lerobot Hub org (Hub API search 'stretch', 2026-10-24)."
+  - id: ev-stretch-ros2
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/hello-robot/stretch_ros2/blob/751e701b87d6f34dd26df1c4abc39229d68e60ff/README.md
+    verified_on: 2026-10-24
+    summary: "Hello Robot's ROS 2 Humble packages for Stretch."
+    quote: "This repository holds ROS 2 Humble packages for the Stretch mobile manipulators from Hello Robot Inc."
+  - id: ev-hello-robot-home
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://hello-robot.com/
+    verified_on: 2026-10-24
+    summary: "Hello Robot homepage: open-source ROS 2 and Python SDK; promotes Stretch 4."
+    quote: "Open-source ROS 2 and Python SDK, with reference demos for autonomy and Physical AI."

@@ -1,0 +1,105 @@
+id: hil-serl
+name: HIL-SERL
+aliases: [hilserl, Human-in-the-Loop Sample-Efficient Robotic Reinforcement Learning, gaussian_actor]
+family: rl
+summary: >-
+  Human-in-the-loop, sample-efficient real-robot reinforcement learning: a few teleoperated demonstrations and an
+  optional vision-based reward classifier bootstrap a distributed actor/learner SAC loop, with a human able to intervene
+  during on-robot exploration. In LeRobot v0.6.x the trained policy is a `gaussian_actor` driven by the `sac` algorithm.
+authors: UC Berkeley (Luo, Xu, Wu, Levine)
+paper_url: https://arxiv.org/abs/2410.21845
+backbone: Gaussian actor (tanh-squashed diagonal Gaussian head) over image + state encoders; critics live in the SAC algorithm
+action_output: other
+arch_source_ref: ev-lerobot-gaussian-actor-config
+license: Apache-2.0 (LeRobot implementation)
+frameworks:
+  lerobot:
+    support: native
+    since: "0.3.2"
+    policy_type: gaussian_actor
+    docs_url: https://huggingface.co/docs/lerobot/hilserl
+    note: >-
+      v0.6.0 rebuilt the RL stack: the policy is now `--policy.type=gaussian_actor` (policy.type="gaussian_actor" in the
+      JSON train config) with a top-level `algorithm` block of type "sac"; from v0.3.2 through v0.5.1 the policy type was
+      `sac`. Training runs as two processes, `python -m lerobot.rl.learner` and `python -m lerobot.rl.actor`. An optional
+      reward classifier (type "reward_classifier", lerobot/rewards/classifier) predicts success from camera images.
+      v0.3.2 is the earliest tagged LeRobot release and already ships the `sac` policy and HIL-SERL guide; the only earlier
+      PyPI release (0.1.0, 2024-03) predates the HIL-SERL paper.
+    source_ref: ev-lerobot-hilserl-docs-policy
+requirements:
+  train:
+    condition: >-
+      The LeRobot compute hardware guide gives no VRAM figure for RL: its RL row (still labelled `sac`, the pre-v0.6.0
+      type name) reads "config-dep." and points to the HIL-SERL guide. The HIL-SERL guide lists "A Nvidia GPU" as a
+      requirement and suggests 64×64 instead of 128×128 image inputs to save GPU memory.
+    source_ref: ev-lerobot-hw-guide
+observation_space:
+  state: robot joint state, optionally with joint velocities, motor currents and end-effector pose; code requires state or an image input
+  source_ref: ev-lerobot-hilserl-docs-images
+notes: >-
+  The guide recommends square 128×128 (default) or 64×64 image crops. The HIL-SERL paper's core RL algorithm is RLPD.
+  The LeRobot compute hardware guide still names the RL policy `sac` although v0.6.x registers `gaussian_actor`.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-hilserl-docs-policy
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hilserl.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "HIL-SERL guide: the policy is configured with type gaussian_actor and the algorithm with type sac."
+    quote: '1. Configure the policy settings (`type="gaussian_actor"`, `device`, etc.)'
+  - id: ev-lerobot-hilserl-docs-images
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hilserl.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: HIL-SERL guide recommends square 128×128 or 64×64 image inputs.
+    quote: "Most vision-based policies have been validated on square inputs of either **128×128** (default) or **64×64** pixels."
+  - id: ev-lerobot-gaussian-actor-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/gaussian_actor/configuration_gaussian_actor.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "`gaussian_actor` is registered as a policy type; its docstring places critics/temperature on the SAC algorithm side."
+    quote: "This configures the policy-side (actor + observation encoder) of a Gaussian policy, as used by SAC and related maximum-entropy continuous-control algorithms."
+  - id: ev-lerobot-v060-release
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.6.0
+    date: 2026-07-06
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.0"}
+    summary: v0.6.0 renamed the RL policy type from sac to gaussian_actor.
+    quote: "The RL stack was rebuilt: the `sac` policy type is now `gaussian_actor` under the new modular RL API."
+  - id: ev-lerobot-sac-v032
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.3.2/src/lerobot/policies/sac/configuration_sac.py
+    date: 2025-08-01
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.3.2"}
+    summary: The `sac` policy type (used by HIL-SERL) is registered at v0.3.2, the earliest tagged release.
+    quote: '@PreTrainedConfig.register_subclass("sac")'
+  - id: ev-hilserl-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2410.21845
+    date: 2024-10-29
+    verified_on: 2026-10-24
+    summary: HIL-SERL paper builds on RLPD as its core RL algorithm.
+    quote: "the core underlying RL algorithm that we build on is RLPD"
+  - id: ev-lerobot-hw-guide
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hardware_guide.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Compute hardware guide RL row: `sac`, VRAM config-dependent, see HIL-SERL guide."
+    quote: "| RL         | `sac`                                       |             config-dep. | See [HIL-SERL guide](./hilserl)   |"

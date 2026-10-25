@@ -1,0 +1,40 @@
+robot: franka-panda
+policy: groot-n1-7
+state: works-with-caveats
+framework: isaac-groot
+caveats:
+  - "NVIDIA documents the DROID deployment path (inference server + DROID robot control script) but publishes no on-robot DROID success rates for N1.7. The README reports only offline MSE on demo data."
+  - "Targets the DROID platform (ZED cameras, DROID control package), not an arbitrary Panda setup. The DROID software accepts either a Panda or an FR3."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-groot-droid-example]
+  inference_real:
+    state: works-with-caveats
+    notes: "Deployment path documented; no published real-robot results."
+    evidence: [ev-groot-droid-example, ev-groot-droid-server, ev-droid-paper]
+evidence:
+  - id: ev-groot-droid-example
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/NVIDIA/Isaac-GR00T/blob/23ace64f17aa5015259b8609d371eb61a357c776/examples/DROID/README.md
+    date: 2026-04-18
+    verified_on: 2026-10-24
+    summary: "Isaac-GR00T n1.7-release DROID example: zero-shot via the OXE_DROID embodiment tag or the nvidia/GR00T-N1.7-DROID fine-tune, fine-tuning commands, and a robot control script (main_gr00t.py) for the DROID platform."
+    quote: "The N1.7 base model supports DROID inference out of the box via the `OXE_DROID_RELATIVE_EEF_RELATIVE_JOINT` pretrain tag."
+  - id: ev-groot-droid-server
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/NVIDIA/Isaac-GR00T/blob/23ace64f17aa5015259b8609d371eb61a357c776/examples/DROID/README.md
+    date: 2026-04-18
+    verified_on: 2026-10-24
+    summary: "The same README documents an inference server for real-world deployment and a client that runs on the DROID control laptop."
+    quote: "Inference Server (for real-world deployment)"
+  - id: ev-droid-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2403.12945v2
+    date: 2025-04-22
+    verified_on: 2026-10-24
+    summary: "The DROID platform and dataset are built on the Franka Emika Panda."
+    quote: "We chose the Franka Emika Panda 7 DoF robot arm as the base of our setup since it is widely adopted in the robot research community, reliable, relatively affordable and was available at most participating institutions."

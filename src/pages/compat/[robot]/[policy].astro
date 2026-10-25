@@ -1,0 +1,148 @@
+---
+import Base from '../../../layouts/Base.astro';
+import State from '../../../components/State.astro';
+import Tier from '../../../components/Tier.astro';
+import Evidence from '../../../components/Evidence.astro';
+import RunsTable from '../../../components/RunsTable.astro';
+import { loadAll, pagePairs, inferredPair, gitLog, gitDate, compatFileName, type Robot, type Policy } from '../../../lib/data.ts';
+import { STATE_META, TIER_META, CAP_LABEL, fmtAge } from '../../../lib/ui.ts';
+import { crumbs, clip, cellTitle } from '../../../lib/seo.ts';
+import { SITE, GH } from '../../../site.ts';
+
+export function getStaticPaths() {
+  return pagePairs().map(({ r, p }) => ({ params: { robot: r.id, policy: p.id }, props: { r, p } }));
+}
+const { r, p } = Astro.props as { r: Robot; p: Policy };
+const all = loadAll();
+const c = all.cell(r.id, p.id);
+const inf = !c ? inferredPair(r, p) : null;
+const state = c?.state ?? (inf ? 'untested' : 'unknown');
+const file = `data/compat/${compatFileName(r.id, p.id)}`;
+const history = c ? gitLog(file) : [];
+const policyRuns = all.runs.filter((x) => x.policy === p.id);
+const q = (o: Record<string, string>) => new URLSearchParams(o).toString();
+const disputeUrl = `${GH}/issues/new?${q({ template: 'dispute-cell.yml', title: `[dispute] ${p.name} on ${r.name}`, robot: r.id, policy: p.id, current_state: state })}`;
+const addUrl = `${GH}/issues/new?${q({ template: 'add-compat.yml', title: `[compat] ${p.name} on ${r.name}`, robot: r.id, policy: p.id })}`;
+const badge = `[![${p.name} on ${r.name}: ${STATE_META[state].label}](${SITE.url}/badge/${r.id}/${p.id}.svg)](${SITE.url}/compat/${r.id}/${p.id})`;
+const iframe = `<iframe src="${SITE.url}/embed/${r.id}/${p.id}" width="380" height="132" style="border:0" title="${p.name} on ${r.name} | ${SITE.title}"></iframe>`;
+const answer = c
+  ? `${STATE_META[state].label}${c.tier ? ` (${TIER_META[c.tier].label})` : ''}, verified ${c.verified_on}`
+  : 'unknown: no sourced evidence yet';
+const desc = `Does ${p.name} run on ${r.name}? ${answer.charAt(0).toUpperCase() + answer.slice(1)}.${c?.caveats?.[0] ? ` ${c.caveats[0]}` : ''} Capabilities, measured control rates and every source.`;
+---
+<Base title={cellTitle(p.name, r.name)} description={clip(desc)} noindex={!c}
+  og={`/og/compat/${r.id}/${p.id}.png`} modified={c ? gitDate(file) : undefined}
+  jsonld={[crumbs([['Matrix', '/'], [r.name, `/robot/${r.id}`], [p.name, `/compat/${r.id}/${p.id}`]])]}>
+  <div class="wrap">
+    <section class="ph">
+      <div class="eyebrow"><a href="/">Matrix</a><span>/</span><a href={`/robot/${r.id}`}>{r.name}</a><span>/</span><a href={`/policy/${p.id}`}>{p.name}</a></div>
+      <h1>Does {p.name} run on {r.name}?</h1>
+      <div class="verdict" data-s={state}>
+        <span class="st big" data-s={state} aria-hidden="true">{STATE_META[state].glyph}</span>
+        <div>
+          <div class="v-state">{STATE_META[state].label}</div>
+          <div class="v-meta">
+            {c ? <>
+              <Tier t={c.tier} />
+              <span class="mono">last verified {c.verified_on} · {fmtAge(c.age_days)}</span>
+              {c.framework && <span class="pill">{all.byId.framework[c.framework]?.name ?? c.framework}{c.framework_version_tested && ` ${c.framework_version_tested}`}</span>}
+              {c.stale && <span class="flag">stale: newest evidence older than 180 days</span>}
+              {c.version_drift && <span class="flag">version drift: tested 3+ minor releases behind current</span>}
+              {c.dispute && <a class="flag red" href={c.dispute}>disputed: open issue</a>}
+            </> : inf ? <span class="tier" data-t="inferred">T4 · inferred</span> : <span class="muted">{STATE_META.unknown.desc}</span>}
+          </div>
+          {c?.partial_scope && <p class="v-note"><strong>Scope:</strong> {c.partial_scope}</p>}
+          {c?.reason && <p class="v-note"><strong>Reason:</strong> {c.reason}</p>}
+        </div>
+        <div class="v-actions">
+          {c ? <a class="btn" href={disputeUrl}>Dispute this cell</a> : <a class="btn primary" href={addUrl}>Add evidence</a>}
+        </div>
+      </div>
+    </section>
+
+    {c ? (
+      <>
+        {c.capabilities && (
+          <>
+            <h2>Capabilities</h2>
+            <div class="tbl-wrap"><table class="tbl">
+              <thead><tr><th>Capability</th><th>State</th><th>Notes</th><th>Evidence</th></tr></thead>
+              <tbody>
+                {Object.entries(CAP_LABEL).map(([k, label]) => {
+                  const cap = c.capabilities?.[k as 'train'];
+                  return <tr>
+                    <td>{label}</td><td><State s={cap?.state ?? 'unknown'} /></td><td class="small">{cap?.notes ?? ''}</td>
+                    <td class="mono small">{cap?.evidence?.map((e, i) => <>{i ? ', ' : ''}<a href={`#${e}`}>{e}</a></>) ?? '—'}</td>
+                  </tr>;
+                })}
+              </tbody>
+            </table></div>
+          </>
+        )}
+
+        {c.caveats?.length ? <><h2>Caveats</h2><ul class="caveats">{c.caveats.map((x) => <li>{x}</li>)}</ul></> : null}
+
+        {c.measured?.length ? <><h2>Measured on this robot</h2><RunsTable runs={c.measured} showCompute evidence={c.evidence} /></> : null}
+
+        {(c.sensors_required?.length || c.sensors_optional?.length) ? (
+          <><h2>Sensors</h2>
+          <dl class="kv">
+            {c.sensors_required?.length ? <><dt>Required</dt><dd>{c.sensors_required.map((s) => all.byId.sensor[s]?.name ?? s).join(', ')}</dd></> : null}
+            {c.sensors_optional?.length ? <><dt>Optional</dt><dd>{c.sensors_optional.map((s) => all.byId.sensor[s]?.name ?? s).join(', ')}</dd></> : null}
+          </dl></>
+        ) : null}
+
+        <h2 id="evidence">Evidence <span class="muted small">{c.evidence.length} source{c.evidence.length === 1 ? '' : 's'}; the cell shows the highest tier</span></h2>
+        <Evidence items={c.evidence} />
+      </>
+    ) : (
+      <div class="empty" style="margin-top:8px">
+        <p><strong>We have found no published evidence for {p.name} on {r.name}.</strong> Unknown means nobody has reported a result either way, so this page makes no claim.</p>
+        {inf && <p class="inf-note">{inf.basis} Sources: <a href={`/robot/${r.id}#sources`}>{r.name} framework support</a>, <a href={`/policy/${p.id}#sources`}>{p.name} framework support</a>.</p>}
+        <p style="margin:0">If you have run it (or failed to), a link to a public log, issue, checkpoint or video is enough. <a href={addUrl}>Open a pre-filled report</a>. Failures are as valuable as successes.</p>
+      </div>
+    )}
+
+    {policyRuns.length > 0 && (
+      <>
+        <h2>{p.name} inference speed by hardware <span class="muted small">robot-independent · inference cost only</span></h2>
+        <RunsTable runs={policyRuns} showCompute />
+      </>
+    )}
+
+    <div class="grid-2" style="margin-top:8px">
+      <section>
+        <h2>Embed this cell</h2>
+        <p class="small muted">Badge for READMEs and model cards. It always shows the current state.</p>
+        <p><img src={`/badge/${r.id}/${p.id}.svg`} alt={`${p.name} on ${r.name}: ${STATE_META[state].label}`} height="20" /></p>
+        <div class="copy"><code>{badge}</code><button class="btn" type="button" data-copy={badge}>Copy</button></div>
+        <div class="copy"><code>{iframe}</code><button class="btn" type="button" data-copy={iframe}>Copy</button></div>
+      </section>
+      <section>
+        <h2>History</h2>
+        {history.length ? (
+          <ol class="hist">{history.map((h) => <li><span class="mono">{h.date}</span> <a class="mono" href={`${GH}/commit/${h.hash}`}>{h.hash}</a> {h.subject} <span class="muted">· {h.author}</span></li>)}</ol>
+        ) : <p class="small muted">{c ? 'No committed history yet.' : 'No record yet.'} Source file: <a class="mono" href={`${GH}/blob/main/${file}`}>{file}</a></p>}
+      </section>
+    </div>
+  </div>
+  <script>
+    for (const b of document.querySelectorAll<HTMLButtonElement>('[data-copy]'))
+      b.addEventListener('click', async () => {
+        try { await navigator.clipboard.writeText(b.dataset.copy!); b.textContent = 'Copied'; setTimeout(() => (b.textContent = 'Copy'), 1400); } catch {}
+      });
+  </script>
+</Base>
+<style>
+  .verdict { display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: start; margin-top: 18px; padding: 18px; border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--bg-elev); }
+  .st.big { width: 44px; height: 40px; font-size: 18px; border-radius: 8px; }
+  .v-state { font-size: 20px; font-weight: 600; letter-spacing: -.02em; }
+  .v-meta { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin-top: 6px; font-size: 12px; color: var(--fg-3); }
+  .v-note { margin: 10px 0 0; font-size: 13.5px; color: var(--fg-2); }
+  .caveats { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; }
+  .copy { display: flex; gap: 8px; align-items: stretch; margin-top: 8px; }
+  .copy code { flex: 1; min-width: 0; overflow-x: auto; white-space: nowrap; padding: 6px 8px; font-size: 11px; display: block; }
+  .inf-note { margin: 0 0 12px; padding: 8px 12px; border: 1px dashed var(--line-2); border-radius: var(--r); font-style: italic; color: var(--fg-2); }
+  .hist { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; font-size: 12.5px; }
+  @media (max-width: 640px) { .verdict { grid-template-columns: auto 1fr; } .v-actions { grid-column: 1 / -1; } }
+</style>

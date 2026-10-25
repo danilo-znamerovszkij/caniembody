@@ -1,0 +1,78 @@
+id: bi-so
+name: Bimanual SO-100/SO-101
+maker: TheRobotStudio (arm design); bimanual configuration by Hugging Face LeRobot
+aliases: [bi_so_follower, bi_so100_follower, Bimanual SO-100, Bimanual SO-101, bi-SO100, bi-SO101]
+class: bimanual
+summary: >-
+  Two SO-100 or SO-101 follower arms driven as one robot by LeRobot. Each arm's observation and action keys get a
+  left_ or right_ prefix. It is a software configuration of two standard SO arms, not a separate hardware product.
+dof: 5
+dof_note: "Per arm: five joints + gripper (six STS3215 servos); 2 arms."
+arms: 2
+actuators: Feetech STS3215 serial bus servos (6 per arm)
+specs_source_ref: ev-lerobot-bi-so-src
+open_source: true
+license: Apache-2.0
+homepage: https://github.com/TheRobotStudio/SO-ARM100
+frameworks:
+  lerobot:
+    support: native
+    since: "0.3.2"
+    robot_type: [bi_so_follower]
+    note: >-
+      0.3.2 to 0.4.2 used the type bi_so100_follower (added in PR #1509, merged 2025-07-16). v0.4.3 renamed it to
+      bi_so_follower when the bimanual SO setups were consolidated (PR #2780). Each side takes an SOFollowerConfig, so
+      SO-100 and SO-101 arms both work. There is no dedicated docs page in v0.6.1.
+    source_ref: ev-lerobot-bi-so-src
+sensors_supported: [rgb-mono, rgb-dual, rgb-multi, realsense-depth]
+teleop_options: ["Two SO-100/SO-101 leader arms (bimanual leader)"]
+notes: >-
+  Cameras can be declared at top level or per arm. Per-arm cameras get the left_/right_ prefix, and top-level cameras
+  keep their names.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-bi-so-src
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/robots/bi_so_follower/config_bi_so_follower.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "bi_so_follower composes two SOFollowerConfig arms (left/right)."
+    quote: "@RobotConfig.register_subclass(\"bi_so_follower\") @dataclass class BiSOFollowerConfig(RobotConfig): \"\"\"Configuration class for Bi SO Follower robots.\"\"\" left_arm_config: SOFollowerConfig right_arm_config: SOFollowerConfig"
+  - id: ev-lerobot-v042-bi-so100
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.4.2/src/lerobot/robots/bi_so100_follower/config_bi_so100_follower.py
+    date: 2025-11-27
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.2"}
+    summary: "Before 0.4.3 the type was bi_so100_follower."
+    quote: "@RobotConfig.register_subclass(\"bi_so100_follower\")"
+  - id: ev-lerobot-v032-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.3.2
+    date: 2025-08-01
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.3.2"}
+    summary: "Bimanual SO-100 was added before the first tagged release."
+    quote: "Feat/add bimanual so100 robot by @pkooij in https://github.com/huggingface/lerobot/pull/1509"
+  - id: ev-lerobot-v043-bi-so
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.4.3
+    date: 2026-01-22
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.3"}
+    summary: "v0.4.3 consolidated the bimanual SO setups into bi_so_follower."
+    quote: "feat(robots): consolidates bi SO setups by @imstevenpmwork in https://github.com/huggingface/lerobot/pull/2780"
+  - id: ev-lerobot-cameras
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/cameras.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot camera classes: OpenCV (USB webcams etc.) and RealSense (with depth)."
+    quote: "| `RealSenseCamera` | Intel RealSense (with depth) |"

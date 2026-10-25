@@ -1,0 +1,41 @@
+robot: franka-fr3
+policy: act
+state: works-with-caveats
+framework: lerobot
+caveats:
+  - "Community-reported only (anonymous PhAIL benchmark under double-blind review); not documented upstream or maintainer-tested."
+  - "Ran through the benchmark authors' own inference server (Positronic stack) with end-effector-frame actions at 15 Hz, not through a native LeRobot FR3 robot type."
+  - "The dataset card states no per-policy success rates; of the two ACT rollouts in its sample subset, one moved all 8 items and one ran out of time at 240 s with 5 of 8 moved."
+capabilities:
+  train:
+    state: works
+    notes: "ACT fine-tuned on PhAIL's 449-episode FR3 teleoperation corpus with its default open-source recipe; the checkpoint path sits under phail_unified/lerobot/."
+    evidence: [ev-phail-card, ev-phail-act-sample-timeout]
+  inference_real:
+    state: works-with-caveats
+    evidence: [ev-phail-card, ev-phail-act-sample-timeout, ev-phail-act-sample-success]
+evidence:
+  - id: ev-phail-card
+    tier: community-reported
+    type: community-post
+    url: https://huggingface.co/datasets/phail-anon/phail-v1.0/blob/5bc590213c5d2615eefeb47bc23a700f8c57022a/README.md
+    date: 2026-05-06
+    verified_on: 2026-10-25
+    summary: "PhAIL v1.0 dataset card: ~950 real-robot episodes on a Franka Research 3 with Robotiq 2F-85 (bin-to-bin pick-and-place), including ~150 ACT evaluation rollouts using ACT's default fine-tuning recipe."
+    quote: "Action Chunking Transformer | `inference` | ~150 | Default fine-tuning recipe"
+  - id: ev-phail-act-sample-timeout
+    tier: community-reported
+    type: community-post
+    url: https://huggingface.co/datasets/phail-anon/phail-v1.0/blob/5bc590213c5d2615eefeb47bc23a700f8c57022a/sample/inference/000000000000/000000000003/static.json
+    date: 2026-05-06
+    verified_on: 2026-10-25
+    summary: "Sample ACT rollout metadata (model=act, server type act, checkpoint .../phail_unified/lerobot/270226-ee/checkpoints/220000/pretrained_model, URDF of an FR3): Batteries, 5 of 8 items moved, outcome Ran out of time after 240 s."
+    quote: "\"eval.outcome\": \"Ran out of time\""
+  - id: ev-phail-act-sample-success
+    tier: community-reported
+    type: community-post
+    url: https://huggingface.co/datasets/phail-anon/phail-v1.0/blob/5bc590213c5d2615eefeb47bc23a700f8c57022a/sample/inference/000000000000/000000000061/static.json
+    date: 2026-05-06
+    verified_on: 2026-10-25
+    summary: "Sample ACT rollout metadata (same checkpoint): Wooden spoons, 8 of 8 items moved in ~199 s, outcome Success."
+    quote: "\"eval.outcome\": \"Success\""

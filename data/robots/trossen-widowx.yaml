@@ -1,0 +1,75 @@
+id: trossen-widowx
+name: Trossen WidowX AI
+maker: Trossen Robotics
+aliases: [WidowX AI, Trossen AI, widowxai_follower_robot, bi_widowxai_follower_robot, Trossen AI Stationary, Trossen AI Mobile]
+class: arm
+summary: >-
+  Trossen Robotics' 6-DoF WidowX AI arm, the arm used in its ALOHA-style "Trossen AI" kits (single arm, stationary
+  bimanual, mobile). LeRobot supports it through Trossen's own plugin (lerobot_trossen). The classic Interbotix WidowX
+  250 used as the leader of the original ALOHA is a different arm and is not covered by this plugin.
+dof: 6
+payload_g: {max: 1500}
+repeatability_mm: {max: 1}
+specs_source_ref: ev-trossen-wxai
+open_source: false
+homepage: https://www.trossenrobotics.com/widowx-ai
+price_usd:
+  low: 4545.95
+  note: "WidowX AI 'Base' configuration (follower, precision grip end-effector) on Trossen's store page."
+  source_ref: ev-trossen-wxai-price
+frameworks:
+  lerobot:
+    support: plugin
+    robot_type: [widowxai_follower_robot, bi_widowxai_follower_robot, mobileai_robot]
+    package: lerobot_robot_trossen
+    repo_url: https://github.com/TrossenRobotics/lerobot_trossen
+    docs_url: https://docs.trossenrobotics.com/trossen_arm/main/tutorials/lerobot_plugin.html
+    note: >-
+      Vendor-maintained plugin. Leaders: widowxai_leader_teleop / bi_widowxai_leader_teleop / mobileai_leader_teleop.
+      Requires Python >=3.12 and lerobot>=0.6.0. Installed with `uv sync` from the repo, since it is not on PyPI as of
+      2026-10-24. LeRobot's own native widowx teleoperator (classic WidowX) was deprecated in 0.4.0.
+    source_ref: ev-trossen-plugin-readme
+sensors_supported: [rgb-mono, rgb-dual, rgb-multi, realsense-depth]
+teleop_options: ["WidowX AI leader arm (widowxai_leader_teleop)"]
+notes: "Trossen spec: payload 1.5 kg, reach 700 mm, 6 DoF, repeatability 1 mm, weight 4 kg."
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-third-party
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/third_party_robots.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot third-party page lists lerobot_trossen for WidowX and ALOHA-style arms."
+    quote: "Plugin for the WidowX and ALOHA-style arms from"
+  - id: ev-trossen-plugin-readme
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/TrossenRobotics/lerobot_trossen/blob/337ed74df1ee617ddfb5987a9f7464cf3089c4a2/README.md
+    verified_on: 2026-10-24
+    summary: "Trossen plugin README: WidowX AI types, auto-registration, lerobot>=0.6.0."
+    quote: "This package requires **Python ≥ 3.12** (it depends on `lerobot >= 0.6.0`, which requires 3.12)."
+  - id: ev-trossen-wxai
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://www.trossenrobotics.com/widowx-ai
+    verified_on: 2026-10-24
+    summary: "Trossen WidowX AI spec: payload 1.5 kg, 6 DoF, repeatability 1 mm."
+    quote: "PAYLOAD 1.5kg REACH 700mm SPAN 1400mm DoF 6 REPEATABILITY 1mm WEIGHT 4kg"
+  - id: ev-trossen-wxai-price
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://www.trossenrobotics.com/widowx-ai
+    verified_on: 2026-10-24
+    summary: "Trossen store: WidowX AI Base configuration $4,545.95."
+    quote: "Custom Molded Silicone Grip Pads $4,545.95"
+  - id: ev-lerobot-v040-deprecate
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.4.0
+    date: 2025-10-23
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.0"}
+    summary: "LeRobot 0.4.0 deprecated its native stretch, viperx and widowx devices."
+    quote: "chore(robots): deprecate strech, vipex and widowx robots by @imstevenpmwork in https://github.com/huggingface/lerobot/pull/2205"

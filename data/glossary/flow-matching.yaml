@@ -1,0 +1,55 @@
+id: flow-matching
+term: "Flow matching"
+aka: ["conditional flow matching", "CFM"]
+short: "A generative training method that regresses a velocity field carrying noise to data; VLAs such as π0 and SmolVLA use it to generate continuous action chunks."
+body: |
+  Flow matching trains a network to predict a velocity field that transports samples from a simple noise distribution to the data distribution along a chosen probability path. At inference the field is integrated with an ODE solver over a fixed number of steps. It was introduced by Lipman, Chen, Ben-Hamu, Nickel and Le in "Flow Matching for Generative Modeling" (2022), which describes it as "a simulation-free approach for training CNFs based on regressing vector fields of fixed conditional probability paths". Diffusion paths are a special case; straight optimal-transport paths are the usual choice.
+
+  In robot policies the generated sample is an [action chunk](/glossary/action-chunking), conditioned on images, language and [proprioceptive](/glossary/proprioception) state. [π0](/policy/pi0) (Black et al., 2024) attaches a flow-matching action expert to a pretrained vision-language model. LeRobot documents flow-matching action heads for [π0.5](/policy/pi05), [SmolVLA](/policy/smolvla), [GR00T N1.7](/policy/groot-n1-7), [X-VLA](/policy/xvla), [EO-1](/policy/eo1) and [EVO-1](/policy/evo1). In LeRobot v0.6.1, π0 defaults to `num_inference_steps=10` and SmolVLA to `num_steps=10`: each chunk costs ten passes through the action network, so the step count belongs in any [inference latency](/glossary/inference-latency) figure.
+
+  A common misconception is that flow matching and diffusion are unrelated families. The π0 paper itself calls flow matching "a variant of diffusion". The practical differences are the training target (a velocity rather than noise) and, typically, fewer integration steps at inference. Both are iterative samplers, so both pay a per-step cost on the robot, and [real-time chunking](/glossary/real-time-chunking) was designed for policies of either kind.
+related: [diffusion-policy, action-chunking, vla, inference-latency, real-time-chunking]
+policies: [pi0, pi05, smolvla, groot-n1-7, xvla, eo1, evo1]
+sources:
+  - id: ev-lipman-2022
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2210.02747
+    date: 2022-10-06
+    verified_on: 2026-10-24
+    summary: "Lipman et al. introduce Flow Matching."
+    quote: "we present the notion of Flow Matching (FM), a simulation-free approach for training CNFs based on regressing vector fields of fixed conditional probability paths."
+  - id: ev-pi0-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2410.24164
+    date: 2024-10-31
+    verified_on: 2026-10-24
+    summary: "π0 uses a flow-matching architecture on top of a pretrained VLM."
+    quote: "We propose a novel flow matching architecture built on top of a pre-trained vision-language model (VLM) to inherit Internet-scale semantic knowledge."
+  - id: ev-pi0-paper-full
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/html/2410.24164
+    date: 2024-10-31
+    verified_on: 2026-10-24
+    summary: "π0 paper describes flow matching as a variant of diffusion."
+    quote: "flow matching (a variant of diffusion) to represent complex continuous action distributions"
+  - id: ev-lerobot-rtc-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/rtc.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot RTC docs name Pi0, Pi0.5 and SmolVLA as flow-matching policies."
+    quote: "large, flow-matching based robotic policies, such as [Pi0](./pi0), [Pi0.5](./pi05), and [SmolVLA](./smolvla)"
+  - id: ev-lerobot-pi0-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/pi0/configuration_pi0.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot v0.6.1 π0 uses 10 denoising steps by default."
+    quote: "num_inference_steps: int = 10  # Number of denoising steps during inference"

@@ -1,0 +1,38 @@
+id: peft-lora
+term: "Parameter-efficient fine-tuning (PEFT) and LoRA"
+aka: ["PEFT", "LoRA", "Low-Rank Adaptation"]
+short: "Adapting a pretrained model by training a small set of added parameters while the original weights stay frozen; LoRA learns low-rank update matrices."
+body: |
+  Parameter-efficient fine-tuning (PEFT) adapts a large pretrained model to a new task by training only a small number of parameters while the original weights stay frozen. Low-Rank Adaptation (LoRA) is the most widely used method. Hu et al. introduced it in "LoRA: Low-Rank Adaptation of Large Language Models" (2021): it "freezes the pre-trained model weights and injects trainable rank decomposition matrices into each layer of the Transformer architecture". For a weight matrix W, LoRA learns an update BA whose inner rank r is small. After training, BA can be merged into W, so a merged adapter adds no inference latency.
+
+  For VLAs, LoRA cuts the memory needed to fine-tune, because gradients and optimizer state exist only for the adapter. The OpenVLA paper (Kim et al., 2024) reports fine-tuning its 7B model "on consumer GPUs via modern low-rank adaptation methods". LeRobot v0.6.1 integrates the Hugging Face PEFT library as `lerobot[peft]`; its example fine-tunes [SmolVLA](/policy/smolvla) on LIBERO with `--peft.method_type=LORA --peft.r=64 --peft.lora_alpha=64`, where the scaling factor is `lora_alpha / r`.
+
+  Two misconceptions recur. First, LoRA reduces *training* memory, not deployment memory: inference still loads the full base weights, so a LoRA-tuned [π0](/policy/pi0) needs the same GPU memory at run time as the base model. Lower deployment memory comes from [quantization](/glossary/quantization), not LoRA. Second, LoRA is not free in quality; the LeRobot docs note that the higher the rank, the closer the result gets to full fine-tuning. Whether a result used LoRA or full fine-tuning is part of what makes it reproducible on a given GPU, such as an [RTX 4090](/compute/rtx-4090).
+related: [quantization, vla, embodiment-gap]
+policies: [smolvla, pi0, openvla]
+sources:
+  - id: ev-lora-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2106.09685
+    date: 2021-06-17
+    verified_on: 2026-10-24
+    summary: "Hu et al. introduce LoRA."
+    quote: "We propose Low-Rank Adaptation, or LoRA, which freezes the pre-trained model weights and injects trainable rank decomposition matrices into each layer of the Transformer architecture"
+  - id: ev-openvla-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2406.09246
+    date: 2024-06-13
+    verified_on: 2026-10-24
+    summary: "OpenVLA can be fine-tuned on consumer GPUs with low-rank adaptation."
+    quote: "we show that OpenVLA can be fine-tuned on consumer GPUs via modern low-rank adaptation methods"
+  - id: ev-lerobot-peft-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/peft_training.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot v0.6.1 PEFT/LoRA fine-tuning guide."
+    quote: "This rank can be specified using the `--peft.r` parameter, and the LoRA scaling factor with\n`--peft.lora_alpha` (where `scaling = lora_alpha / r`)."

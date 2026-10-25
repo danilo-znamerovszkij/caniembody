@@ -1,0 +1,26 @@
+robot: mobile-aloha
+policy: act
+state: works
+framework: act-plus-plus
+caveats:
+  - "Documented with the Mobile ALOHA authors' codebase (MarkFzp/act-plus-plus, co-training with static ALOHA data), not LeRobot; LeRobot's converted lerobot/aloha_mobile_* datasets carry 14-dim arm actions only (no base velocity)."
+capabilities:
+  train: {state: works, evidence: [ev-mobile-aloha-paper, ev-act-plus-plus]}
+  inference_real: {state: works, evidence: [ev-mobile-aloha-paper]}
+evidence:
+  - id: ev-mobile-aloha-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2401.02117
+    date: 2024-01-04
+    verified_on: 2026-10-24
+    summary: "Mobile ALOHA paper trains ACT (co-trained with static ALOHA data) for whole-body mobile manipulation tasks on Mobile ALOHA, e.g. 95% success on Wipe Wine with co-training."
+    quote: "We train two recent imitation learning methods, Diffusion Policy [18] and VINN [63], with Mobile ALOHA in addition to ACT."
+  - id: ev-act-plus-plus
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/MarkFzp/act-plus-plus/blob/26bab0789d05b7496bacef04f5c6b2541a4403b5/README.md
+    date: 2024-01-11
+    verified_on: 2026-10-24
+    summary: "Authors' repo implementing ACT, Diffusion Policy and VINN with co-training for Mobile ALOHA; real-robot use requires the MarkFzp/mobile-aloha stack."
+    quote: "This repo contains the implementation of ACT, Diffusion Policy and VINN, together with 2 simulated environments:"

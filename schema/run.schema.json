@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "run.schema.json",
+  "description": "A robot-independent measured inference run: policy x compute. Robot-specific runs go in compat cells.",
+  "type": "object",
+  "allOf": [{ "$ref": "common.schema.json#/$defs/measurement" }],
+  "required": ["id", "policy", "evidence", "date"],
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/id" },
+    "policy": { "$ref": "common.schema.json#/$defs/id" },
+    "checkpoint": { "type": "string" },
+    "date": { "$ref": "common.schema.json#/$defs/date" },
+    "evidence": { "$ref": "common.schema.json#/$defs/sources", "minItems": 1 }
+  },
+  "unevaluatedProperties": false
+}

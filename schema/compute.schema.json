@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "compute.schema.json",
+  "type": "object",
+  "required": ["id", "name", "class", "memory_gb", "sources", "verified_on"],
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/id" },
+    "name": { "type": "string" },
+    "aliases": { "type": "array", "items": { "type": "string" } },
+    "class": { "enum": ["edge", "consumer-gpu", "workstation", "datacenter", "apple-silicon", "cpu-only", "cloud"] },
+    "memory_gb": { "type": "number", "description": "VRAM, or unified memory when unified=true" },
+    "unified": { "type": "boolean", "description": "Memory shared between CPU and GPU (Jetson, Apple Silicon)" },
+    "arch": { "type": "string", "description": "e.g. Ampere, Ada Lovelace, Blackwell, Apple M-series" },
+    "ai_tops": { "type": "string", "description": "Vendor headline AI performance figure, with precision, verbatim" },
+    "power_w": { "type": "string" },
+    "price_usd_approx": { "type": "number" },
+    "price_note": { "type": "string" },
+    "notes": { "type": "string" },
+    "verified_on": { "$ref": "common.schema.json#/$defs/date" },
+    "sources": { "$ref": "common.schema.json#/$defs/sources", "minItems": 1 }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,91 @@
+id: xarm
+name: UFACTORY xArm
+maker: UFACTORY
+aliases: [xArm, UFACTORY xArm 5, UFACTORY xArm 6, UFACTORY xArm 7, xArm6, xArm7, lerobot_robot_xarm]
+class: arm
+summary: >-
+  UFACTORY's xArm collaborative arm series, made up of xArm 5, 6 and 7 with 5, 6 and 7 DoF respectively and 3-5 kg
+  payload. LeRobot reaches it only through a third-party plugin (SpesRobotics lerobot-robot-xarm), and that plugin is
+  built around UFACTORY's smaller Lite 6 arm.
+repeatability_mm: {max: 0.1}
+specs_source_ref: ev-ufactory-xarm
+open_source: false
+homepage: https://www.ufactory.cc/xarm-collaborative-robot/
+price_usd:
+  low: 5299
+  note: "Starting price for the xArm series on UFACTORY's official store page. It depends on model and configuration."
+  source_ref: ev-ufactory-xarm-price
+frameworks:
+  lerobot:
+    support: plugin
+    robot_type: [lerobot_robot_xarm]
+    package: lerobot-robot-xarm
+    repo_url: https://github.com/SpesRobotics/lerobot-robot-xarm
+    docs_url: https://huggingface.co/docs/lerobot/third_party_robots
+    note: >-
+      Third-party drop-in plugin by Spes Robotics (Apache-2.0, requires lerobot>=0.4). It ships lite6.urdf and a
+      Lite6Gripper class and reads 6 joints, so it targets the Lite 6 rather than xArm 5/7. Paired teleop in its README:
+      lerobot-teleoperator-teleop.
+    source_ref: ev-xarm-plugin
+  ros2:
+    support: upstream-repo
+    repo_url: https://github.com/xArm-Developer/xarm_ros2
+    note: "UFACTORY's own ROS 2 packages (xArm-Developer org)."
+    source_ref: ev-xarm-ros2
+notes: >-
+  UFACTORY comparison table: xArm 5/6/7 have 5/6/7 DoF, 3/5/3.5 kg payload, 700 mm reach and ±0.1 mm repeatability.
+  The Lite 6, the model the LeRobot plugin targets, has 600 g max payload and ±0.5 mm repeatability. DoF is left unset
+  because it differs by model.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-third-party
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/third_party_robots.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot's third-party page lists lerobot-robot-xarm as a drop-in plugin for UFACTORY xArm."
+    quote: "Plugin for the xArm collaborative arm series from"
+  - id: ev-lerobot-plugin-discovery
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/third_party_robots.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Plugins are auto-discovered by package-name prefix."
+    quote: "Drop-in plugins are auto-discovered by package name: LeRobot imports any installed package prefixed with `lerobot_robot_` or `lerobot_teleoperator_`."
+  - id: ev-xarm-plugin
+    tier: community-reported
+    type: source-code
+    url: https://github.com/SpesRobotics/lerobot-robot-xarm/blob/8758f9bfa22c0234e4db64553af0d7186a115347/lerobot_robot_xarm/config_xarm.py
+    verified_on: 2026-10-24
+    summary: "Plugin registers robot type lerobot_robot_xarm; xarm.py uses lite6.urdf and a Lite6Gripper; published on PyPI as lerobot-robot-xarm 0.0.3."
+  - id: ev-xarm-plugin-readme
+    tier: community-reported
+    type: source-code
+    url: https://github.com/SpesRobotics/lerobot-robot-xarm/blob/8758f9bfa22c0234e4db64553af0d7186a115347/README.md
+    verified_on: 2026-10-24
+    summary: "README install line: pip install lerobot-robot-xarm lerobot-teleoperator-teleop; --robot.type=lerobot_robot_xarm."
+  - id: ev-ufactory-xarm
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://www.ufactory.cc/xarm-collaborative-robot/
+    verified_on: 2026-10-24
+    summary: "UFACTORY xArm comparison: xArm 5/6/7 DoF 5/6/7, payload 3/5/3.5 kg, repeatability ±0.1 mm."
+    quote: "Degrees of freedom 5 6 7 Repeatability ±0.1mm ±0.1mm ±0.1mm"
+  - id: ev-ufactory-xarm-price
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://www.ufactory.cc/xarm-collaborative-robot/
+    verified_on: 2026-10-24
+    summary: "UFACTORY store: xArm from US$5,299."
+    quote: "From US$5,299"
+  - id: ev-xarm-ros2
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/xArm-Developer/xarm_ros2/blob/ac736c92b02de7ca7e0be6f737d77d46707464d8/ReadMe.md
+    verified_on: 2026-10-24
+    summary: "UFACTORY's xarm_ros2 packages support ROS 2 Humble."
+    quote: "- Ubuntu 22.04 + ROS Humble"

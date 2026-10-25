@@ -1,0 +1,15 @@
+robot: aloha
+policy: pi05
+state: partial
+partial_scope: "openpi ships π0.5 ALOHA configs (inference config pi05_aloha and fine-tuning config pi05_aloha_pen_uncap on public ALOHA data), but no π0.5 ALOHA checkpoint and no published on-robot ALOHA result."
+framework: openpi
+capabilities:
+  train: {state: works, notes: "Upstream fine-tuning config on physical-intelligence/aloha_pen_uncap_diverse from pi05_base.", evidence: [ev-openpi-config]}
+evidence:
+  - id: ev-openpi-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/Physical-Intelligence/openpi/blob/215abfb217dbac7d5f1273282331b9b1866c0479/src/openpi/training/config.py
+    verified_on: 2026-10-24
+    summary: "openpi training configs include pi05_aloha (under '# Inference Aloha configs.') and pi05_aloha_pen_uncap, a π0.5 fine-tuning config on the public ALOHA pen-uncap dataset with trossen normalization assets."
+    quote: "name=\"pi05_aloha_pen_uncap\","

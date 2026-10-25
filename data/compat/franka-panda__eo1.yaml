@@ -1,0 +1,29 @@
+robot: franka-panda
+policy: eo1
+state: works
+framework: eo1
+capabilities:
+  train:
+    state: works
+    evidence: [ev-eo1-paper-panda]
+  inference_real:
+    state: works
+    notes: "Seven Franka Panda pick-and-place tasks plus reasoning-control and open-world tasks. The upstream client controls the Panda through Deoxys (NUC with a real-time kernel + GPU workstation) with RealSense cameras."
+    evidence: [ev-eo1-paper-panda, ev-eo1-repo-franka]
+evidence:
+  - id: ev-eo1-paper-panda
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2508.21112v5
+    date: 2026-02-25
+    verified_on: 2026-10-24
+    summary: "EO-1 paper (v5), Sec. 4.5: EO-1 is evaluated in the real world on a Franka Panda (7 pick-and-place tasks) among other robots."
+    quote: "We evaluate its performance on both short-horizon and long-horizon tasks using different robots, including Franka Panda, WidowX 250 S, Agibot G-1, and Lerobot SO100."
+  - id: ev-eo1-repo-franka
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/EO-Robotics/EO1/blob/451c363d7dff682700789afae0b9b17c004e8f8c/experiments/7_franka/README.md
+    date: 2025-11-12
+    verified_on: 2026-10-24
+    summary: "EO1 repo ships a Franka Emika Panda real-robot client (eval_franka.py, deoxys_control submodule)."
+    quote: "This directory contains the implementation for controlling Franka Emika Panda robots using the EO-1 model."

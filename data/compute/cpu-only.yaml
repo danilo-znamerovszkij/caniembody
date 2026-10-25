@@ -1,0 +1,17 @@
+id: cpu-only
+name: CPU only (no accelerator)
+class: cpu-only
+memory_gb: 0
+notes: 'memory_gb is 0 because there is no dedicated accelerator memory: models run from system RAM, which varies per machine. CPU model, core count and RAM change results by large factors, so runs on this target must record the CPU in platform.cpu (or platform.chip) and the RAM size.'
+verified_on: '2026-10-24'
+sources:
+- id: ev-lerobot-cpu-backend
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/torch_accelerators.mdx
+  date: '2026-08-03'
+  verified_on: '2026-10-24'
+  versions:
+    lerobot: 0.6.1
+  summary: LeRobot docs list CPU as a backend where all computation runs on the CPU with no accelerator.
+  quote: '- **CPU**: CPU executes all computations, no dedicated accelerator is used'

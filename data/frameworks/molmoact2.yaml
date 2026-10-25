@@ -1,0 +1,10 @@
+id: molmoact2
+name: MolmoAct2 (allenai/molmoact2)
+maintainer: Allen Institute for AI (Ai2)
+repo: allenai/molmoact2
+docs_url: https://github.com/allenai/molmoact2
+license: Apache-2.0
+current_version: main
+current_version_date: 2026-10-02
+versioning: none
+notes: "Ai2's original MolmoAct2 training and inference code (used for the paper's experiments). No tagged releases; pin by commit (main at 6070080a, 2026-10-02)."

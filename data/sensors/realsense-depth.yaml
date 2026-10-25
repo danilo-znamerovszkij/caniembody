@@ -1,0 +1,3 @@
+id: realsense-depth
+name: "Intel RealSense depth"
+description: "RGB-D from Intel RealSense (D400 series). LeRobot ships a RealSense camera class; most VLA policies consume only the RGB stream."

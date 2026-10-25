@@ -1,0 +1,142 @@
+id: lingbot-va
+name: LingBot-VA
+aliases: [lingbot_va, lingbot-va-base, robbyant/lingbot-va]
+family: world-model
+summary: >-
+  Autoregressive video-action world-model policy from Robbyant built on the Wan2.2 video-diffusion stack: a dual-stream
+  mixture-of-transformers that interleaves prediction of future video latents and robot actions, each denoised by
+  flow matching, with a KV cache and observed-keyframe feedback across chunks. Predicts end-effector poses + gripper.
+authors: Robbyant
+paper_url: https://arxiv.org/abs/2601.21998
+params: 5300000000
+params_note: "Authors state a total model size of 5.3B parameters (approx. 350M of them the action stream). The LeRobot checkpoint stores only the ~5B trainable transformer; the frozen Wan2.2 VAE + UMT5-XXL text encoder (~20 GB) are pulled separately."
+params_source_ref: ev-lingbotva-paper-params
+backbone: Wan2.2 video DiT (dual-stream mixture-of-transformers, 30 shared blocks) + Wan2.2 VAE + UMT5-XXL text encoder (frozen)
+action_output: flow-matching
+action_chunking: true
+peft_supported: true
+arch_source_ref: ev-lerobot-lingbotva-docs
+license: Apache-2.0
+weights_license: Apache-2.0
+open_weights: true
+frameworks:
+  lerobot:
+    support: native
+    since: "0.6.0"
+    policy_type: lingbot_va
+    docs_url: https://huggingface.co/docs/lerobot/lingbot_va
+    note: "Added in v0.6.0 (\"LingBot-VA: video-action world model\"). Streaming inference is single-environment (`--eval.batch_size=1`); training needs `--policy.attn_mode=flex`. LoRA via the policy's own `--policy.use_peft=true` flag (documented on the LingBot-VA page, not in the generic PEFT guide)."
+    source_ref: ev-lerobot-lingbotva-config
+checkpoints:
+  - hub_id: lerobot/lingbot_va_base
+    note: "Pretrained base, converted to LeRobot format from robbyant/lingbot-va-base."
+  - hub_id: lerobot/lingbot_va_libero_long
+    note: "LIBERO-Long post-train (LeRobot format)."
+  - hub_id: lerobot/lingbot_va_robotwin
+    note: "RoboTwin post-train (LeRobot format)."
+  - hub_id: robbyant/lingbot-va-base
+    note: "Original upstream release."
+requirements:
+  train:
+    condition: >-
+      LeRobot docs: the full 5B DiT does not fit a single 24–32 GB GPU under AdamW; fine-tune with LoRA
+      (`--policy.use_peft=true`) and/or optimizer offload. No VRAM figure is given for either path; not covered by the
+      LeRobot compute hardware guide.
+    source_ref: ev-lerobot-lingbotva-docs-train
+  inference:
+    vram_gb: {min: 18, max: 24}
+    batch_size: 1
+    condition: >-
+      LeRobot docs: inference needs roughly 18–24 GB of VRAM, with the UMT5-XXL text encoder on CPU by default
+      (`config.text_encoder_device`) so the 5B transformer + VAE fit on one GPU; single-environment streaming
+      inference. Precision not stated.
+    source_ref: ev-lerobot-lingbotva-docs-vram
+observation_space:
+  cameras: {min: 2, max: 3}
+  language: required
+  source_ref: ev-lerobot-lingbotva-docs-cams
+notes: >-
+  Family world-model: the LeRobot docs describe it as an "autoregressive video-action world-model policy" that
+  predicts future video latents alongside actions (closed-loop world modeling). Camera counts are those of the
+  documented configurations (LIBERO 2: agentview + wrist; RoboTwin 3: head + two wrists); camera order is fixed and
+  order-sensitive. Joint-space datasets must be remapped into the EEF-pose action schema before fine-tuning the
+  released checkpoints. Upstream repo README gives ~24GB (RoboTwin eval) and ~18GB (i2av inference) with VAE and text
+  encoder offloaded to CPU.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-lingbotva-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/lingbot_va.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot docs: autoregressive video-action world-model policy on Wan2.2; video and action streams use flow-matching schedulers."
+    quote: "LingBot-VA is an **autoregressive video-action world-model policy** built on the **Wan2.2** video-diffusion stack."
+  - id: ev-lerobot-lingbotva-docs-train
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/lingbot_va.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: Full AdamW fine-tuning does not fit 24–32 GB; LoRA via --policy.use_peft=true and/or optimizer offload.
+    quote: "The full 5B DiT does not fit a single 24–32 GB GPU under AdamW; fine-tune with **LoRA** (`--policy.use_peft=true`) and/or optimizer offload."
+  - id: ev-lerobot-lingbotva-docs-vram
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/lingbot_va.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: Inference VRAM roughly 18–24 GB.
+    quote: "inference needs roughly 18–24 GB of VRAM."
+  - id: ev-lerobot-lingbotva-docs-cams
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/lingbot_va.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: Camera order is fixed (LIBERO 2 cameras, RoboTwin 3); first camera is exterior/head, rest are wrist views.
+    quote: "The first camera is the exterior/head view and the rest are wrist views."
+  - id: ev-lerobot-lingbotva-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/lingbot_va/configuration_lingbot_va.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Policy type string is `lingbot_va`."
+    quote: '@PreTrainedConfig.register_subclass("lingbot_va")'
+  - id: ev-lerobot-v060-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.6.0
+    date: 2026-07-06
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.0"}
+    summary: LingBot-VA was added in LeRobot v0.6.0.
+    quote: "* LingBot-VA: video-action world model  by @pkooij in https://github.com/huggingface/lerobot/pull/3731"
+  - id: ev-lingbotva-paper-params
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2601.21998v1
+    date: 2026-01-29
+    verified_on: 2026-10-24
+    summary: LingBot-VA paper ("Causal World Modeling for Robot Control") states a total model size of 5.3B parameters.
+    quote: "resulting in approximately 350M additional parameters and a total model size of 5.3B parameters."
+  - id: ev-lingbotva-upstream-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/Robbyant/lingbot-va/blob/7c6ffa9bfc4b83582cafc860fab4c82cc7deeeeb/README.md
+    date: 2026-07-09
+    verified_on: 2026-10-24
+    summary: Upstream README memory notes with VAE and text encoder offloaded to CPU; Apache 2.0 license.
+    quote: "> **GPU Memory Requirements**: Approximately **18GB VRAM** for single-GPU i2av inference with offload mode enabled (VAE and text_encoder offloaded to CPU)."
+  - id: ev-hub-lingbotva-checkpoints
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/lerobot/lingbot_va_base
+    verified_on: 2026-10-24
+    summary: "Hub API: lerobot/lingbot_va_{base,libero_long,robotwin} and robbyant/lingbot-va-base exist, all tagged license:apache-2.0."

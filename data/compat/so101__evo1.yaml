@@ -1,0 +1,19 @@
+robot: so101
+policy: evo1
+state: works
+framework: evo-1
+capabilities:
+  inference_real:
+    state: works
+    notes: Upstream SO100/SO101 LeRobot inference lives on the evo1-lerobot branch of MINT-SJTU/Evo-1.
+    evidence:
+    - ev-evo1-readme-so100-so101
+evidence:
+- id: ev-evo1-readme-so100-so101
+  tier: upstream-documented
+  type: source-code
+  url: https://github.com/MINT-SJTU/Evo-1/blob/5fd14b015013c4fd0aacf5f8f48f868ca9b870a2/README.md
+  date: '2026-08-18'
+  verified_on: '2026-10-24'
+  summary: 'Official Evo-1 repo README: SO100/SO101 inference via the LeRobot framework (instructions on its evo1-lerobot branch).'
+  quote: Added Evo-1 inference in the LeRobot framework for SO100/SO101

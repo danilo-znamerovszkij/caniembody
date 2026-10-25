@@ -1,0 +1,56 @@
+id: embodiment-gap
+term: "Embodiment gap"
+aka: ["cross-embodiment gap", "embodiment mismatch"]
+short: "The differences in kinematics, action space, sensors and dynamics between the robots a policy was trained on and the robot it is deployed on."
+body: |
+  The embodiment gap is the set of differences between the robot that produced a policy's training data and the robot the policy is asked to control. It covers the number and arrangement of joints ([degrees of freedom](/glossary/degrees-of-freedom)), the action representation (joint positions or end-effector deltas), gripper type, camera count and placement, [control rate](/glossary/control-rate), and actuator dynamics. A policy has no built-in way to map actions across these differences; it learns mappings only for the embodiments in its data.
+
+  Cross-embodiment pretraining tries to narrow the gap through data diversity. The Open X-Embodiment collaboration (2023) assembled "a dataset from 22 different robots collected through a collaboration between 21 institutions" and reported positive transfer for its RT-X models. Later VLAs make the embodiment explicit. LeRobot's X-VLA documentation starts from the problem that "Robot data is fragmented across platforms, sensors, embodiments, and collection protocols", and [X-VLA](/policy/xvla) learns soft-prompt embeddings per hardware setup. [GR00T N1.7](/policy/groot-n1-7) is described as a cross-embodiment policy. [SmolVLA](/policy/smolvla) pads state and action vectors to a fixed width of 32 in LeRobot v0.6.1 so that different robots fit one network.
+
+  A common misconception is that a pretrained generalist VLA runs zero-shot on any robot. The OpenVLA-OFT paper (Kim et al., 2025) observes that VLAs "struggle with novel robot setups and require fine-tuning to achieve good performance". Deploying a pretrained checkpoint on a robot absent from its pretraining data, such as an [SO-101](/robot/so101), normally means collecting demonstrations on that robot and fine-tuning. The gap is distinct from [sim-to-real](/glossary/sim-to-real) transfer, which concerns one robot in two worlds.
+related: [degrees-of-freedom, vla, sim-to-real, affordance, peft-lora]
+policies: [xvla, groot-n1-7, smolvla, openvla-oft]
+sources:
+  - id: ev-oxe-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2310.08864
+    date: 2023-10-13
+    verified_on: 2026-10-24
+    summary: "Open X-Embodiment: dataset from 22 robots; RT-X shows positive transfer."
+    quote: "We assemble a dataset from 22 different robots collected through a collaboration between 21 institutions, demonstrating 527 skills (160266 tasks)."
+  - id: ev-oft-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2502.19645
+    date: 2025-02-27
+    verified_on: 2026-10-24
+    summary: "OpenVLA-OFT: VLAs need fine-tuning for novel robot setups."
+    quote: "VLAs struggle with novel robot setups and require fine-tuning to achieve good performance"
+  - id: ev-lerobot-xvla-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/xvla.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot X-VLA docs on embodiment heterogeneity."
+    quote: "Robot data is fragmented across platforms, sensors, embodiments, and collection protocols."
+  - id: ev-lerobot-groot-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/groot.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot describes GR00T as a cross-embodiment policy."
+    quote: "It is a cross-embodiment policy that accepts multimodal input, including language, images, and proprioception"
+  - id: ev-lerobot-smolvla-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/smolvla/configuration_smolvla.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "SmolVLA pads actions to 32 dimensions in LeRobot v0.6.1."
+    quote: "max_action_dim: int = 32"

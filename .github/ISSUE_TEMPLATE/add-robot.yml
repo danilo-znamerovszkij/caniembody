@@ -1,0 +1,24 @@
+name: Add a robot
+description: Propose a robot for the matrix. It needs a public interface (SDK / framework support) someone can verify.
+title: "[robot] <name>"
+labels: [robot]
+body:
+  - type: input
+    id: name
+    attributes: { label: Robot name }
+    validations: { required: true }
+  - type: input
+    id: maker
+    attributes: { label: Maker / project }
+  - type: dropdown
+    id: class
+    attributes: { label: Class, options: [arm, bimanual, mobile-manipulator, humanoid, mobile-base, desktop-social] }
+    validations: { required: true }
+  - type: input
+    id: framework
+    attributes: { label: Framework support (e.g. LeRobot native since 0.5.0, or plugin package name), placeholder: "lerobot plugin: lerobot_robot_xyz" }
+    validations: { required: true }
+  - type: textarea
+    id: sources
+    attributes: { label: Sources (docs, repo, product page — one URL per line) }
+    validations: { required: true }

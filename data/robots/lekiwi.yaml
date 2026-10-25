@@ -1,0 +1,103 @@
+id: lekiwi
+name: LeKiwi
+maker: SIGRobotics-UIUC
+aliases: [LeKiwi mobile manipulator, Mobile SO100, mobile so100, lekiwi_client]
+class: mobile-manipulator
+summary: >-
+  Low-cost open-source mobile manipulator: an SO-ARM101 arm on a 3-wheel holonomic (kiwi) base with omni wheels. It
+  is usually run from an onboard Raspberry Pi 5 that streams to a laptop, and a wired version exists. LeRobot
+  supports it natively and teleoperates it with an SO leader arm plus keyboard driving.
+dof: 5
+dof_note: "Arm: five joints + gripper (SO-ARM101, six STS3215). Base: three STS3215 wheel motors (kiwi drive), not counted in dof."
+arms: 1
+actuators: Feetech STS3215 serial bus servos (6 arm + 3 base wheels)
+specs_source_ref: ev-lerobot-lekiwi-motors
+open_source: true
+license: Apache-2.0
+bom_url: https://github.com/SIGRobotics-UIUC/LeKiwi/blob/main/BOM.md
+homepage: https://github.com/SIGRobotics-UIUC/LeKiwi
+price_usd:
+  low: 482
+  high: 499
+  note: >-
+    Self-sourced parts cost from the maker's BOM (US): $482 (12V version) and $499 (5V version). Base only costs $184
+    (wired) to $251.5. The maker notes that prices vary by location and time.
+  source_ref: ev-lekiwi-bom
+frameworks:
+  lerobot:
+    support: native
+    since: "0.3.2"
+    robot_type: [lekiwi, lekiwi_client]
+    docs_url: https://huggingface.co/docs/lerobot/lekiwi
+    note: >-
+      `lekiwi` runs on the robot (host, usually a Raspberry Pi). `lekiwi_client` runs on the laptop and talks to the
+      host over ZeroMQ. Install extra: pip install -e ".[lekiwi]". Both types are already present at v0.3.2. The
+      wired version runs everything on the PC.
+    source_ref: ev-lerobot-lekiwi-src
+sensors_builtin: [rgb-dual]
+sensors_supported: [rgb-mono, rgb-dual, rgb-multi]
+teleop_options: ["SO-100/SO-101 leader arm (so100_leader) for the arm", "Keyboard (w,a,s,d / z,x) for the base"]
+notes: >-
+  The maker README lists two built-in cameras: a workspace RGB camera and a wrist RGB camera. A Dynamixel variant
+  (Koch v1.1 arm, XL430 base motors) is documented in the maker repo but is not a separate LeRobot type.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/README.md
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot README lists LeKiwi among natively supported hardware."
+    quote: "SO100, LeKiwi, Koch, HopeJR, OMX, EarthRover, Reachy2, Gamepads, Keyboards, Phones, OpenARM, Unitree G1, reBot B601."
+  - id: ev-lerobot-lekiwi-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/lekiwi.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeKiwi guide: leader arm for the arm, keyboard for the base."
+    quote: "Now you can move the leader arm and use the keyboard (w,a,s,d) to drive forward, left, backwards, right."
+  - id: ev-lerobot-lekiwi-src
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/robots/lekiwi/config_lekiwi.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Registers lekiwi (host) and lekiwi_client robot types."
+    quote: "@RobotConfig.register_subclass(\"lekiwi_client\")"
+  - id: ev-lerobot-lekiwi-motors
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/robots/lekiwi/lekiwi.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Motor map: six arm motors and three base wheels, all sts3215."
+    quote: "\"base_left_wheel\": Motor(7, \"sts3215\", MotorNormMode.RANGE_M100_100),"
+  - id: ev-lerobot-v032-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.3.2
+    date: 2025-08-01
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.3.2"}
+    summary: "LeKiwi (initially 'mobile so100') was added before the first tagged release."
+    quote: "Add mobile so100 by @pkooij in https://github.com/huggingface/lerobot/pull/724"
+  - id: ev-lekiwi-readme
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/SIGRobotics-UIUC/LeKiwi/blob/efa608d7ee5a495a4803b1d28cd0c955b4f1e033/README.md
+    verified_on: 2026-10-24
+    summary: "Maker README: kiwi drive with omni wheels, SO-ARM101 arm, workspace + wrist RGB cameras."
+    quote: "- 3-wheel Kiwi (holonomic) drive with omni wheels"
+  - id: ev-lekiwi-bom
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/SIGRobotics-UIUC/LeKiwi/blob/efa608d7ee5a495a4803b1d28cd0c955b4f1e033/BOM.md
+    verified_on: 2026-10-24
+    summary: "Maker BOM totals: 12V $482, 5V $499; base-only options $184-$251.5."
+    quote: "| **12V** | **$482** | **€545.8** | **¥2891** | | **5V** | **$499** |"

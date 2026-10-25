@@ -1,0 +1,58 @@
+robot: franka-fr3
+policy: multitask-dit
+state: works-with-caveats
+framework: lerobot
+caveats:
+  - "Evidence is TRI's own Large Behavior Model (DiT) stack, not LeRobot's multi_task_dit reimplementation; LeRobot has no FR3 robot type and no FR3 run through LeRobot is documented."
+  - "TRI's platform is bimanual: two FR3 arms per station with custom compliant fingers (Schunk grippers on the evaluated platform) and 4 wrist cameras."
+capabilities:
+  train:
+    state: works
+    notes: "LBMs are pretrained on a multi-source mixture (TRI's own real data, lbm_real, weighted 0.5) and finetuned per task (30k steps for real tasks)."
+    evidence: [ev-lbm-paper-finetune, ev-lbm-paper-platform]
+  inference_real:
+    state: works
+    notes: "Real-world evaluation on nine bimanual FR3 stations; the policy runs at 10 Hz."
+    evidence: [ev-lbm-paper-platform, ev-lbm-paper-hardware, ev-lbm-paper-dit]
+evidence:
+  - id: ev-lbm-paper-platform
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2507.05331v1
+    date: 2025-07-07
+    verified_on: 2026-10-25
+    summary: "TRI LBM paper, Sec. 4.3.1: the real-world platform is tabletop bimanual manipulation with two Franka FR3 arms."
+    quote: "We focus here on tabletop bimanual manipulation using two Franka FR3 robot arms with parallel gripper and TRI’s finray-style fingers"
+  - id: ev-lbm-paper-hardware
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2507.05331v1
+    date: 2025-07-07
+    verified_on: 2026-10-25
+    summary: "TRI LBM paper, Sec. 7.1: every robot station has two Franka Research 3 arms."
+    quote: "All stations contain a tabletop marked with grid lines (useful for correlating object placement on the real robot stations), two Franka Research 3 arms, and two parallel jaw grippers with custom compliant fingers"
+  - id: ev-lbm-paper-dit
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2507.05331v1
+    date: 2025-07-07
+    verified_on: 2026-10-25
+    summary: "TRI LBM paper, Fig. 9: the LBM policy is a language-, vision- and proprioception-conditioned Diffusion Transformer run at 10 Hz on deployment."
+    quote: "conditioned on language, vision and proprioception and which outputs 20-dimensional actions over 16 timesteps"
+  - id: ev-lbm-paper-finetune
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2507.05331v1
+    date: 2025-07-07
+    verified_on: 2026-10-25
+    summary: "TRI LBM paper: LBMs are finetuned per task on real (and simulated) data before evaluation."
+    quote: "we finetune for 30k steps for real tasks and for 10k steps for simulated tasks with a global batch size of 320 and a reduced learning rate of 2e-5."
+  - id: ev-lerobot-mtdit-lbm
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/multi_task_dit.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-25
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot v0.6.1 docs: LeRobot's Multitask DiT diffusion implementation is based on TRI's LBM paper, which ties this grid policy to the LBM results."
+    quote: "The original diffusion implementation here is based on the work described in [TRI's LBM paper](https://arxiv.org/abs/2507.05331)"

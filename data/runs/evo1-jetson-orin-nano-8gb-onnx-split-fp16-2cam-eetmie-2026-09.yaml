@@ -1,0 +1,49 @@
+id: evo1-jetson-orin-nano-8gb-onnx-split-fp16-2cam-eetmie-2026-09
+policy: evo1
+compute: jetson-orin-nano-8gb
+checkpoint: zuoxingdong/evo1_libero
+date: '2026-09-05'
+runtime: onnx-split
+runtime_note: Split ONNX graphs on ONNX Runtime (onnxruntime-gpu 1.24) with the TensorRT execution provider (FP16); superseded in the same repo by the pure-TensorRT runs.
+precision: fp16
+cameras: 2
+inference_latency_ms:
+  p50: 414.67
+  p95: 424.72
+inference_hz: 2.41
+action_chunk: 50
+outcome: runs
+platform:
+  board: Jetson Orin Nano Super 8 GB developer kit
+  jetpack: 7.2 (L4T R39.2.x, per the repo host-setup doc at this commit)
+  power_mode: MAXN_SUPER, pinned clocks
+  cuda: '13.2'
+  os: Ubuntu 24.04
+  onnxruntime-gpu: '1.24'
+  tensorrt: 10.16.2 (system, via ONNX Runtime TensorRT EP)
+note: Inference cost only; not task success. Deterministic synthetic observations, pinned MAXN_SUPER clocks. Author labels the precision "mixed FP16". System RAM 6001 MB in use.
+source_ref: ev-eetmie-readme-2026-09
+evidence:
+- id: ev-eetmie-readme-2026-09
+  tier: community-reported
+  type: community-post
+  url: https://github.com/eetmie/jetson-orin-nano-vla/blob/b6185e17c5006e449a5d2b1c1a31ae7f26ce9f9f/README.md
+  date: '2026-09-05'
+  verified_on: '2026-10-24'
+  summary: eetmie/jetson-orin-nano-vla README "Measured fit" table at commit b6185e1 (PyTorch FP32 vs split ONNX FP16 on Orin Nano 8 GB Super).
+  quote: '| EVO1 LIBERO split ONNX mixed FP16 | 2 | 414.67 ms | 424.72 ms | 2.41 Hz |'
+- id: ev-eetmie-results-2026-09
+  tier: community-reported
+  type: source-code
+  url: https://github.com/eetmie/jetson-orin-nano-vla/blob/b6185e17c5006e449a5d2b1c1a31ae7f26ce9f9f/docs/RESULTS.md
+  date: '2026-09-05'
+  verified_on: '2026-10-24'
+  summary: 'Generated results at the same commit: speed, footprint and control-rate fit per run.'
+- id: ev-eetmie-host-2026-09
+  tier: community-reported
+  type: source-code
+  url: https://github.com/eetmie/jetson-orin-nano-vla/blob/b6185e17c5006e449a5d2b1c1a31ae7f26ce9f9f/docs/01-host-setup.md
+  date: '2026-09-05'
+  verified_on: '2026-10-24'
+  summary: 'Board state at that commit: JetPack 7.2 / L4T R39.2, CUDA 13.2, TensorRT 10.16.2.'
+  quote: 'JetPack 7.2 is L4T R39.2.0: Ubuntu 24.04, kernel 6.8, Python 3.12, CUDA 13.2, cuDNN 9.20,'

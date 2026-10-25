@@ -1,0 +1,32 @@
+robot: xarm
+policy: tdmpc
+state: works-with-caveats
+framework: fowm
+caveats:
+  - "Evidence is the FOWM authors' real xArm 7 experiments with their own codebase; the public FOWM repo runs only the simulated xArm tasks, and LeRobot's tdmpc port documents no real-robot use."
+  - "The real-robot results come from offline pretraining followed by online RL finetuning with task rewards (about 20 trials per task), not from pure imitation learning."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-fowm-paper]
+  inference_real:
+    state: works
+    evidence: [ev-fowm-paper]
+evidence:
+  - id: ev-fowm-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2310.16029
+    date: 2023-10-24
+    verified_on: 2026-10-24
+    summary: "FOWM (the method LeRobot's tdmpc policy implements) is pretrained offline and finetuned online on three visuo-motor tasks on a real xArm 7 with a jaw gripper and RealSense camera input."
+    quote: "The agent controls an xArm 7 robot with a jaw gripper using positional control"
+  - id: ev-lerobot-tdmpc-source
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/tdmpc/modeling_tdmpc.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot's tdmpc policy is an implementation of FOWM, linking the grid policy to the FOWM paper's xArm results."
+    quote: "Implementation of Finetuning Offline World Models in the Real World."

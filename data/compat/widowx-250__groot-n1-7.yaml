@@ -1,0 +1,34 @@
+robot: widowx-250
+policy: groot-n1-7
+state: partial
+partial_scope: "Simulation only: SimplerEnv WidowX + Bridge (N1.7 post-trained on BridgeData V2); no real-robot training or inference documented."
+framework: isaac-groot
+capabilities:
+  inference_sim:
+    state: works
+    notes: "SimplerEnv Bridge (simulated WidowX-250) with nvidia/GR00T-N1.7-SimplerEnv-Bridge; NVIDIA reports N1.7 per-task success from 2% (eggplant in sink) to 100% (open drawer)."
+    evidence: [ev-groot-simplerenv-readme, ev-groot-n17-bridge-card, ev-simplerenv-paper]
+evidence:
+  - id: ev-groot-simplerenv-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/NVIDIA/Isaac-GR00T/blob/1a1837f20538b7d7e21f977a11a5aee14f99803c/examples/SimplerEnv/README.md
+    date: 2026-07-07
+    verified_on: 2026-10-25
+    summary: "Isaac-GR00T SimplerEnv example: 'Bridge (WidowX robot)' section lists nvidia/GR00T-N1.7-SimplerEnv-Bridge, per-task N1.6/N1.7 success rates in SimplerEnv, and the fine-tuning command (--embodiment-tag SIMPLER_ENV_WIDOWX)."
+    quote: "| `widowx_spoon_on_towel` | 56/101 (55.4%) | 78/100 (78.0%) |"
+  - id: ev-groot-n17-bridge-card
+    tier: upstream-documented
+    type: model-card
+    url: https://huggingface.co/nvidia/GR00T-N1.7-SimplerEnv-Bridge
+    verified_on: 2026-10-25
+    summary: "NVIDIA model card: GR00T N1.7 post-trained on the LeRobot conversion of BridgeData V2 for SimplerEnv."
+    quote: "N1.7 post-trained model using the **Bridge Dataset** in SimplerEnv."
+  - id: ev-simplerenv-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2405.05941v1
+    date: 2024-05-09
+    verified_on: 2026-10-25
+    summary: "SimplerEnv paper: the simulated WidowX + Bridge setup models the WidowX-250 6DOF robot."
+    quote: "For the WidowX + Bridge (with WidowX-250 6DOF robot), we adopt the following tasks:"

@@ -1,0 +1,88 @@
+id: reachy2
+name: Reachy 2
+maker: Pollen Robotics (Hugging Face)
+aliases: [Reachy2, Reachy 2 humanoid]
+class: humanoid
+summary: >-
+  Pollen Robotics' open-source wheeled humanoid: two 7-DoF human-scale arms, a head with an expressive neck and
+  antennas, and an optional omnidirectional mobile base. It runs on ROS 2 Humble with a Python SDK. LeRobot supports
+  it natively, including in Pollen's MuJoCo/Gazebo simulation image.
+dof: 7
+dof_note: "Per arm, as stated by Pollen. The gripper, neck, antennas and mobile base are additional."
+arms: 2
+actuators: "Orbita 2D/3D parallel actuators (per Pollen)"
+payload_g: {max: 3000}
+specs_source_ref: ev-pollen-reachy2
+open_source: true
+homepage: https://www.pollen-robotics.com/reachy-2/
+frameworks:
+  lerobot:
+    support: native
+    since: "0.4.0"
+    robot_type: [reachy2]
+    docs_url: https://huggingface.co/docs/lerobot/reachy2
+    note: >-
+      Teleop in LeRobot is robot-to-robot (--teleop.type=reachy2_teleoperator, one Reachy 2 driving another). Pollen's
+      VR teleoperation app is not included in LeRobot. Parts can be toggled with --robot.with_<part> (mobile_base,
+      l_arm, r_arm, neck, antennas). Cameras: left/right teleop cameras and a torso camera.
+    source_ref: ev-lerobot-reachy2-src
+  ros2:
+    support: upstream-repo
+    note: "Pollen states that Reachy 2 runs on ROS 2 Humble (vendor software stack)."
+    source_ref: ev-pollen-reachy2-ros
+teleop_options: ["Robot-to-robot via a second Reachy 2 (reachy2_teleoperator)", "Pollen VR teleoperation app (outside LeRobot)"]
+notes: >-
+  Pollen lists ~3 kg payload per arm, 136-166 cm adjustable height, up to 50 kg full-robot weight, stereo + RGB-D
+  vision and LiDAR. Price is not published on the product page.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/README.md
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot README lists Reachy2 among natively supported hardware."
+    quote: "SO100, LeKiwi, Koch, HopeJR, OMX, EarthRover, Reachy2, Gamepads, Keyboards, Phones, OpenARM, Unitree G1, reBot B601."
+  - id: ev-lerobot-reachy2-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/reachy2.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot Reachy 2 guide: two teleop modes; VR app not part of LeRobot."
+    quote: "- Pollen Robotics’ VR teleoperation (not included in LeRobot). - Robot-to-robot teleoperation (use one Reachy 2 to control another)."
+  - id: ev-lerobot-reachy2-src
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/robots/reachy2/configuration_reachy2.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Registers reachy2."
+    quote: "@RobotConfig.register_subclass(\"reachy2\")"
+  - id: ev-lerobot-v040-reachy2
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.4.0
+    date: 2025-10-23
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.0"}
+    summary: "Reachy 2 first released in v0.4.0 (module absent at v0.3.3)."
+    quote: "2 add reachy 2 to updated lerobot by @glannuzel in https://github.com/huggingface/lerobot/pull/1767"
+  - id: ev-pollen-reachy2
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://www.pollen-robotics.com/reachy-2/
+    verified_on: 2026-10-24
+    summary: "Pollen: 7-DoF arms, ~3 kg per arm, optional omnidirectional base."
+    quote: "With 7 degrees of freedom, Reachy 2's arms mirror the dimensions, proportions and movements of an adult human arm. One arm can lift objects up to 3 kg and manipulate them with real dexterity."
+  - id: ev-pollen-reachy2-ros
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://www.pollen-robotics.com/reachy-2/
+    verified_on: 2026-10-24
+    summary: "Pollen: fully open source, Python-controllable, ROS 2 Humble."
+    quote: "Fully open source. Teleoperated or controlled with Python. Runs on ROS 2 Humble."

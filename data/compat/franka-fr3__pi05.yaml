@@ -1,0 +1,17 @@
+robot: franka-fr3
+policy: pi05
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-bekhzod-pi05]
+evidence:
+  - id: ev-hub-bekhzod-pi05
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/Bekhzod/Pi05_fr3_pickplace_fixed_goal_robustness_recovery_data_model
+    date: 2026-07-17
+    verified_on: 2026-10-24
+    summary: "config.json type=pi05 (pretrained_path lerobot/pi05_base); train_config dataset Bekhzod/fr3_pickplace_fixed_goal_robustness_recovery_merged_data (350 episodes, front + top cameras), whose meta/info.json robot_type=FR3WMS. Auto-generated card, no rollout results."

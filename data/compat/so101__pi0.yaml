@@ -1,0 +1,34 @@
+robot: so101
+policy: pi0
+state: partial
+partial_scope: Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source.
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-amindt-pi0-so101
+    - ev-hub-vikrant-pi0-so101
+    - ev-hub-shani-pi0-so101
+evidence:
+- id: ev-hub-amindt-pi0-so101
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/amindt/pi0_so101_pickandplace_redblue
+  date: '2025-11-24'
+  verified_on: '2026-10-24'
+  summary: config.json type=pi0; train_config.json dataset.repo_id=amindt/so101_pickandplace_redblue, whose meta/info.json robot_type=so101_follower (50 episodes).
+- id: ev-hub-vikrant-pi0-so101
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/vikrant1998/pi0_so101_v3
+  date: '2025-12-11'
+  verified_on: '2026-10-24'
+  summary: config.json type=pi0; train_config.json dataset.repo_id=vikrant1998/so101_v3_dataset, whose meta/info.json robot_type=so101_follower (50 episodes).
+- id: ev-hub-shani-pi0-so101
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/Shani123/pi0_so101_pickup_toothpicks_2_plus_recovery_20000
+  date: '2025-09-25'
+  verified_on: '2026-10-24'
+  summary: config.json type=pi0; train_config.json dataset.repo_id=Shani123/pickup_toothpicks_2_plus_recovery, whose meta/info.json robot_type=so101_follower (66 episodes).

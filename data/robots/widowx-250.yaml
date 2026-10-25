@@ -1,0 +1,83 @@
+id: widowx-250
+name: WidowX 250 S
+maker: Trossen Robotics (Interbotix X-Series)
+aliases: [WidowX 250, WidowX 250 S, WidowX-250 6DOF, wx250s, Interbotix WidowX 250, Bridge WidowX]
+class: arm
+summary: >-
+  Trossen Robotics' Interbotix X-Series 6-DoF Dynamixel arm, now discontinued. It is the robot used for BridgeData V2,
+  and the "WidowX" in OpenVLA, X-VLA and EO-1 real-robot results refers to this setup. It is not the Trossen WidowX AI
+  (trossen-widowx). LeRobot shipped a native `widowx` teleoperator for this arm (the ALOHA leader role) until 0.3.3 and
+  has never had a follower robot type for it. Policies are usually deployed through the BridgeData WidowX controller
+  stack (rail-berkeley/bridge_data_robot) or Trossen's ROS packages.
+dof: 6
+payload_g: {max: 250}
+repeatability_mm: {max: 1}
+specs_source_ref: ev-trossen-wx250s-spec
+open_source: false
+homepage: https://www.trossenrobotics.com/widowx-250
+frameworks:
+  lerobot:
+    support: removed
+    until: "0.3.3"
+    note: >-
+      Only a teleoperator (`--teleop.type=widowx`, leader arm) was ever native. There was no follower robot type, so
+      LeRobot could not run a policy on it. Deprecated in 0.4.0.
+    source_ref: ev-lerobot-v033-widowx
+  ros2:
+    support: upstream-repo
+    repo_url: https://github.com/Interbotix/interbotix_ros_manipulators
+    docs_url: https://docs.trossenrobotics.com/interbotix_xsarms_docs/ros2_packages.html
+    note: "Trossen's Interbotix X-Series ROS 2 packages (control, MoveIt 2, simulation)."
+    source_ref: ev-trossen-ros2
+notes: >-
+  Not the Trossen WidowX AI (trossen-widowx). Evidence for one does not transfer to the other. Trossen spec: 6 DoF,
+  650 mm reach, 1 mm repeatability, 5-8 mm accuracy, 250 g working payload. Trossen's product page marks the WidowX 250 S as
+  discontinued. Results on the Bridge "WidowX" in SimplerEnv are simulation, not real-robot, evidence.
+verified_on: 2026-10-24
+sources:
+  - id: ev-trossen-wx250s-spec
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://docs.trossenrobotics.com/interbotix_xsarms_docs/specifications/wx250s.html
+    verified_on: 2026-10-24
+    summary: "Trossen spec for the WidowX-250 6DOF: 6 DoF, 650 mm reach, 1 mm repeatability, 250 g working payload."
+    quote: "WidowX-250 6DOF Degrees of Freedom 6 Reach 650mm Total Span 1300mm Repeatability 1mm Accuracy 5 - 8mm Working Payload 250g*"
+  - id: ev-trossen-wx250s-page
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://www.trossenrobotics.com/widowx-250
+    verified_on: 2026-10-24
+    summary: "Trossen's WidowX 250 S product page shows a discontinued banner."
+    quote: "THIS PRODUCT HAS BEEN DISCONTINUED"
+  - id: ev-bridgev2-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2308.12952v3
+    date: 2024-01-17
+    verified_on: 2026-10-24
+    summary: "BridgeData V2 was collected on a WidowX 250 with a fixed RGBD over-the-shoulder camera, two randomized RGB cameras and a wrist camera, at 5 Hz control."
+    quote: "showing the WidowX 250 robot arm and various cameras."
+  - id: ev-lerobot-v033-widowx
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.3.3/src/lerobot/teleoperators/widowx/widowx.py
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.3.3"}
+    summary: "LeRobot v0.3.3 ships a `widowx` Teleoperator (Dynamixel XM430/XL430 bus) that links to the WidowX 250 product page."
+    quote: "[WidowX](https://www.trossenrobotics.com/widowx-250) developed by Trossen Robotics"
+  - id: ev-lerobot-v040-deprecate
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.4.0
+    date: 2025-10-23
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.0"}
+    summary: "LeRobot 0.4.0 deprecated its native stretch, viperx and widowx devices."
+    quote: "chore(robots): deprecate strech, vipex and widowx robots by @imstevenpmwork in https://github.com/huggingface/lerobot/pull/2205"
+  - id: ev-trossen-ros2
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://docs.trossenrobotics.com/interbotix_xsarms_docs/ros2_packages.html
+    verified_on: 2026-10-24
+    summary: "Trossen maintains ROS 2 packages for its X-Series arms, WidowX 250 6DOF included."
+    quote: "Below is a list of all ROS 2 packages meant to be used with the X-Series robotic arms sold by Trossen Robotics."

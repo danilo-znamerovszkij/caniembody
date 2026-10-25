@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this dataset, please cite the version you used."
+title: "caniembody: a sourced robot-policy compatibility matrix"
+type: dataset
+authors:
+  - name: "caniembody contributors"
+version: "1.0.0-seed"
+date-released: "2026-10-24"
+license: CC-BY-4.0
+url: "https://caniembody.pages.dev"
+repository-code: "https://github.com/danilo-znamerovszkij/caniembody"
+abstract: >
+  A cell-level, evidence-linked compatibility reference for robot learning: which policies run on which
+  robots, on which compute, at what measured inference rate. Every non-unknown cell carries typed evidence
+  with a verification tier, date and exact software versions. v1 covers LeRobot-centric robot learning.
+keywords: [robot learning, LeRobot, vision-language-action, imitation learning, compatibility, embodied AI]
+# identifiers: add the Zenodo concept DOI here once the GitHub–Zenodo integration mints it on the first release.

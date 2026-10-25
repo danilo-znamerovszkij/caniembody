@@ -1,0 +1,51 @@
+robot: so100
+policy: smolvla
+state: works
+framework: lerobot
+framework_version_tested: 0.6.1
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-smolvla-paper-so100
+  inference_real:
+    state: works
+    evidence:
+    - ev-smolvla-paper-so100
+    - ev-lerobot-async-doc
+  teleop_record:
+    state: works
+    evidence:
+    - ev-smolvla-paper-datasets
+evidence:
+- id: ev-smolvla-paper-so100
+  tier: upstream-documented
+  type: paper
+  url: https://arxiv.org/html/2506.01844v1
+  date: '2025-06-02'
+  verified_on: '2026-10-24'
+  summary: 'SmolVLA paper (Hugging Face/LeRobot team), Table 3: real-world SO100 benchmark (pick-place, stacking, sorting) comparing ACT (single-task), pi0 3.5B and SmolVLA (multi-task).'
+  quote: 'Table 3: Real-world benchmarks (SO100). Success rate (%) across three tasks using policies trained in multi-task and single-task settings.'
+- id: ev-smolvla-paper-datasets
+  tier: upstream-documented
+  type: paper
+  url: https://arxiv.org/html/2506.01844v1
+  date: '2025-06-02'
+  verified_on: '2026-10-24'
+  summary: 'SmolVLA paper: real-world evaluation datasets were recorded on SO-100 (three tasks) and SO-101 (one task).'
+  quote: For real-world evaluation, we collected three datasets using the SO-100 robot arm
+- id: ev-lerobot-async-doc
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/async.mdx
+  date: '2026-08-03'
+  verified_on: '2026-10-24'
+  versions:
+    lerobot: 0.6.1
+  summary: 'LeRobot v0.6.1 async-inference guide: API example drives an SO100 follower (SO100FollowerConfig) from a SmolVLA policy server.'
+  quote: |-
+    robot_cfg = SO100FollowerConfig(
+      port="/dev/tty.usbmodem585A0076841",
+      id="follower_so100",
+      cameras=camera_cfg
+    )

@@ -1,0 +1,67 @@
+robot: so101
+policy: act
+state: works
+framework: lerobot
+framework_version_tested: 0.6.1
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-lerobot-il-robots-train
+    - ev-smolvla-paper-so101
+  inference_real:
+    state: works
+    evidence:
+    - ev-lerobot-act-doc
+    - ev-smolvla-paper-so101
+  teleop_record:
+    state: works
+    evidence:
+    - ev-lerobot-il-robots-teleop
+evidence:
+- id: ev-lerobot-act-doc
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/act.mdx
+  date: '2026-08-03'
+  verified_on: '2026-10-24'
+  versions:
+    lerobot: 0.6.1
+  summary: LeRobot v0.6.1 ACT guide evaluates a trained ACT policy on the real robot with lerobot-rollout --robot.type=so101_follower.
+  quote: |-
+    lerobot-rollout \
+      --strategy.type=base \
+      --policy.path=${HF_USER}/act_policy \
+      --robot.type=so101_follower \
+- id: ev-lerobot-il-robots-train
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/il_robots.mdx
+  date: '2026-08-03'
+  verified_on: '2026-10-24'
+  versions:
+    lerobot: 0.6.1
+  summary: The v0.6.1 real-robot imitation-learning tutorial records on so101_follower and trains ACT (--policy.type=act) on the resulting so101_test dataset.
+  quote: |-
+    lerobot-train \
+      --dataset.repo_id=${HF_USER}/so101_test \
+      --policy.type=act \
+      --output_dir=outputs/train/act_so101_test \
+- id: ev-lerobot-il-robots-teleop
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/il_robots.mdx
+  date: '2026-08-03'
+  verified_on: '2026-10-24'
+  versions:
+    lerobot: 0.6.1
+  summary: The v0.6.1 imitation-learning tutorial teleoperates and records datasets with an SO101 leader/follower pair.
+  quote: In this example, we’ll demonstrate how to teleoperate the SO101 robot.
+- id: ev-smolvla-paper-so101
+  tier: upstream-documented
+  type: paper
+  url: https://arxiv.org/html/2506.01844v1
+  date: '2025-06-02'
+  verified_on: '2026-10-24'
+  summary: 'SmolVLA paper, Table 4: real-world SO101 Pick-Place-Lego benchmark, ACT vs SmolVLA, in- and out-of-distribution.'
+  quote: Similarly, on SO101 (see Table 4), SmolVLA surpasses ACT in both in-distribution and out-of-distribution (OOD) settings.

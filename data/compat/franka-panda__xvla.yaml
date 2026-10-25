@@ -1,0 +1,18 @@
+robot: franka-panda
+policy: xvla
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+caveats:
+  - "The checkpoint's Panda identity comes from repo and robot_type naming (panda_ros_cartesian, panda_joint* states). The card is auto-generated with no hardware description."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-tinkybala-xvla]
+evidence:
+  - id: ev-hub-tinkybala-xvla
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/TInkybala/Real_Panda_25epsdataset_xvla
+    verified_on: 2026-10-24
+    summary: "config.json type=xvla. train_config dataset TInkybala/Real_Panda_25eps_Screwdriver, whose meta/info.json robot_type=panda_ros_cartesian (68 episodes, one camera, Cartesian-velocity actions)."

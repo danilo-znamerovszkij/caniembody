@@ -1,0 +1,9 @@
+id: openvla
+name: OpenVLA
+maintainer: Stanford / TRI / Berkeley (OpenVLA authors)
+repo: openvla/openvla
+docs_url: https://github.com/openvla/openvla
+license: MIT
+current_version: main
+current_version_date: 2025-03-23
+versioning: none

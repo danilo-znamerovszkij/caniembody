@@ -1,0 +1,17 @@
+robot: reachy2
+policy: pi05
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-erlhub-pi05-reachy2
+evidence:
+- id: ev-hub-erlhub-pi05-reachy2
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/erl-hub/reachy-pi05
+  verified_on: '2026-10-24'
+  summary: "LoRA checkpoint at 2026-04-30_02-32-39-pi05-lora-ft-erl-hub-reachy-pick-and-place-images_s6246/checkpoints/030000/pretrained_model: config.json type=pi05; train_config.json dataset erl-hub/reachy-pick-and-place-images whose meta/info.json robot_type=reachy2 (25 episodes); pretrained from lerobot/pi05_base."

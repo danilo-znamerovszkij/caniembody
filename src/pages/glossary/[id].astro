@@ -1,0 +1,34 @@
+---
+import Base from '../../layouts/Base.astro';
+import Evidence from '../../components/Evidence.astro';
+import { loadAll, gitDate, type GlossaryEntry } from '../../lib/data.ts';
+import { md } from '../../lib/md.ts';
+import { fitTitle, crumbs } from '../../lib/seo.ts';
+import { SITE } from '../../site.ts';
+export function getStaticPaths() {
+  return loadAll().glossary.map((g) => ({ params: { id: g.id }, props: { g } }));
+}
+const { g } = Astro.props as { g: GlossaryEntry };
+const all = loadAll();
+const modified = gitDate(`data/glossary/${g.id}.yaml`);
+---
+<Base title={fitTitle(`What is ${g.term}?`, [' Robotics definition and sources', ' Robotics definition'])} description={g.short} modified={modified}
+  jsonld={[crumbs([['Glossary', '/glossary'], [g.term, `/glossary/${g.id}`]]), {
+    '@context': 'https://schema.org', '@type': 'TechArticle', headline: `What is ${g.term}?`, description: g.short,
+    url: `${SITE.url}/glossary/${g.id}`, ...(modified ? { dateModified: modified } : {}), license: 'https://creativecommons.org/licenses/by/4.0/',
+    about: { '@type': 'DefinedTerm', name: g.term, description: g.short },
+  }]}>
+  <div class="wrap narrow">
+    <section class="ph">
+      <div class="eyebrow"><a href="/glossary">Glossary</a></div>
+      <h1>{g.term}</h1>
+      {g.aka?.length ? <p class="small muted" style="margin-top:6px">Also: {g.aka.join(', ')}</p> : null}
+      <p class="lede">{g.short}</p>
+    </section>
+    <article class="prose" set:html={md(g.body)} />
+    {g.policies?.length ? <><h2>Policies where this matters</h2><p>{g.policies.map((p, i) => <>{i ? ' · ' : ''}<a href={`/policy/${p}`}>{all.byId.policy[p]?.name ?? p}</a></>)}</p></> : null}
+    {g.related?.length ? <><h2>Related</h2><p>{g.related.map((r, i) => <>{i ? ' · ' : ''}<a href={`/glossary/${r}`}>{all.byId.glossary[r]?.term ?? r}</a></>)}</p></> : null}
+    <h2>Sources</h2>
+    <Evidence items={g.sources} />
+  </div>
+</Base>

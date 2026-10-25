@@ -1,0 +1,173 @@
+id: pi0
+name: π0
+aliases: [pi0, pi_0, Pi0, π₀, lerobot/pi0_base]
+family: vla
+summary: >-
+  Physical Intelligence's flow-matching vision-language-action model: a PaliGemma VLM plus a 300M-parameter action
+  expert that predicts 50-step action chunks. Open weights via openpi; LeRobot ships a PyTorch port.
+authors: Physical Intelligence
+paper_url: https://arxiv.org/abs/2410.24164
+params: 3300000000
+params_note: "Authors state 3.3 billion (PaliGemma 3B + 300M action expert). The LeRobot paper's Table 2 lists π0 as 3.5B."
+params_source_ref: ev-pi0-paper-params
+backbone: PaliGemma (SigLIP + Gemma 2B), with a Gemma-300M action expert
+action_output: flow-matching
+action_chunking: true
+rtc_compatible: true
+peft_supported: true
+arch_source_ref: ev-pi0-paper-arch
+license: Apache-2.0
+weights_license: Gemma (Hub license tag `gemma` on lerobot/pi0_base)
+open_weights: true
+frameworks:
+  lerobot:
+    support: native
+    since: "0.3.2"
+    policy_type: pi0
+    docs_url: https://huggingface.co/docs/lerobot/pi0
+    note: >-
+      `pi0` is registered at v0.3.2, the first tagged LeRobot release (the only earlier PyPI release, 0.1.0 of 2024-03,
+      predates π0). The v0.4.0 release notes list "Add OpenPi, Pi0 and Pi0.5" (PR #1910); the docs describe the current
+      implementation as adapted from openpi. RTC per rtc.mdx; PEFT per peft_training.mdx.
+    source_ref: ev-lerobot-pi0-config-v032
+  openpi:
+    support: upstream-repo
+    repo_url: https://github.com/Physical-Intelligence/openpi
+    docs_url: https://github.com/Physical-Intelligence/openpi
+    note: "Official Physical Intelligence release (JAX, plus PyTorch since Sept 2025); base checkpoint gs://openpi-assets/checkpoints/pi0_base."
+    source_ref: ev-openpi-readme
+checkpoints:
+  - hub_id: lerobot/pi0_base
+    note: "LeRobot-format base model; Hub license tag gemma."
+  - hub_id: lerobot/pi0_libero_base
+    note: "LIBERO-trained variant. The v0.6.1 pi0 docs link lerobot/pi0_libero, which the Hub redirects here."
+requirements:
+  train:
+    vram_gb: {min: 24, max: 40}
+    batch_size: 8
+    condition: >-
+      Peak training VRAM at batch size 8 with AdamW (LeRobot default), "Large VLA" group (pi0, pi0_fast, pi05, xvla,
+      wall_x) in the LeRobot compute hardware guide; suggested A100 40 GB+, "24 GB tight at BS 1". The guide calls its
+      figures indicative, order-of-magnitude numbers, not exact predictions. Precision not stated.
+    reference_time: "~4–8 h for 5 epochs on a ~45k-frame dataset at batch 4 on a single A100 40 GB (indicative, ±50%)."
+    source_ref: ev-lerobot-hw-guide
+  inference:
+    vram_gb: {measured: 13.32}
+    precision: fp32
+    condition: >-
+      Peak memory at inference measured by the LeRobot paper (Table 2): 13.32 GB on both RTX 4090 and A100, all models in
+      full fp32 precision, 10 flow-matching denoising steps. (Same table: 4.13GB CPU-only, 97MB on Apple MPS, where
+      unified memory and swap make figures unreliable per the paper.)
+    source_ref: ev-lerobot-paper-mem
+observation_space:
+  state: proprio/state vector, padded to max_state_dim 32
+  language: optional
+  source_ref: ev-pi0-base-card
+notes: >-
+  openpi's own README (JAX/openpi runtime, not LeRobot) states single-GPU needs of >8 GB for inference, >22.5 GB for
+  LoRA fine-tuning and >70 GB for full fine-tuning (ev-openpi-requirements). In LeRobot, train_expert_only=true freezes
+  the VLM to reduce fine-tuning memory.
+verified_on: 2026-10-24
+sources:
+  - id: ev-pi0-paper-params
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2410.24164
+    date: 2024-10-31
+    verified_on: 2026-10-24
+    summary: π0 paper states total parameter count (PaliGemma 3B + 300M action expert).
+    quote: "We add 300M parameters for the action expert (which is initialized from scratch) for a total of 3.3 billion parameters."
+  - id: ev-pi0-paper-arch
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2410.24164
+    date: 2024-10-31
+    verified_on: 2026-10-24
+    summary: π0 builds on PaliGemma and supervises action-chunk tokens with conditional flow matching (H = 50).
+    quote: "During training, we supervise these action tokens using a conditional flow matching loss"
+  - id: ev-lerobot-pi0-config-v032
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.3.2/src/lerobot/policies/pi0/configuration_pi0.py
+    date: 2025-08-01
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.3.2"}
+    summary: "`pi0` policy type is registered at v0.3.2 (and unchanged at v0.6.1)."
+    quote: '@PreTrainedConfig.register_subclass("pi0")'
+  - id: ev-lerobot-v040-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.4.0
+    date: 2025-10-23
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.0"}
+    summary: v0.4.0 added the openpi-based Pi0 and Pi0.5 implementations.
+    quote: "* Add OpenPi, Pi0 and Pi0.5 by @pkooij in https://github.com/huggingface/lerobot/pull/1910"
+  - id: ev-lerobot-pi0-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/pi0.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: LeRobot π0 docs; implementation adapted from openpi, Apache 2.0.
+    quote: "The LeRobot implementation is adapted from their open source [OpenPI](https://github.com/Physical-Intelligence/openpi) repository."
+  - id: ev-openpi-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/Physical-Intelligence/openpi/blob/215abfb217dbac7d5f1273282331b9b1866c0479/README.md
+    verified_on: 2026-10-24
+    versions: {openpi: "215abfb"}
+    summary: openpi is Physical Intelligence's official repo containing π0 with base checkpoints.
+    quote: "- the [π₀ model](https://www.physicalintelligence.company/blog/pi0), a flow-based vision-language-action model (VLA)."
+  - id: ev-openpi-requirements
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/Physical-Intelligence/openpi/blob/215abfb217dbac7d5f1273282331b9b1866c0479/README.md
+    verified_on: 2026-10-24
+    versions: {openpi: "215abfb"}
+    summary: "openpi single-GPU memory requirements: inference >8 GB, LoRA fine-tuning >22.5 GB, full fine-tuning >70 GB."
+    quote: "| Fine-Tuning (Full) | > 70 GB         | A100 (80GB) / H100 |"
+  - id: ev-lerobot-rtc-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/rtc.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: LeRobot RTC docs name Pi0 as a supported flow-matching policy.
+    quote: "allows large, flow-matching based robotic policies, such as [Pi0](./pi0), [Pi0.5](./pi05), and [SmolVLA](./smolvla), to produce smooth, continuous, and reactive motion"
+  - id: ev-lerobot-peft-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/peft_training.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: LeRobot PEFT guide names π₀ among the pretrained policies it adapts (PI0Policy also defines default LoRA targets).
+    quote: "large pretrained models such as pre-trained policies (e.g., SmolVLA, π₀, ...) to new tasks without training all"
+  - id: ev-lerobot-hw-guide
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hardware_guide.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Compute hardware guide: Large VLA group (incl. `pi0`) peak VRAM ~24–40GB at BS 8 with AdamW; indicative figures."
+    quote: "| Large VLA  | `pi0`, `pi0_fast`, `pi05`, `xvla`, `wall_x` |                ~24–40GB | A100 40 GB+ (24 GB tight at BS 1) |"
+  - id: ev-lerobot-paper-mem
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2602.22818
+    date: 2026-02-26
+    verified_on: 2026-10-24
+    summary: "LeRobot paper Table 2: π0 (3.5B) peak memory 4.13GB CPU, 97MB MPS, 13.32 GB RTX 4090, 13.32 GB A100, fp32."
+    quote: "Table 2: Peak memory consumption of policy models currently supported by lerobot . All models are run in full precision (fp32). Diffusion and Flow Models are run with 10 denoising steps at inference."
+  - id: ev-pi0-base-card
+    tier: upstream-documented
+    type: model-card
+    url: https://huggingface.co/lerobot/pi0_base
+    date: 2025-09-09
+    verified_on: 2026-10-24
+    summary: lerobot/pi0_base card lists inputs (multi-view images, state, optional language), flow-matching objective, license gemma.
+    quote: "- **Inputs:** images (multi-view), proprio/state, optional language instruction"

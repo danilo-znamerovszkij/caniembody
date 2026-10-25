@@ -1,0 +1,38 @@
+robot: i2rt-yam
+policy: pi05
+state: works-with-caveats
+framework: lerobot
+caveats:
+  - "Community-reported only; not documented upstream or maintainer-tested."
+  - "Real-robot results come from a π0.5-DROID baseline in the MolmoAct2 paper (average 32.2% over 8 bimanual YAM tasks), which does not name the codebase used; the LeRobot checkpoints' cards do not report hardware rollouts."
+  - "LeRobot has no built-in YAM robot type; the checkpoints use bi_yam_follower / yam_follower_bimanual types from third-party plugins."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-asethi-pi05, ev-hub-nuffnuff-pi05]
+  inference_real:
+    state: works-with-caveats
+    evidence: [ev-molmoact2-paper-c3]
+evidence:
+  - id: ev-hub-asethi-pi05
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/ASethi04/pi05-BimanualYAM-oranges
+    date: 2026-08-06
+    verified_on: 2026-10-24
+    summary: "config.json type=pi05 (fine-tuned from lerobot/pi05_base on a LeRobot fork whose pi05 code matches upstream main); trained on brandonyang/yam-vive-teleop whose meta/info.json robot_type=bi_yam_follower. Card: hardware rollouts pending."
+  - id: ev-hub-nuffnuff-pi05
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/nuffnuff/pi05-yam-finetuned
+    date: 2026-05-29
+    verified_on: 2026-10-24
+    summary: "config.json type=pi05; trained on nuffnuff/yam-master-v1 whose meta/info.json robot_type=yam_follower_bimanual."
+  - id: ev-molmoact2-paper-c3
+    tier: community-reported
+    type: paper
+    url: https://arxiv.org/abs/2605.02881
+    date: 2026-05-04
+    verified_on: 2026-10-24
+    summary: "MolmoAct2 paper appendix C.3: π0.5-DROID baseline fine-tuned per task and evaluated on real bimanual YAM, 8 tasks x 50 trials (Table 19 average 32.2%)."
+    quote: "to ensure a fair comparison, we applied the identical training protocol to each of the four baseline policies. All policies were trained to convergence, and the resulting checkpoints were used for evaluation."

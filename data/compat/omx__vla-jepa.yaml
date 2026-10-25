@@ -1,0 +1,24 @@
+robot: omx
+policy: vla-jepa
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-maximellerbach-vlajepa-omx
+    - ev-hub-dawity-vlajepa-omx
+evidence:
+- id: ev-hub-maximellerbach-vlajepa-omx
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/maximellerbach/omx_pickandplace_vla_jepa
+  verified_on: '2026-10-24'
+  summary: "config.json type=vla_jepa; train_config.json dataset maximellerbach/omx_pickandplace whose meta/info.json robot_type=omx_follower (50 episodes); pretrained from maximellerbach/VLA-JEPA-Pretrain."
+- id: ev-hub-dawity-vlajepa-omx
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/dawity/vla_jepa_omx
+  verified_on: '2026-10-24'
+  summary: "config.json type=vla_jepa; train_config.json dataset dawity/vla_fresh_data_drawer3 whose meta/info.json robot_type=omx_follower (150 episodes)."

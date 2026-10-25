@@ -1,0 +1,53 @@
+robot: widowx-250
+policy: xvla
+state: works-with-caveats
+framework: x-vla
+caveats:
+  - "The paper says only 'WidowX' following the BridgeData V2 benchmark. It identifies the arm through BridgeData V2 (a WidowX 250), not by model name."
+  - "X-VLA's repo provides an inference server but no WidowX robot client. Its released WidowX checkpoints (2toINF/X-VLA-WidowX, lerobot/xvla-widowx) are labelled for the SimplerEnv benchmark, and LeRobot has no WidowX 250 robot type."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-xvla-paper-widowx, ev-xvla-readme-widowx]
+  inference_real:
+    state: works
+    notes: "Real-world WidowX pick-and-place, five tasks (visual/motion/physical/semantic generalization), 10 trials each."
+    evidence: [ev-xvla-paper-widowx, ev-xvla-paper-realworld]
+  inference_sim:
+    state: works
+    notes: "SimplerEnv WidowX (simulation)."
+    evidence: [ev-xvla-readme-widowx, ev-lerobot-xvla-doc]
+evidence:
+  - id: ev-xvla-paper-widowx
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2510.10274
+    date: 2025-10-11
+    verified_on: 2026-10-24
+    summary: "X-VLA paper, Appendix J: X-VLA-0.9B fine-tuned on BridgeData is deployed on a real WidowX for pick-and-place, with each task evaluated 10 times."
+    quote: "WidowX for pick-and-place experiments. Specifically, X-VLA-0.9B finetuned on BridgeData is directly deployed to evaluate its ability to perform robust manipulation on a compact platform."
+  - id: ev-xvla-paper-realworld
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2510.10274
+    date: 2025-10-11
+    verified_on: 2026-10-24
+    summary: "X-VLA paper, Sec. 5: real-world WidowX evaluation follows the BridgeData V2 benchmark (Fig. 7)."
+    quote: "Real-world experiments. We also evaluate X-VLA-0.9B on physical robotic platforms follow the BridgeDatav2 benchmark (Walke et al., 2023)"
+  - id: ev-xvla-readme-widowx
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/2toinf/X-VLA/blob/6c4ecfb8be458ae7c0c96094e4b0add4174f4fe2/README.md
+    date: 2026-10-20
+    verified_on: 2026-10-24
+    summary: "X-VLA README lists the 2toINF/X-VLA-WidowX checkpoint (fine-tuned on BridgeData V2, 95.8% on Simpler) and a server-client inference API."
+    quote: "Fine-tuned on BridgeDataV2 (Simpler benchmark)."
+  - id: ev-lerobot-xvla-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/xvla.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot v0.6.1 X-VLA doc lists lerobot/xvla-widowx under 'Simulation Checkpoints'."
+    quote: "Fine-tuned on BridgeData for pick-and-place experiments on compact WidowX platforms. Demonstrates robust manipulation capabilities."

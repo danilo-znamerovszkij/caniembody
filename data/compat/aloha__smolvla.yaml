@@ -1,0 +1,20 @@
+robot: aloha
+policy: smolvla
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train: {state: works, evidence: [ev-hub-qualia-smolvla-coffee, ev-hub-qualia-smolvla-cups]}
+evidence:
+  - id: ev-hub-qualia-smolvla-coffee
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/qualia-robotics/smolvla-aloha-static-coffee-87e074e8
+    verified_on: 2026-10-24
+    summary: "config.json type=smolvla (base lerobot/smolvla_base); train_config.json dataset lerobot/aloha_static_coffee, whose meta/info.json robot_type=aloha (50 real static-ALOHA episodes, 4 cameras, 14-dim joint state/action). Template card, no rollout results."
+  - id: ev-hub-qualia-smolvla-cups
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/qualia-robotics/smolvla-aloha-static-cups-open-bd3cb6ef
+    verified_on: 2026-10-24
+    summary: "config.json type=smolvla; train_config.json dataset lerobot/aloha_static_cups_open, whose meta/info.json robot_type=aloha (50 episodes)."

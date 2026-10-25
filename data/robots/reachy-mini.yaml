@@ -1,0 +1,63 @@
+id: reachy-mini
+name: Reachy Mini
+maker: Pollen Robotics (Hugging Face)
+aliases: [Reachy Mini Lite, Reachy Mini Wireless, reachy_mini]
+class: desktop-social
+in_grid: false
+out_of_grid_reason: >-
+  Reachy Mini is not a LeRobot robot. It ships its own SDK (reachy_mini Python package, JavaScript SDK) and a
+  Hugging Face Spaces app ecosystem. It is absent from LeRobot v0.6.1's supported-hardware list and robots source
+  tree, and its SDK does not depend on LeRobot. It is an expressive desktop head/body robot with no arm or gripper,
+  so manipulation policies do not apply.
+summary: >-
+  Small open-source expressive desktop companion robot from Pollen Robotics and Hugging Face. It has a movable head,
+  antennas, a camera, 4 microphones and a speaker, and is sold as a DIY kit in Wireless (onboard Raspberry Pi CM4) and
+  Lite (USB) versions. It is programmed through the Reachy Mini SDK and apps, not through LeRobot. It is unrelated to
+  the full-size Reachy 2, which LeRobot does support.
+arms: 0
+open_source: true
+license: "Apache-2.0 (software); CC BY-SA-NC (hardware design files)"
+homepage: https://www.pollen-robotics.com/reachy-mini/
+price_usd:
+  low: 399
+  high: 499
+  note: "DIY kits (~2 h assembly): Reachy Mini Lite $399 (USB, uses your computer), Reachy Mini Wireless $499 (onboard CM4). DAP, shipping/duties extra."
+  source_ref: ev-pollen-reachy-mini
+frameworks: {}
+sensors_builtin: [rgb-mono, mic-array]
+notes: >-
+  A common confusion. Reachy 2, Pollen's full-size wheeled humanoid, is natively supported by LeRobot as robot_type
+  reachy2. Reachy Mini is not. The Reachy Mini SDK can record and share "moves" as datasets, but these are its own
+  format and tooling, not LeRobot robot integration.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/README.md
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot's supported-hardware list names Reachy2 but not Reachy Mini; src/lerobot/robots at v0.6.1 has no reachy_mini module."
+    quote: "SO100, LeKiwi, Koch, HopeJR, OMX, EarthRover, Reachy2, Gamepads, Keyboards, Phones, OpenARM, Unitree G1, reBot B601."
+  - id: ev-reachy-mini-readme
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/pollen-robotics/reachy_mini/blob/9fb2bfcbdf4c9800b0649acb8f0c18027673943f/README.md
+    verified_on: 2026-10-24
+    summary: "Reachy Mini SDK repo: own Python/JS SDK and HF Spaces app store; Apache-2.0 software, CC BY-SA-NC hardware."
+    quote: "Reachy Mini comes with an app store powered by Hugging Face Spaces."
+  - id: ev-reachy-mini-license
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/pollen-robotics/reachy_mini/blob/9fb2bfcbdf4c9800b0649acb8f0c18027673943f/README.md
+    verified_on: 2026-10-24
+    summary: "License statement in the Reachy Mini README."
+    quote: "Hardware design files are licensed under Creative Commons BY-SA-NC."
+  - id: ev-pollen-reachy-mini
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://www.pollen-robotics.com/reachy-mini/
+    verified_on: 2026-10-24
+    summary: "Pollen store: Wireless $499 (CM4), Lite $399 (USB); camera, 4 mics, speaker; both DIY kits."
+    quote: "Reachy Mini Lite USB • External compute $399 ✓ Your Mac/PC as brain ✓ USB only ✓ Camera, 4 mics, speaker"

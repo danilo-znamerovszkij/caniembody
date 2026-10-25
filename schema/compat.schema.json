@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "compat.schema.json",
+  "type": "object",
+  "required": ["robot", "policy", "state", "framework", "evidence"],
+  "$defs": {
+    "capability": {
+      "type": "object",
+      "required": ["state"],
+      "properties": {
+        "state": { "$ref": "common.schema.json#/$defs/state" },
+        "notes": { "type": "string" },
+        "evidence": { "type": "array", "items": { "type": "string", "pattern": "^ev-[a-z0-9-]+$" } }
+      },
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "robot": { "$ref": "common.schema.json#/$defs/id" },
+    "policy": { "$ref": "common.schema.json#/$defs/id" },
+    "state": { "$ref": "common.schema.json#/$defs/state" },
+    "partial_scope": { "type": "string" },
+    "reason": { "type": "string" },
+    "framework": { "$ref": "common.schema.json#/$defs/id" },
+    "framework_version_tested": { "type": "string" },
+    "capabilities": {
+      "type": "object",
+      "properties": {
+        "train": { "$ref": "#/$defs/capability" },
+        "inference_sim": { "$ref": "#/$defs/capability" },
+        "inference_real": { "$ref": "#/$defs/capability" },
+        "teleop_record": { "$ref": "#/$defs/capability" }
+      },
+      "additionalProperties": false
+    },
+    "measured": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/measurement", "unevaluatedProperties": false } },
+    "sensors_required": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/id" } },
+    "sensors_optional": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/id" } },
+    "caveats": { "type": "array", "items": { "type": "string" } },
+    "dispute": { "$ref": "common.schema.json#/$defs/url", "description": "Open dispute issue, rendered as a marker while set" },
+    "evidence": { "$ref": "common.schema.json#/$defs/sources" }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    { "if": { "properties": { "state": { "const": "works-with-caveats" } } }, "then": { "required": ["caveats"], "properties": { "caveats": { "minItems": 1 } } } },
+    { "if": { "properties": { "state": { "const": "partial" } } }, "then": { "required": ["partial_scope"] } },
+    { "if": { "properties": { "state": { "const": "not-supported" } } }, "then": { "required": ["reason"] } },
+    { "if": { "properties": { "state": { "not": { "const": "unknown" } } } }, "then": { "properties": { "evidence": { "minItems": 1 } } } }
+  ]
+}

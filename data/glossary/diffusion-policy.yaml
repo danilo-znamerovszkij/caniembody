@@ -1,0 +1,40 @@
+id: diffusion-policy
+term: "Diffusion policy"
+aka: ["Diffusion Policy", "action diffusion"]
+short: "A policy that generates action sequences by iteratively denoising random noise with a conditional diffusion model, introduced by Chi et al. in 2023."
+body: |
+  A diffusion policy represents a robot's visuomotor policy as a conditional denoising diffusion process. Starting from Gaussian noise, a network conditioned on recent observations removes noise over a series of steps until a sequence of actions remains. The technique was introduced by Chi et al. in "Diffusion Policy: Visuomotor Policy Learning via Action Diffusion" (2023). The paper's central argument is that diffusion handles multimodal action distributions, such as two equally valid ways around an obstacle, where regressing to the mean would produce an action no demonstrator took.
+
+  The paper defines three horizons: observation horizon T_o, action prediction horizon T_p, and action execution horizon T_a. The robot executes T_a of the T_p predicted steps before re-planning (see [action horizon](/glossary/action-horizon)). LeRobot's [Diffusion Policy](/policy/diffusion) maps these to `n_obs_steps`, `horizon` and `n_action_steps`, with v0.6.1 defaults of 2, 64 and 32, and uses a DDPM noise scheduler with 100 training timesteps; inference uses the same number of steps unless `num_inference_steps` is set. [Multitask DiT](/policy/multitask-dit) extends the design with a diffusion transformer and language conditioning.
+
+  The term is overloaded. As a technique, "diffusion policy" means any policy whose action head is a diffusion model. As a model, it means Chi et al.'s architecture, trained from scratch per task. VLAs with diffusion or [flow-matching](/glossary/flow-matching) action heads are diffusion policies in the first sense, not the second.
+
+  Every denoising step is a full forward pass of the action network, so the step count dominates [inference latency](/glossary/inference-latency) on small compute such as a [Jetson Orin Nano](/compute/jetson-orin-nano-8gb).
+related: [flow-matching, action-horizon, action-chunking, behavioral-cloning, inference-latency]
+policies: [diffusion, multitask-dit]
+sources:
+  - id: ev-chi-2023
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2303.04137
+    date: 2023-03-07
+    verified_on: 2026-10-24
+    summary: "Chi et al. introduce Diffusion Policy."
+    quote: "This paper introduces Diffusion Policy, a new way of generating robot behavior by representing a robot's visuomotor policy as a conditional denoising diffusion process."
+  - id: ev-chi-2023-full
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/html/2303.04137
+    date: 2023-03-07
+    verified_on: 2026-10-24
+    summary: "Diffusion Policy executes part of each predicted action sequence before re-planning (observation, prediction and execution horizons)."
+    quote: "This encourages temporal action consistency while remaining responsive."
+  - id: ev-lerobot-diffusion-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/diffusion/configuration_diffusion.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot v0.6.1 Diffusion Policy defaults to DDPM with 100 training timesteps."
+    quote: "num_train_timesteps: int = 100"

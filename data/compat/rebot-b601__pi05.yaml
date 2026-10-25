@@ -1,0 +1,41 @@
+robot: rebot-b601
+policy: pi05
+state: partial
+partial_scope: Training on reBot B601-DM data is documented by the vendor (Seeed wiki 'B601-DM with LeRobot'). The wiki's on-robot evaluation command (lerobot-record with --policy.path and no teleoperator) is rejected by the Seeed LeRobot fork the wiki installs, which directs policy deployment to lerobot-rollout, so on-robot inference is not validly documented. Public checkpoints trained on B601-DM data also exist.
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-seeed-wiki-b601-dm-lerobot
+    - ev-hub-tinjyuu-pi05-rebot
+    - ev-hub-qualia-pi05-rebot
+evidence:
+- id: ev-seeed-wiki-b601-dm-lerobot
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://github.com/Seeed-Studio/wiki-documents/blob/86afe5634df5713aec98cf77c09a7e8d670feb1d/sites/en/docs/Robotics/Robot_Kits/reBot_Arm/B601_DM/reBot_Arm_B601_DM_Lerobot.md
+  date: '2026-10-15'
+  verified_on: '2026-10-25'
+  summary: 'Seeed wiki ''B601-DM with LeRobot'' (Training and Evaluation section). Pi0.5 tab: lerobot-train --policy.type=pi05 --policy.pretrained_path=lerobot/pi05_base on your reBot dataset, then evaluate with lerobot-record --robot.type=seeed_b601_dm_follower --policy.path=...'
+  quote: 'To use it in LeRobot: just set the policy type to `--policy.type=pi05`.'
+- id: ev-seeed-lerobot-fork-record
+  tier: upstream-documented
+  type: source-code
+  url: https://github.com/Seeed-Projects/lerobot/blob/4aaff99be4a1d81568c08c8f0296b41b40c99ec4/src/lerobot/scripts/lerobot_record.py
+  date: '2026-08-28'
+  verified_on: '2026-10-25'
+  summary: 'Seeed''s LeRobot fork (main, pyproject version 0.6.2), which the wiki tells users to install: RecordConfig raises an error when no teleoperator is given and points policy deployment to lerobot-rollout.'
+  quote: For policy-based deployment, use lerobot-rollout instead.
+- id: ev-hub-tinjyuu-pi05-rebot
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/tinjyuu/pi05-rebot-prod1-peft-15k
+  verified_on: '2026-10-24'
+  summary: config.json type=pi05; train_config.json dataset tinjyuu/rebot-prod1 whose meta/info.json robot_type=seeed_b601_dm_follower (Seeed plugin naming for the B601-DM, 43 episodes); pretrained from lerobot/pi05_base.
+- id: ev-hub-qualia-pi05-rebot
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/qualia-robotics/pi05-b601-dm-icehockey-v1-72e6d068
+  verified_on: '2026-10-24'
+  summary: config.json type=pi05; train_config.json dataset userresu2026/b601-dm-icehockey-v1 whose meta/info.json robot_type=seeed_b601_dm_follower (125 episodes).

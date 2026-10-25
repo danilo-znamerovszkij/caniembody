@@ -1,0 +1,35 @@
+robot: trossen-widowx
+policy: act
+state: works
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-trossen-docs-train-eval, ev-trossen-act-tshirt-card]
+  inference_real:
+    state: works
+    evidence: [ev-trossen-docs-train-eval, ev-trossen-plugin-readme, ev-trossen-act-tshirt-card]
+evidence:
+  - id: ev-trossen-docs-train-eval
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://docs.trossenrobotics.com/trossen_arm/v1.9/tutorials/lerobot_plugin/train_and_evaluate.html
+    verified_on: 2026-10-24
+    summary: "Trossen's LeRobot-plugin tutorial trains ACT (--policy.type=act) on Trossen AI Solo/Stationary/Mobile (WidowX AI) datasets and evaluates it on the robot with lerobot-record --robot.type=widowxai_follower_robot / bi_widowxai_follower_robot."
+    quote: "We specified the policy with --policy.type=act, which loads configurations from configuration_act.py."
+  - id: ev-trossen-plugin-readme
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/TrossenRobotics/lerobot_trossen/blob/337ed74df1ee617ddfb5987a9f7464cf3089c4a2/README.md
+    date: 2026-09-16
+    verified_on: 2026-10-24
+    summary: "Official Trossen plugin README (requires lerobot >= 0.6.0) shows an ACT policy evaluated on a single WidowX AI via lerobot-record --policy.path."
+    quote: "Evaluate a trained policy by recording 2 episodes of a cube pickup task with a single WidowX AI robot using the OpenCV camera interface."
+  - id: ev-trossen-act-tshirt-card
+    tier: upstream-documented
+    type: model-card
+    url: https://huggingface.co/TrossenRoboticsCommunity/act-tshirt-folding-lerobot/blob/a71a4013b54206b0ca15fc486a69ecd33f5ee7f3/README.md
+    date: 2026-07-01
+    verified_on: 2026-10-24
+    summary: "Trossen-published ACT checkpoint (config.json type=act; train_config dataset hamza-trossen/tshirt-folding-mobile-stationary, whose meta/info.json robot_type=bi_widowxai_follower_robot) with an on-robot eval video and a 6/10 success rate on bimanual t-shirt folding."
+    quote: "**ACT** (Action Chunking Transformer) policy for bimanual t-shirt folding on the Trossen AI **stationary** (WidowX AI) platform. Trained with **lerobot**."

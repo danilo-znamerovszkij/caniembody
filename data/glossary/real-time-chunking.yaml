@@ -1,0 +1,40 @@
+id: real-time-chunking
+term: "Real-time chunking"
+aka: ["RTC"]
+short: "An inference-time method that generates the next action chunk while the current one executes, freezing actions that will run anyway and inpainting the rest."
+body: |
+  Real-time chunking (RTC) is an inference-time algorithm for executing [action chunks](/glossary/action-chunking) from diffusion- or flow-based policies without pauses or jumps at chunk boundaries. It was introduced by Black, Galliker and Levine of Physical Intelligence in "Real-Time Execution of Action Chunking Flow Policies" (2025).
+
+  The policy starts generating the next chunk while the robot is still executing the current one. Because of [inference latency](/glossary/inference-latency), the first actions of the new chunk will already have been executed by the time it arrives. RTC "freezes" those actions to match the previous chunk and treats the rest as an inpainting problem, guiding the denoising so that the new chunk joins the old one smoothly. It needs no retraining. The paper reports precise tasks such as lighting a match succeeding "even in the presence of inference delays in excess of 300 milliseconds, corresponding to more than 30% of the model's prediction horizon".
+
+  LeRobot v0.6.1 documents RTC for flow-matching policies such as [π0](/policy/pi0), [π0.5](/policy/pi05) and [SmolVLA](/policy/smolvla). Measurements in this matrix record it with an `rtc_enabled` flag, because the same model on the same hardware behaves differently with and without it.
+
+  RTC is often confused with [asynchronous inference](/glossary/async-inference). Async inference decides *when* to request a new chunk so that the action queue never empties. RTC changes *how* the new chunk is generated so that it agrees with what is already executing. Naive asynchronous execution without RTC can switch abruptly between chunks that disagree. RTC also differs from temporal ensembling, which averages overlapping chunks; the paper reports RTC as smoother than all compared methods, including temporal ensembling.
+related: [action-chunking, async-inference, inference-latency, flow-matching, control-rate]
+policies: [pi0, pi05, smolvla]
+sources:
+  - id: ev-rtc-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2506.07339
+    date: 2025-06-09
+    verified_on: 2026-10-24
+    summary: "Black et al. introduce real-time chunking (RTC)."
+    quote: "Our method, real-time chunking (RTC), is applicable to any diffusion- or flow-based VLA out of the box with no re-training."
+  - id: ev-rtc-paper-full
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/html/2506.07339
+    date: 2025-06-09
+    verified_on: 2026-10-24
+    summary: "RTC paper: robust to inference delays over 300 ms."
+    quote: "even in the presence of inference delays in excess of 300 milliseconds, corresponding to more than 30% of the model’s prediction horizon"
+  - id: ev-lerobot-rtc-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/rtc.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot v0.6.1 documents RTC for Pi0, Pi0.5 and SmolVLA."
+    quote: "Real-Time Chunking (RTC) is an inference-time method that allows large, flow-matching based robotic policies, such as [Pi0](./pi0), [Pi0.5](./pi05), and [SmolVLA](./smolvla), to produce smooth, continuous, and reactive motion despite having high inference latency."

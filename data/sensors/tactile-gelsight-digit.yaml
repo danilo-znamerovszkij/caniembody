@@ -1,0 +1,3 @@
+id: tactile-gelsight-digit
+name: "Tactile — GelSight / DIGIT"
+description: "Vision-based tactile sensors (GelSight Mini, Meta DIGIT) that output an image of the contact surface."

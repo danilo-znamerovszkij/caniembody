@@ -1,0 +1,17 @@
+robot: agilex-piper
+policy: wall-oss
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-jolch-wallx]
+evidence:
+  - id: ev-hub-jolch-wallx
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/jolch/piper_wall_x_20260207
+    date: 2026-02-07
+    verified_on: 2026-10-24
+    summary: "config.json type=wall_x (LeRobot WALL-OSS); trained on jolch/piper_pnp_20260111_1538 whose meta/info.json robot_type=piper_follower."

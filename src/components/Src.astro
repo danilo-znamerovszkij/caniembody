@@ -1,0 +1,9 @@
+---
+// Inline citation: links to the evidence entry on the same page.
+const { r } = Astro.props as { r?: string };
+---
+{r && <a href={`#${r}`} class="src" title="View source">src</a>}
+<style>
+  .src { font: 500 9.5px/1 var(--mono); vertical-align: 2px; margin-left: 4px; padding: 1px 3px; border-radius: 3px; border: 1px solid var(--line); color: var(--fg-3); text-decoration: none; }
+  .src:hover { color: var(--accent); border-color: var(--accent); }
+</style>

@@ -1,0 +1,26 @@
+robot: xarm
+policy: smolvla
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+framework_version_tested: "0.6.1"
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-zwonzis-smolvla, ev-hub-jjbin-smolvla]
+evidence:
+  - id: ev-hub-zwonzis-smolvla
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/zwonzis/smolvla-xarm7-pick-orange-ball
+    date: 2026-07-27
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "config.json type=smolvla; train_config dataset zwonzis/xarm7-pick-orange-ball (56 episodes), whose meta/info.json robot_type=xarm7; card lists LeRobot version 0.6.1. Auto-generated card, no rollout results."
+  - id: ev-hub-jjbin-smolvla
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/jjbin2001/smolvla_xarm_black_white_sorting
+    date: 2026-05-27
+    verified_on: 2026-10-24
+    summary: "config.json type=smolvla; train_config dataset jjbin2001/xarm_black_white_sorting, whose meta/info.json robot_type=xarm7_follower. Auto-generated card, no rollout results."

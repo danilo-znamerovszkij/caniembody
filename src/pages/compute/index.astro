@@ -1,0 +1,46 @@
+---
+import Base from '../../layouts/Base.astro';
+import { loadAll, gridPolicies } from '../../lib/data.ts';
+import { COMPUTE_CLASS_LABEL, COMPUTE_CLASS_ORDER } from '../../lib/ui.ts';
+import { fitFor, needOf } from '../../lib/fit.ts';
+import { pageTitle, crumbs } from '../../lib/seo.ts';
+const all = loadAll();
+const P = gridPolicies();
+const summary = (cid: string) => {
+  const c = all.byId.compute[cid];
+  let measured = 0, fails = 0, exceeds = 0;
+  for (const p of P) {
+    const runs = all.runs.filter((r) => r.policy === p.id && r.compute === cid).map((r) => ({ ...r, outcome: r.outcome ?? 'runs' }));
+    const f = fitFor(needOf(p), c, runs as any);
+    if (f.kind === 'measured') measured++; else if (f.kind === 'fails') fails++; else if (f.kind === 'exceeds') exceeds++;
+  }
+  return { measured, fails, exceeds };
+};
+---
+<Base title={pageTitle('What can I run on my hardware? Robot policies by compute target')}
+  description="Which robot learning policies (SmolVLA, π0, GR00T, ACT…) run on a Jetson Orin Nano, AGX Orin, Thor, RTX 4090, Apple Silicon or CPU, with measured inference rates, runtime and precision."
+  jsonld={[crumbs([['Matrix', '/'], ['Compute', '/compute']])]}>
+  <div class="wrap">
+    <section class="ph">
+      <div class="eyebrow"><a href="/">Matrix</a><span>/</span><span>Compute</span></div>
+      <h1>What can I run on this hardware?</h1>
+      <p class="lede">Measured inference runs per compute target. Every number states its runtime, precision and camera count. Edge targets are listed first.</p>
+    </section>
+    {COMPUTE_CLASS_ORDER.map((cl) => {
+      const xs = all.compute.filter((c) => c.class === cl);
+      return xs.length ? (
+        <section>
+          <h2>{COMPUTE_CLASS_LABEL[cl]}</h2>
+          <div class="tbl-wrap"><table class="tbl">
+            <thead><tr><th>Target</th><th>Memory</th><th>Measured policies</th><th>Fails (measured)</th><th>Exceeds memory (inferred)</th></tr></thead>
+            <tbody>{xs.map((c) => { const s = summary(c.id); return (
+              <tr><td><a href={`/compute/${c.id}`}><strong>{c.name}</strong></a></td>
+                <td class="mono">{c.memory_gb ? `${c.memory_gb} GB${c.unified ? ' unified' : ''}` : 'system RAM'}</td>
+                <td class="mono">{s.measured || '—'}</td><td class="mono">{s.fails || '—'}</td><td class="mono">{s.exceeds || '—'}</td></tr>
+            ); })}</tbody>
+          </table></div>
+        </section>
+      ) : null;
+    })}
+  </div>
+</Base>

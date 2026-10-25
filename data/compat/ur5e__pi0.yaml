@@ -1,0 +1,48 @@
+robot: ur5e
+policy: pi0
+state: works-with-caveats
+framework: openpi
+caveats:
+  - "The upstream evidence is Physical Intelligence's own UR5e evaluation; openpi ships no UR5e fine-tuned checkpoint, and its examples/ur5 is an outline for writing UR5 input/output transforms rather than a tested recipe."
+  - "Public end-to-end UR5e deployments are community-reported only (an openpi fork driven through a LeRobot plugin, and a LeRobot 0.5.1 fork)."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-pi0-paper, ev-ur5e-gello-readme, ev-ur5e-lerobot-readme]
+  inference_real:
+    state: works
+    evidence: [ev-pi0-paper, ev-ur5e-gello-readme, ev-ur5e-lerobot-readme]
+evidence:
+  - id: ev-pi0-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2410.24164
+    date: 2024-10-31
+    verified_on: 2026-10-24
+    summary: "The π0 paper lists UR5e (one arm, two cameras, 7-D action space) among its platforms and fine-tunes and evaluates π0 on a UR5e bowl-stacking task."
+    quote: "UR5e stack bowls. This task requires stacking bowls, with four bowls of different sizes."
+  - id: ev-openpi-ur5-example
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/Physical-Intelligence/openpi/blob/215abfb217dbac7d5f1273282331b9b1866c0479/examples/ur5/README.md
+    date: 2026-08-24
+    verified_on: 2026-10-24
+    summary: "openpi's UR5 example only outlines how to write UR5 input/output transforms for fine-tuning; it is not a released checkpoint or tested recipe."
+    quote: "Below we provide an outline of how to implement the key components mentioned in the \"Finetune on your data\" section of the [README](../README.md) for finetuning on UR5 datasets."
+  - id: ev-ur5e-gello-readme
+    tier: community-reported
+    type: source-code
+    url: https://github.com/F-Fer/lerobot_ur5e_gello/blob/3f3532cfc58d81ba12c1582f9c6087d12488269d/README.md
+    date: 2026-02-16
+    verified_on: 2026-10-24
+    summary: "Third-party UR5e LeRobot plugin (Robotiq gripper, RTDE) records datasets with LeRobot and runs π0 checkpoints served by an openpi fork (openpi-ur5e, config pi0_ur5e) on the real UR5e, with an evaluation script."
+    quote: "**Remote policy inference** — deploy OpenPI (π0) policies via WebSocket from a GPU server"
+  - id: ev-ur5e-lerobot-readme
+    tier: community-reported
+    type: source-code
+    url: https://github.com/yechen056/UR5e-LeRobot/blob/72d41bdae2606f464d3fd0da24cd6a20241ab244/README.md
+    date: 2026-07-02
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.5.1"}
+    summary: "LeRobot route: the UR5e-LeRobot fork (lerobot 0.5.1) trains --policy.type=pi0 from lerobot/pi0_base and evaluates it on single-arm and bimanual UR5e."
+    quote: "We have validated and tuned hyperparameters on this hardware stack for five policies: `ACT`, `Diffusion Policy`, `VQ-BeT`, `MultiTaskDiT`, `pi0`, and `pi05`."

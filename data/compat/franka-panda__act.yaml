@@ -1,0 +1,45 @@
+robot: franka-panda
+policy: act
+state: works-with-caveats
+framework: lerobot
+caveats:
+  - "Community-reported only; not documented upstream or maintainer-tested."
+  - "The real-robot evidence uses the LeFranX fork (Panda/FER + RobotEra XHand, 19-D action space), not an unmodified LeRobot install. LeFranX has no Franka Hand gripper interface."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-levr-paper, ev-hub-tinkybala-act, ev-hub-ases-act]
+  inference_real:
+    state: works
+    notes: "LeVR: three tasks, 10 rollouts per task-policy pair, remote inference via LeRobot's gRPC policy server."
+    evidence: [ev-levr-paper, ev-levr-paper-hw]
+evidence:
+  - id: ev-levr-paper
+    tier: community-reported
+    type: paper
+    url: https://arxiv.org/abs/2509.14349v1
+    date: 2025-09-17
+    verified_on: 2026-10-24
+    summary: "LeVR paper: LeRobot ACT is fine-tuned on 100 LeFranX demos per task and rolled out on the robot (10 rollouts per task, 3 tasks)."
+    quote: "Using the LeRobot framework, we directly finetuned two state-of-the-art visuomotor policies, ACT and DP, on our LeFranX-collected dataset."
+  - id: ev-levr-paper-hw
+    tier: community-reported
+    type: paper
+    url: https://arxiv.org/abs/2509.14349v1
+    date: 2025-09-17
+    verified_on: 2026-10-24
+    summary: "LeVR hardware: Franka FER with an XHand, three RealSense D435 cameras at 320x240/30 fps, inference on an RTX 6000 Ada server."
+    quote: "Experiments were conducted using a Franka FER robot equipped with a RobotEra XHand dexterous hand."
+  - id: ev-hub-tinkybala-act
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/TInkybala/Real_Panda_PickCubeVLA0_act_20260402_143912
+    date: 2026-04-02
+    verified_on: 2026-10-24
+    summary: "config.json type=act. train_config dataset TInkybala/PickCubeVLA0, whose meta/info.json robot_type=panda_ros_cartesian (148 episodes, panda_joint1-7 state, Cartesian-velocity actions). Auto-generated card, no rollout results. The Panda identity comes from the repo/robot_type naming."
+  - id: ev-hub-ases-act
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/ases200q2/Real_Panda_CartesianVel_SpaceMouse_policy
+    verified_on: 2026-10-24
+    summary: "config.json type=act. train_config dataset ases200q2/Real_Panda_CartesianVel_SpaceMouse, whose meta/info.json robot_type=panda_ros_cartesian (25 episodes, one camera)."

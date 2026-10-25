@@ -1,0 +1,40 @@
+robot: agilex-piper
+policy: pi05
+state: works-with-caveats
+framework: openpi
+caveats:
+  - "The vendor-documented route is AgileX's own openpi fork (openpi-agilex, JAX, ROS 2) on the bimanual Cobot Magic (two PiPER arms, three cameras), not a single PiPER arm and not LeRobot."
+  - "AgileX documents the fine-tuning and inference workflow but publishes no PiPER success rates or released PiPER checkpoint."
+capabilities:
+  train:
+    state: works
+    notes: "Vendor: π0.5 fine-tuning configs pi05_aloha / pi05_aloha_lora for cobot_magic data collected with agilexrobotics/data_tools. Community: LeRobot pi05 checkpoint trained on single-arm Piper data."
+    evidence: [ev-openpi-agilex-readme, ev-hub-qualia-pi05]
+  inference_real:
+    state: works
+    notes: "Vendor: serve the fine-tuned checkpoint with openpi's serve_policy.py and run scripts/aloha_inference-joint-ros2.py against dual PiPER arms."
+    evidence: [ev-openpi-agilex-readme, ev-openpi-agilex-configs]
+evidence:
+  - id: ev-openpi-agilex-readme
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/agilexrobotics/openpi-agilex/blob/432577c37c4fc650fcbea03f03e45f936e9e4a08/README.md
+    date: 2026-02-02
+    verified_on: 2026-10-25
+    summary: "AgileX's openpi distribution README: fine-tune π0.5 (pi05_base) on your data, serve it with serve_policy.py, then run inference on dual PiPER arms via the provided ROS 2 scripts."
+    quote: "open your dual piper arms ros-sdk and multi cameras, then"
+  - id: ev-openpi-agilex-configs
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/agilexrobotics/openpi-agilex/blob/432577c37c4fc650fcbea03f03e45f936e9e4a08/README.md
+    date: 2026-02-02
+    verified_on: 2026-10-25
+    summary: "Same README's config table maps the π0.5 configs pi05_aloha and pi05_aloha_lora to the inference script for the Cobot Magic (three cameras, two arms)."
+    quote: "| pi05_aloha   | scripts/aloha_inference-joint-ros2.py   | cobot_magic, 3 cameras and 2 arms    |"
+  - id: ev-hub-qualia-pi05
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/qualia-robotics/pi05-piper-popcorn-6956e853
+    date: 2026-03-26
+    verified_on: 2026-10-24
+    summary: "config.json type=pi05; trained on callum-sh/piper-popcorn whose meta/info.json robot_type=piper."

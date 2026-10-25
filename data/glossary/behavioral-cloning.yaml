@@ -1,0 +1,30 @@
+id: behavioral-cloning
+term: "Behavioral cloning"
+aka: ["BC", "behavior cloning"]
+short: "Supervised learning of a policy that maps observations to the actions a demonstrator took, with no reward signal or environment interaction during training."
+body: |
+  Behavioral cloning (BC) is the simplest form of [imitation learning](/glossary/imitation-learning): record observation–action pairs from a demonstrator and fit a policy to them with supervised learning. It needs no reward function, simulator or online interaction. An early, widely cited example is ALVINN (Pomerleau, NIPS 1988), a neural network that mapped camera and laser range-finder input to the direction a vehicle should travel to follow a road.
+
+  Most manipulation policies in this matrix are trained by behavioral cloning on teleoperated demonstrations, including [ACT](/policy/act), [Diffusion Policy](/policy/diffusion), [SmolVLA](/policy/smolvla), and the fine-tuning stage of large VLAs such as [π0](/policy/pi0). They differ in the model used to represent the action distribution (a conditional VAE in ACT, a diffusion model, [flow matching](/glossary/flow-matching) or discrete [action tokens](/glossary/action-tokenization)) and in how much pretraining comes before the cloning step. Modern BC is therefore not plain regression. Generative action heads exist because demonstrations are multimodal, and regressing to their mean can produce an action no demonstrator took.
+
+  BC's known weakness is distribution shift. The policy only sees states the demonstrator visited; at deployment its own small errors take it elsewhere, and errors accumulate. The ACT paper (Zhao et al., 2023) calls this the "compounding error" problem of imitation learning. Remedies include [action chunking](/glossary/action-chunking), [DAgger](/glossary/dagger)-style corrective data, and combining BC with reinforcement learning, as in [HIL-SERL](/policy/hil-serl).
+
+  A common misconception is that more demonstrations always help. Demonstrations that differ in strategy or speed make the target distribution harder to model; the ACT abstract names non-stationary human demonstrations as a challenge alongside compounding error.
+related: [imitation-learning, dagger, action-chunking, teleoperation, diffusion-policy]
+policies: [act, diffusion, smolvla, pi0, hil-serl]
+sources:
+  - id: ev-alvinn-1988
+    tier: upstream-documented
+    type: paper
+    url: https://papers.nips.cc/paper_files/paper/1988/hash/812b4ba287f5ee0bc9d43bbf5bbe87fb-Abstract.html
+    verified_on: 2026-10-24
+    summary: "Pomerleau (NIPS 1988): ALVINN, a neural network trained to map sensor input to steering direction."
+    quote: "ALVINN (Autonomous Land Vehicle In a Neural Network) is a 3-layer back-propagation network designed for the task of road following."
+  - id: ev-act-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2304.13705
+    date: 2023-04-23
+    verified_on: 2026-10-24
+    summary: "ACT paper names compounding errors and non-stationary demonstrations as challenges."
+    quote: "errors in the policy can compound over time, and human demonstrations can be non-stationary."

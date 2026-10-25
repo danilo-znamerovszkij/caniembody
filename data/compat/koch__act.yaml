@@ -1,0 +1,35 @@
+robot: koch
+policy: act
+state: works
+framework: lerobot
+framework_version_tested: "0.6.1"
+capabilities:
+  inference_real:
+    state: works
+    notes: "The upstream quick-start rolls out the checkpoint lerobot/act_koch_real on koch_follower; that checkpoint was not publicly accessible on the Hub on 2026-10-24, so bring your own trained ACT checkpoint."
+    evidence: [ev-lerobot-rollout-koch]
+  train:
+    state: works
+    evidence: [ev-hub-ethancsl-act-koch, ev-hub-sounderya-act-koch]
+evidence:
+  - id: ev-lerobot-rollout-koch
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/inference.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot's policy-deployment page uses an ACT checkpoint on the Koch follower (koch_follower) as its lerobot-rollout quick-start example."
+    quote: "--policy.path=lerobot/act_koch_real \\\n    --robot.type=koch_follower"
+  - id: ev-hub-ethancsl-act-koch
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/ethanCSL/act_koch_sorting_only_wrist
+    verified_on: 2026-10-24
+    summary: "config.json type=act; train_config.json dataset ethanCSL/svla_koch_sorting_n_stacking_wrist_camera whose meta/info.json robot_type=koch_follower (200 episodes)."
+  - id: ev-hub-sounderya-act-koch
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/Sounderya/act-koch-pickplace
+    verified_on: 2026-10-24
+    summary: "config.json type=act; train_config.json dataset Sounderya/koch_pickplace_v1 whose meta/info.json robot_type=koch_follower (210 episodes)."

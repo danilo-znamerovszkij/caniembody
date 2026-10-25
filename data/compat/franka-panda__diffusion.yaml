@@ -1,0 +1,48 @@
+robot: franka-panda
+policy: diffusion
+state: works-with-caveats
+framework: lerobot
+caveats:
+  - "The LeRobot route is community-reported only: the LeVR/LeFranX authors fine-tuned LeRobot's Diffusion Policy on a Panda (FER) with a RobotEra XHand, using the LeFranX fork, which has no Franka Hand gripper support."
+  - "The Diffusion Policy authors' own Panda experiments (sauce pouring/spreading, bimanual tasks) ran on their own stack. The public real-stanford/diffusion_policy real-robot code targets UR5 only."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-levr-paper, ev-dp-paper-panda, ev-droid-paper-dp]
+  inference_real:
+    state: works
+    notes: "Upstream: Diffusion Policy paper (Panda). Also the DROID paper (robomimic-based droid_policy_learning) and OpenVLA's from-scratch baseline. Via LeRobot: LeVR, 10 rollouts per task."
+    evidence: [ev-dp-paper-panda, ev-droid-paper-dp, ev-openvla-paper-dp-baseline, ev-levr-paper]
+evidence:
+  - id: ev-levr-paper
+    tier: community-reported
+    type: paper
+    url: https://arxiv.org/abs/2509.14349v1
+    date: 2025-09-17
+    verified_on: 2026-10-24
+    summary: "LeVR paper: ACT and Diffusion Policy as hosted by LeRobot are fine-tuned on 100 demos per task, collected with LeFranX on a Franka FER + XHand, and rolled out on the robot (10 rollouts per task, 3 tasks)."
+    quote: "Using the LeRobot framework, we directly finetuned two state-of-the-art visuomotor policies, ACT and DP, on our LeFranX-collected dataset."
+  - id: ev-dp-paper-panda
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2303.04137v5
+    date: 2024-03-14
+    verified_on: 2026-10-24
+    summary: "Diffusion Policy paper (v5): real-world 6-DoF sauce pouring and periodic spreading tasks on a Franka Panda, plus bimanual tasks teleoperated onto Franka Panda arms."
+    quote: "Our Franka Panda setup and tasks are shown in Fig 10."
+  - id: ev-droid-paper-dp
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2403.12945v2
+    date: 2025-04-22
+    verified_on: 2026-10-24
+    summary: "DROID paper: all policy-learning experiments train diffusion policies (robomimic-based, released as droid_policy_learning), evaluated on 6 real tasks on the Panda-based DROID hardware."
+    quote: "To this end, we use diffusion policies [7, 16, 21, 38, 54], which leverage denoising diffusion models for action prediction"
+  - id: ev-openvla-paper-dp-baseline
+    tier: community-reported
+    type: paper
+    url: https://arxiv.org/abs/2406.09246v3
+    date: 2024-09-05
+    verified_on: 2026-10-24
+    summary: "OpenVLA paper trains Diffusion Policy from scratch on seven Franka Emika Panda tasks as a baseline. It is strong on narrow single-instruction tasks and weaker on multi-instruction ones."
+    quote: "Diffusion Policy exhibits strong performance on narrow single-instruction tasks, while Octo and OpenVLA perform better on diverse fine-tuning tasks involving multiple instructions and distractor objects."

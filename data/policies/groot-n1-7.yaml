@@ -1,0 +1,174 @@
+id: groot-n1-7
+name: GR00T N1.7
+aliases: [groot, gr00t, GR00T, Isaac GR00T N1.7, GR00T-N1.7-3B, nvidia/GR00T-N1.7-3B, gr00t-n1.7]
+family: vla
+summary: >-
+  NVIDIA's open cross-embodiment foundation model for humanoid and manipulation skills: a Cosmos-Reason2-2B
+  (Qwen3-VL architecture) vision-language backbone feeding a flow-matching diffusion-transformer (DiT) action head
+  that denoises continuous action chunks conditioned on vision, language and proprioception.
+authors: NVIDIA (GEAR)
+paper_url: https://arxiv.org/abs/2503.14734
+params: 3000000000
+params_note: "Model card states 3,000,000,000; the Isaac-GR00T README calls it the 'Base model (3B params)'. Both are rounded figures."
+params_source_ref: ev-groot-n17-card
+backbone: Cosmos-Reason2-2B (Qwen3-VL architecture) VLM with SigLip2 vision transformer
+action_output: flow-matching
+action_chunking: true
+rtc_compatible: true
+arch_source_ref: ev-groot-n17-card-arch
+license: Apache-2.0
+weights_license: NVIDIA Open Model License
+open_weights: true
+frameworks:
+  lerobot:
+    support: native
+    since: "0.6.0"
+    policy_type: groot
+    docs_url: https://huggingface.co/docs/lerobot/groot
+    note: >-
+      `groot` is GR00T N1.7 from v0.6.0. LeRobot v0.4.0–v0.5.1 shipped GR00T N1.5 under the same `groot` type
+      (default base model nvidia/GR00T-N1.5-3B); N1.5 was removed in v0.6.0 and N1.5 checkpoints are rejected.
+      To keep N1.5, pin lerobot==0.5.1. groot.mdx shows rollout with --inference.type=rtc.
+    source_ref: ev-lerobot-v060-notes
+  isaac-groot:
+    support: upstream-repo
+    since: n1.7-release
+    repo_url: https://github.com/NVIDIA/Isaac-GR00T
+    note: "N1.7 is an Early Access release (tag n1.7-release, 2026-04-18); older generations live on the n1.6-release / n1.5-release tags."
+    source_ref: ev-isaac-groot-readme-ea
+checkpoints:
+  - hub_id: nvidia/GR00T-N1.7-3B
+    note: "Base model; NVIDIA Open Model License."
+  - hub_id: nvidia/gr00t17-lerobot-libero_spatial-640
+    note: "LeRobot-trained LIBERO Spatial checkpoint (95% in LeRobot docs)."
+  - hub_id: nvidia/gr00t17-lerobot-libero_object-640
+  - hub_id: nvidia/gr00t17-lerobot-libero_goal-640
+  - hub_id: nvidia/gr00t17-lerobot-libero_10-640
+  - hub_id: nvidia/GR00T-N1.7-LIBERO
+    note: "Upstream (Isaac-GR00T format) LIBERO checkpoints."
+requirements:
+  train:
+    vram_gb: {min: 24, max: 40}
+    batch_size: 8
+    condition: >-
+      Peak training VRAM at batch size 8 with AdamW (LeRobot default), "Multimodal" group (`groot`, `eo1`) in the
+      LeRobot compute hardware guide; suggested starter GPU "A100 40 GB+". The guide calls its figures indicative,
+      order-of-magnitude numbers for picking hardware, not exact predictions. Precision not stated.
+    source_ref: ev-lerobot-hw-guide
+  inference:
+    vram_gb: {min: 16}
+    condition: >-
+      Upstream Isaac-GR00T N1.7 README hardware requirement for inference with NVIDIA's own gr00t package: 1 GPU with
+      16 GB+ VRAM (e.g. RTX 4090, L40, H100, Jetson AGX Thor/Orin, DGX Spark). Not a LeRobot measurement; precision
+      and batch size not stated. The same README recommends 40 GB+ GPUs for fine-tuning.
+    source_ref: ev-isaac-groot-readme-hw
+observation_space:
+  state: robot proprioception, MLP-encoded per embodiment ID and padded to a configurable max length (LeRobot default max_state_dim 132)
+  source_ref: ev-groot-n17-card-proprio
+notes: >-
+  Naming: the LeRobot policy type is `groot` (no version in the string); the version is determined by the LeRobot
+  release (N1.5 in 0.4.0–0.5.1, N1.7 from 0.6.0). The GR00T N1 technical report (arXiv 2503.14734) covers the N1.x
+  family; there is no separate N1.7 paper. The v0.6.1 GR00T config keeps deprecated LoRA fields that its own comment
+  calls "never-wired", so PEFT support is left unknown. Upstream code is Apache-2.0; weights are under the NVIDIA Open
+  Model License.
+verified_on: 2026-10-24
+sources:
+  - id: ev-groot-n17-card
+    tier: upstream-documented
+    type: model-card
+    url: https://huggingface.co/nvidia/GR00T-N1.7-3B
+    verified_on: 2026-10-24
+    summary: N1.7 model card gives the parameter count and the flow-matching DiT action head over SigLip2 vision features.
+    quote: "**Number of Model Parameters:** 3,000,000,000"
+  - id: ev-groot-n17-card-arch
+    tier: upstream-documented
+    type: model-card
+    url: https://huggingface.co/nvidia/GR00T-N1.7-3B
+    verified_on: 2026-10-24
+    summary: Model card describes the flow matching action transformer that models a chunk of actions.
+    quote: "uses a flow matching action transformer to model a chunk of actions conditioned on vision, language and proprioception."
+  - id: ev-groot-n17-card-proprio
+    tier: upstream-documented
+    type: model-card
+    url: https://huggingface.co/nvidia/GR00T-N1.7-3B
+    verified_on: 2026-10-24
+    summary: Model card describes proprioception encoding and padding.
+    quote: "To handle variable-dimension proprioception, inputs are padded to a configurable max length before feeding into the MLP."
+  - id: ev-lerobot-groot-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/groot.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: LeRobot integrates GR00T N1.7 only; N1.5 was removed and needs lerobot==0.5.1.
+    quote: "To keep using an N1.5 checkpoint, pin the last release that supports it: `pip install 'lerobot==0.5.1'`."
+  - id: ev-lerobot-groot-rtc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/groot.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: LeRobot GR00T docs deploy with RTC inference via lerobot-rollout.
+    quote: "--inference.rtc.enabled=True \\ # set to False if it causes inference instability"
+  - id: ev-lerobot-groot-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/groot/configuration_groot.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Policy type string is `groot`."
+    quote: '@PreTrainedConfig.register_subclass("groot")'
+  - id: ev-lerobot-v060-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.6.0
+    date: 2026-07-06
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.0"}
+    summary: v0.6.0 replaced GR00T N1.5 with N1.7 (PR #3922).
+    quote: "GR00T N1.5 is replaced by N1.7 (pin `lerobot==0.5.1` if you need N1.5)."
+  - id: ev-lerobot-v040-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.4.0
+    date: 2025-10-23
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.0"}
+    summary: The `groot` policy (then GR00T N1.5) first shipped in v0.4.0.
+    quote: "feat(policies): add Nvidia Gr00t N1.5 model by @imstevenpmwork"
+  - id: ev-isaac-groot-readme-ea
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/NVIDIA/Isaac-GR00T/blob/n1.7-release/README.md
+    date: 2026-04-18
+    verified_on: 2026-10-24
+    summary: Isaac-GR00T n1.7-release README describes N1.7 as an Early Access release with a Cosmos-Reason2-2B / Qwen3-VL backbone.
+    quote: "We just released GR00T N1.7 Early Access, the latest version of GR00T N1 with a new VLM backbone (Cosmos-Reason2-2B / Qwen3-VL) and improved performance."
+  - id: ev-isaac-groot-readme-hw
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/NVIDIA/Isaac-GR00T/blob/n1.7-release/README.md
+    date: 2026-04-18
+    verified_on: 2026-10-24
+    summary: Upstream hardware requirements for N1.7 inference (16 GB+) and fine-tuning (40 GB+ recommended).
+    quote: "**Inference:** 1 GPU with 16 GB+ VRAM (e.g., RTX 4090, L40, H100, Jetson AGX Thor/Orin, DGX Spark)."
+  - id: ev-isaac-groot-readme-license
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/NVIDIA/Isaac-GR00T/blob/n1.7-release/README.md
+    date: 2026-04-18
+    verified_on: 2026-10-24
+    summary: Code is Apache 2.0; model weights are under the NVIDIA Open Model License.
+    quote: "- **Model weights:** [NVIDIA Open Model License](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/)"
+  - id: ev-lerobot-hw-guide
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hardware_guide.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Compute hardware guide: Multimodal group (`groot`, `eo1`) peak VRAM ~24–40GB at BS 8 with AdamW; figures are indicative."
+    quote: "| Multimodal | `groot`, `eo1`                              |                ~24–40GB | A100 40 GB+                       |"

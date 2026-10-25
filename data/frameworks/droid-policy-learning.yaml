@@ -1,0 +1,10 @@
+id: droid-policy-learning
+name: droid_policy_learning
+maintainer: DROID dataset team
+repo: droid-dataset/droid_policy_learning
+docs_url: https://github.com/droid-dataset/droid_policy_learning
+license: MIT
+current_version: master
+current_version_date: 2025-04-22
+versioning: none
+notes: "DROID team's robomimic-based policy-learning code (Diffusion Policy). No tagged releases; pin by commit (master at 9a29c832b4c8, 2025-04-22)."

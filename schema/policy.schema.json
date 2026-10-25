@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "policy.schema.json",
+  "type": "object",
+  "required": ["id", "name", "family", "frameworks", "verified_on", "sources"],
+  "$defs": {
+    "requirement": {
+      "type": "object",
+      "required": ["source_ref"],
+      "properties": {
+        "vram_gb": {
+          "type": "object",
+          "properties": { "min": { "type": "number" }, "max": { "type": "number" }, "measured": { "type": "number" } },
+          "additionalProperties": false
+        },
+        "precision": { "enum": ["fp32", "tf32", "bf16", "fp16", "fp8", "int8", "int4", "nf4", "mixed"] },
+        "batch_size": { "type": "integer" },
+        "condition": { "type": "string", "description": "What the number covers, e.g. 'full fine-tune, batch 8, bf16'" },
+        "reference_time": { "type": "string", "description": "e.g. '~6 h for 20k steps on 1x RTX 4090'" },
+        "source_ref": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/id" },
+    "name": { "type": "string" },
+    "aliases": { "type": "array", "items": { "type": "string" } },
+    "family": { "enum": ["bc", "diffusion", "flow", "vla", "world-model", "rl", "reward-model"] },
+    "in_grid": { "type": "boolean", "default": true },
+    "summary": { "type": "string" },
+    "authors": { "type": "string", "description": "Originating lab/organisation" },
+    "paper_url": { "$ref": "common.schema.json#/$defs/url" },
+    "params": { "type": "integer" },
+    "params_note": { "type": "string" },
+    "params_source_ref": { "type": "string" },
+    "backbone": { "type": "string" },
+    "action_output": { "enum": ["regression", "diffusion", "flow-matching", "autoregressive-tokens", "vq-tokens", "hybrid", "value-based", "scalar-reward", "other"] },
+    "action_chunking": { "type": "boolean" },
+    "rtc_compatible": { "type": "boolean", "description": "Real-Time Chunking plug-in support (LeRobot RTC)" },
+    "peft_supported": { "type": "boolean" },
+    "arch_source_ref": { "type": "string", "description": "Evidence id backing backbone/action_output/chunking/rtc/peft" },
+    "license": { "type": "string", "description": "Code license" },
+    "weights_license": { "type": "string" },
+    "open_weights": { "type": "boolean" },
+    "frameworks": { "$ref": "framework-support.schema.json" },
+    "checkpoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["hub_id"],
+        "properties": { "hub_id": { "type": "string" }, "note": { "type": "string" } },
+        "additionalProperties": false
+      }
+    },
+    "requirements": {
+      "type": "object",
+      "properties": { "train": { "$ref": "#/$defs/requirement" }, "inference": { "$ref": "#/$defs/requirement" } },
+      "additionalProperties": false
+    },
+    "observation_space": {
+      "type": "object",
+      "properties": {
+        "cameras": { "type": "object", "properties": { "min": { "type": "integer" }, "typical": { "type": "integer" }, "max": { "type": "integer" } }, "additionalProperties": false },
+        "state": { "type": "string" },
+        "language": { "enum": ["required", "optional", "unsupported"] },
+        "depth": { "enum": ["required", "optional", "unsupported", "unknown"] },
+        "tactile": { "enum": ["required", "optional", "unsupported", "unknown"] },
+        "source_ref": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "notes": { "type": "string" },
+    "verified_on": { "$ref": "common.schema.json#/$defs/date" },
+    "sources": { "$ref": "common.schema.json#/$defs/sources", "minItems": 1 }
+  },
+  "additionalProperties": false
+}

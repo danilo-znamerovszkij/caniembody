@@ -1,0 +1,33 @@
+id: lerobot-dataset
+term: "LeRobotDataset"
+aka: ["LeRobotDataset v3.0", "LeRobot dataset format"]
+short: "Hugging Face LeRobot's standard format for robot demonstration data: Parquet for states and actions, MP4 for camera streams, plus episode metadata."
+body: |
+  LeRobotDataset is the data format and loader used by Hugging Face's LeRobot library to record, share and train on robot demonstrations. The current format, v3.0, has three parts. Low-dimensional, high-frequency signals ("states, actions, timestamps") are stored in Apache Parquet. Camera frames are encoded into MP4, with videos sharded per camera. Metadata in JSON and Parquet records feature names, dtypes, shapes, frame rates, normalization statistics, and the start and end offsets of each episode.
+
+  The main change from v2.1 is file-based storage: v3 packs "many episodes per Parquet/MP4 file" where v2 used one file per episode, and episodes are reconstructed from metadata rather than from filenames. Datasets can be streamed from the Hugging Face Hub with `StreamingLeRobotDataset` without downloading them first. The docs state that v3.0 ships with lerobot 0.4.0 and later, and provide a converter for v2.1 datasets.
+
+  Each frame exposes standard keys: `observation.state` ([proprioception](/glossary/proprioception)), one `observation.images.<camera>` key per camera, and `action`. For an [SO-101](/robot/so101) recorded with `lerobot-record`, state and action are six joint positions. The frame rate is fixed per dataset and is the [control rate](/glossary/control-rate) the trained policy should run at.
+
+  A common misconception is that "LeRobot format" makes any dataset usable on any robot. The format standardizes storage, not semantics. Two datasets can both be valid LeRobotDatasets yet have different joint orders, units, camera names or action spaces, and a policy such as [ACT](/policy/act), [SmolVLA](/policy/smolvla) or [π0](/policy/pi0) trained on one will not run on the other's robot without matching features (see [embodiment gap](/glossary/embodiment-gap)).
+related: [teleoperation, proprioception, control-rate, imitation-learning]
+policies: [act, smolvla, pi0, diffusion]
+sources:
+  - id: ev-lerobot-dataset-v3-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/lerobot-dataset-v3.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobotDataset v3.0 layout: Parquet tabular data, MP4 video, metadata."
+    quote: "Low‑dimensional, high‑frequency signals (states, actions, timestamps) stored in **Apache Parquet**."
+  - id: ev-lerobot-dataset-v3-files
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/lerobot-dataset-v3.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "v3 stores many episodes per file."
+    quote: "Many episodes per Parquet/MP4 file (v2 used one file per episode)."

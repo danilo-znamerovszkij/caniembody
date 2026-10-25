@@ -1,0 +1,9 @@
+id: lerobot
+name: LeRobot
+maintainer: Hugging Face
+repo: huggingface/lerobot
+docs_url: https://huggingface.co/docs/lerobot
+license: Apache-2.0
+current_version: "0.6.1"
+current_version_date: 2026-08-03
+versioning: releases

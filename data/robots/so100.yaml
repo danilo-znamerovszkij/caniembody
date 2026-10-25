@@ -1,0 +1,123 @@
+id: so100
+name: SO-100
+maker: TheRobotStudio (designed in collaboration with Hugging Face)
+aliases: [SO-ARM100, SO100, SO-100 arm, Standard Open Arm 100, so100_follower, so100_leader]
+class: arm
+summary: >-
+  The first-generation low-cost, open-source 3D-printed arm from TheRobotStudio and Hugging Face. It has five joints
+  plus a gripper and uses Feetech STS3215 servos. The maker now marks the SO-100 docs as deprecated in favour of the
+  SO-101, but LeRobot still supports it natively.
+dof: 5
+dof_note: "Six servos per follower: shoulder_pan, shoulder_lift, elbow_flex, wrist_flex, wrist_roll + gripper."
+arms: 1
+actuators: Feetech STS3215 serial bus servos (6 per arm)
+specs_source_ref: ev-lerobot-so-follower-motors
+open_source: true
+license: Apache-2.0
+bom_url: https://github.com/TheRobotStudio/SO-ARM100/blob/main/SO100.md
+homepage: https://github.com/TheRobotStudio/SO-ARM100
+frameworks:
+  lerobot:
+    support: native
+    since: "0.3.2"
+    robot_type: [so100_follower]
+    docs_url: https://huggingface.co/docs/lerobot/so100
+    note: >-
+      Leader: --teleop.type=so100_leader. 0.3.x also registered so100_follower_end_effector, which is gone from 0.4.0.
+      Since 0.4.3 the so100_follower type is registered by the shared so_follower module (PR #2763), which merged the
+      SO-100 and SO-101 code. The type string did not change. SO-100 support was added on main in Oct 2024 (PR #419),
+      after the only earlier PyPI release (0.1.0, 2024-03-09), so 0.3.2 is the first release that includes it.
+    source_ref: ev-lerobot-so-follower-src
+sensors_supported: [rgb-mono, rgb-dual, rgb-multi, realsense-depth]
+teleop_options: ["SO-100 leader arm (so100_leader)"]
+notes: >-
+  The SO-101 is the maker's recommended successor. Its improvements are better wiring, easier assembly (no gear
+  removal) and updated motors. LeRobot drives both arms with the same code.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/README.md
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot README lists SO100 first among natively supported hardware."
+    quote: "SO100, LeKiwi, Koch, HopeJR, OMX, EarthRover, Reachy2, Gamepads, Keyboards, Phones, OpenARM, Unitree G1, reBot B601."
+  - id: ev-lerobot-so100-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/so100.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "SO-100 assembly/setup guide in LeRobot docs."
+    quote: "In the steps below, we explain how to assemble the SO-100 robot."
+  - id: ev-lerobot-so-follower-src
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/robots/so_follower/config_so_follower.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "so_follower config registers both so101_follower and so100_follower robot types."
+    quote: "@RobotConfig.register_subclass(\"so101_follower\") @RobotConfig.register_subclass(\"so100_follower\")"
+  - id: ev-lerobot-so-follower-motors
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/robots/so_follower/so_follower.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Motor map: five arm joints plus gripper, all sts3215."
+    quote: "\"shoulder_pan\": Motor(1, \"sts3215\", norm_mode_body),"
+  - id: ev-lerobot-v032-so100
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.3.2/src/lerobot/robots/so100_follower/config_so100_follower.py
+    date: 2025-08-01
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.3.2"}
+    summary: "At v0.3.2 the so100_follower and so100_follower_end_effector types were registered."
+    quote: "@RobotConfig.register_subclass(\"so100_follower_end_effector\")"
+  - id: ev-lerobot-v032-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.3.2
+    date: 2025-08-01
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.3.2"}
+    summary: "v0.3.2 release notes (full history since project start) include the PR that added SO-100 (merged 2024-10-25)."
+    quote: "Add FeetechMotorsBus, SO-100, Moss-v1 by @Cadene in https://github.com/huggingface/lerobot/pull/419"
+  - id: ev-lerobot-v043-consolidate
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.4.3
+    date: 2026-01-22
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.3"}
+    summary: "v0.4.3 merged the SO-100/SO-101 implementations into one so_follower module."
+    quote: "feat(robots): consolidate SO arms implementation by @imstevenpmwork in https://github.com/huggingface/lerobot/pull/2763"
+  - id: ev-lerobot-cameras
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/cameras.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot camera classes: OpenCV (USB webcams etc.) and RealSense (with depth)."
+    quote: "| `RealSenseCamera` | Intel RealSense (with depth) |"
+  - id: ev-soarm-readme
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/TheRobotStudio/SO-ARM100/blob/a758567c3978dfeefe282ede0500085a48fe8f78/README.md
+    verified_on: 2026-10-24
+    summary: "Maker README marks the SO-100 docs as deprecated in favour of the SO-101."
+    quote: "which is deprecated."
+  - id: ev-soarm-license
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/TheRobotStudio/SO-ARM100/blob/a758567c3978dfeefe282ede0500085a48fe8f78/LICENSE
+    verified_on: 2026-10-24
+    summary: "SO-ARM100 repository is Apache-2.0 licensed."
+    quote: "Apache License Version 2.0, January 2004"

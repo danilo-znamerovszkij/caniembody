@@ -1,0 +1,60 @@
+robot: unitree-g1
+policy: pi05
+state: works
+framework: lerobot
+framework_version_tested: "0.6.1"
+capabilities:
+  train:
+    state: works
+    notes: "Upstream fine-tunes from lerobot/pi05_base on a G1 dataset recorded with the Homunculus exoskeleton (bfloat16, gradient checkpointing, --policy.device=cuda)."
+    evidence: [ev-lerobot-g1-train, ev-unitree-il-pi05, ev-hub-xiaopengwu-pi05-g1]
+  inference_real:
+    state: works
+    notes: "Deployed with lerobot-rollout and --inference.type=rtc on --robot.is_simulation=false. Walking is handled by a separate locomotion controller chosen with --robot.controller (HolosomaLocomotionController in the documented command; GrootLocomotionController is also supported); the page does not present π0.5 as the walking controller."
+    evidence: [ev-lerobot-g1-rollout]
+  teleop_record:
+    state: works
+    notes: "The documented recording command runs in MuJoCo (--robot.is_simulation=true) with the Homunculus exoskeleton or a joystick."
+    evidence: [ev-lerobot-g1-intro]
+evidence:
+  - id: ev-lerobot-g1-intro
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/unitree_g1.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot supports the Unitree G1 (29 and 23 DoF) for teleoperation, locomanipulation policy training and simulation."
+    quote: "The Unitree G1 humanoid is now supported in LeRobot! You can teleoperate, train locomanipulation policies, test in sim, and more. Both 29 and 23 DoF variants are supported."
+  - id: ev-lerobot-g1-train
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/unitree_g1.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "The G1 page's 'Training & Inference' section fine-tunes π0.5 (--policy.type=pi05, pretrained lerobot/pi05_base)."
+    quote: "--policy.type=pi05 \\\n  --output_dir=./outputs/pi05_training"
+  - id: ev-lerobot-g1-rollout
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/unitree_g1.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Upstream deploys the trained policy on the physical G1 with lerobot-rollout, RTC inference and the Holosoma locomotion controller."
+    quote: "--robot.type=unitree_g1 \\\n  --robot.is_simulation=false \\\n  --robot.controller=HolosomaLocomotionController"
+  - id: ev-unitree-il-pi05
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/unitreerobotics/unitree_IL_lerobot/blob/41c2805742de879ddab2d8d6beaeaf215f876395/README.md
+    verified_on: 2026-10-24
+    versions: {lerobot: "a5b29d4"}
+    summary: "Unitree's own LeRobot-based repo documents π0.5 training on its G1 Dex3 dataset (repo pins LeRobot as a submodule at commit a5b29d4)."
+    quote: "--dataset.repo_id=unitreerobotics/G1_Dex3_ToastedBread_Dataset \\\n    --policy.type=pi05"
+  - id: ev-hub-xiaopengwu-pi05-g1
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/xiaopeng-wu/pi05_unitree_g1
+    verified_on: 2026-10-24
+    summary: "config.json type=pi05; train_config.json dataset nepyope/unitree_box_move_blue_full (the example dataset linked from the upstream G1 page) whose meta/info.json robot_type=unitree_g1 (550 episodes); pretrained from lerobot/pi05_base, 3000 steps."

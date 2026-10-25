@@ -1,0 +1,57 @@
+robot: franka-panda
+policy: molmoact2
+state: works-with-caveats
+framework: molmoact2
+caveats:
+  - "Evidence is for the DROID setup (Franka, external + wrist camera, 15-step chunks at DROID's 15 Hz). The paper says 'DROID setup' without naming the arm model. The DROID platform is Panda-based, but its software also accepts an FR3."
+  - "The upstream repo ships the MolmoAct2-DROID inference server (examples/droid/host_server_droid.py) but not the robot-side client."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-molmoact2-paper-droid-ft]
+  inference_real:
+    state: works
+    notes: "Zero-shot real-world DROID evaluation: five kitchen tasks x three spatial variants, 87.1% (vs. MolmoBot and π0 baselines)."
+    evidence: [ev-molmoact2-paper-droid-real, ev-molmoact2-droid-server, ev-lerobot-molmoact2-doc, ev-droid-paper]
+evidence:
+  - id: ev-molmoact2-paper-droid-real
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2605.02881v2
+    date: 2026-05-08
+    verified_on: 2026-10-24
+    summary: "MolmoAct2 paper, Sec. 6.2 / App. C.2: MolmoAct2-DROID is evaluated zero-shot on a real DROID setup in novel scenes, reaching 87.1%."
+    quote: "In real-world evaluation on the DROID setup, which is substantially more out-of-distribution given the random camera initialization and entirely novel scenes and objects relative to the DROID dataset (Khazatsky et al., 2024), MolmoAct2 again attains the highest performance, reaching 87.1%"
+  - id: ev-molmoact2-paper-droid-ft
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2605.02881v2
+    date: 2026-05-08
+    verified_on: 2026-10-24
+    summary: "MolmoAct2 paper: the MolmoAct2-DROID checkpoint is fine-tuned on a quality-filtered DROID mixture."
+    quote: "The MolmoAct2-DROID checkpoint is fine-tuned on the filtered DROID mixture."
+  - id: ev-molmoact2-droid-server
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/allenai/molmoact2/blob/6070080a20321b4f498ab30f28e1d09ac465edb7/examples/droid/host_server_droid.py
+    date: 2026-10-02
+    verified_on: 2026-10-24
+    summary: "Upstream MolmoAct2-DROID HTTP inference server (allenai/MolmoAct2-DROID, norm tag franka_droid). It takes an external + wrist image and an 8-D joint+gripper state."
+    quote: "MolmoAct2-DROID inference server."
+  - id: ev-lerobot-molmoact2-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/molmoact2.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot v0.6.1 lists a LeRobot-format MolmoAct2-DROID checkpoint for lerobot-rollout. LeRobot has no Panda robot type, so that route needs a third-party robot integration."
+    quote: "| MolmoAct2-DROID-LeRobot       | `cam0`, `cam1`         | External + wrist         |"
+  - id: ev-droid-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2403.12945v2
+    date: 2025-04-22
+    verified_on: 2026-10-24
+    summary: "The DROID platform and dataset are built on the Franka Emika Panda."
+    quote: "We chose the Franka Emika Panda 7 DoF robot arm as the base of our setup since it is widely adopted in the robot research community, reliable, relatively affordable and was available at most participating institutions."

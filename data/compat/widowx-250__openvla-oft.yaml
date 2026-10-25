@@ -1,0 +1,39 @@
+robot: widowx-250
+policy: openvla-oft
+state: works-with-caveats
+framework: openvla-oft
+caveats:
+  - "The WidowX result is an appendix experiment: OpenVLA-OFT (without FiLM) trained on all of BridgeData V2 and evaluated on a subset of OpenVLA's Bridge tasks (69.2% vs. 65.8% for OpenVLA)."
+  - "The openvla-oft repo ships fine-tuning and evaluation code only for LIBERO and ALOHA. It has no Bridge/WidowX config, deployment script or released WidowX checkpoint."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-oft-paper-bridge]
+  inference_real:
+    state: works
+    evidence: [ev-oft-paper-bridge, ev-bridgev2-paper]
+evidence:
+  - id: ev-oft-paper-bridge
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2502.19645v2
+    date: 2025-04-28
+    verified_on: 2026-10-24
+    summary: "OpenVLA-OFT paper, Appendix (Scaling up to BridgeData V2): OFT is trained on BridgeData V2 and evaluated on real WidowX tasks from OpenVLA's evaluation suite, scoring 69.2% on average vs. 65.8% for OpenVLA."
+    quote: "Specifically, we train OpenVLA-OFT (without FiLM) on the BridgeData V2 dataset [52], which contains 50,365 real WidowX robot demonstrations (25× more than the four LIBERO task suites combined)."
+  - id: ev-oft-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/moojink/openvla-oft/blob/e4287e94541f459edc4feabc4e181f537cd569a8/README.md
+    date: 2025-09-09
+    verified_on: 2026-10-24
+    summary: "openvla-oft README points to LIBERO and ALOHA for fine-tuning/evaluation. experiments/robot at this commit contains only aloha/ and libero/."
+    quote: "See [ALOHA.md](ALOHA.md) for fine-tuning/evaluating on real-world ALOHA robot tasks."
+  - id: ev-bridgev2-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2308.12952v3
+    date: 2024-01-17
+    verified_on: 2026-10-24
+    summary: "BridgeData V2 was collected on a WidowX 250."
+    quote: "showing the WidowX 250 robot arm and various cameras."

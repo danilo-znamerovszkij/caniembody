@@ -1,0 +1,17 @@
+robot: omx
+policy: pi0
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-yaswanth-pi0-omx
+evidence:
+- id: ev-hub-yaswanth-pi0-omx
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/yaswanth8390/omx_pi0
+  verified_on: '2026-10-24'
+  summary: "config.json type=pi0; train_config.json dataset yaswanth8390/merged whose meta/info.json robot_type=omx_follower (100 episodes); pretrained from lerobot/pi0_base."

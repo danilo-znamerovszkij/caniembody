@@ -1,0 +1,18 @@
+robot: moss-v1
+policy: act
+state: works-with-caveats
+framework: lerobot
+caveats:
+  - "LeRobot's `moss` robot type and its tutorial were removed in the hardware API redesign (PR #777, June 2025); Moss v1 is not supported by LeRobot v0.6.1, so the documented workflow needs a pre-redesign commit."
+capabilities:
+  teleop_record: {state: works, evidence: [ev-lerobot-moss-doc]}
+  train: {state: works, evidence: [ev-lerobot-moss-doc]}
+  inference_real: {state: works, evidence: [ev-lerobot-moss-doc]}
+evidence:
+  - id: ev-lerobot-moss-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/bed90e3a41c43758c619dba66158ddd5798d361a/examples/11_use_moss.md
+    verified_on: 2026-10-24
+    summary: "Official LeRobot Moss v1 tutorial (last version before removal, commit bed90e3, May 2025): calibrate/teleop/record with --robot.type=moss, train with --policy.type=act, evaluate the ACT checkpoint on the robot via --control.policy.path."
+    quote: "This tutorial explains how to use [Moss v1](https://github.com/jess-moss/moss-robot-arms) with LeRobot."

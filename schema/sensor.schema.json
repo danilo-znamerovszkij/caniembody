@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sensor.schema.json",
+  "type": "object",
+  "required": ["id", "name", "description"],
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/id" },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "examples": { "type": "array", "items": { "type": "string" } },
+    "lerobot_support": { "type": "string" },
+    "sources": { "$ref": "common.schema.json#/$defs/sources" }
+  },
+  "additionalProperties": false
+}

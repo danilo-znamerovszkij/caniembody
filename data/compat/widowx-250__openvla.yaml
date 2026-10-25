@@ -1,0 +1,46 @@
+robot: widowx-250
+policy: openvla
+state: works
+framework: openvla
+capabilities:
+  train:
+    state: works
+    notes: "OpenVLA's pretraining mixture includes BridgeData V2, and the repo documents LoRA and full fine-tuning on BridgeData V2 (bridge_orig)."
+    evidence: [ev-openvla-readme-bridge-ft]
+  inference_real:
+    state: works
+    notes: "Out-of-the-box evaluation on the real Bridge WidowX through the BridgeData V2 WidowX controller stack (bridge_data_robot, server-client)."
+    evidence: [ev-openvla-paper-widowx, ev-openvla-readme-eval, ev-bridgev2-paper]
+evidence:
+  - id: ev-openvla-paper-widowx
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2406.09246v3
+    date: 2024-09-05
+    verified_on: 2026-10-24
+    summary: "OpenVLA paper, Sec. 5.1: the authors evaluate OpenVLA out of the box on the real BridgeData V2 WidowX robot across visual, motion, physical, semantic and language-grounding tasks (Fig. 3, Table 4)."
+    quote: "We evaluate OpenVLA’s performance “out-of-the-box” on two robot embodiments: the WidowX robot from the BridgeData V2 evaluations [6] (see Fig. 1, left)"
+  - id: ev-openvla-readme-eval
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/openvla/openvla/blob/c8f03f48af692657d3060c19588038c7220e9af9/README.md
+    date: 2025-03-23
+    verified_on: 2026-10-24
+    summary: "OpenVLA README 'Evaluating OpenVLA' section: run real BridgeData V2 WidowX evals using the rail-berkeley/bridge_data_robot controller (widowx_envs) in Docker plus the openvla eval script."
+    quote: "Added new section, [Evaluating OpenVLA](#evaluating-openvla), with instructions for running BridgeData V2 WidowX robot evals"
+  - id: ev-openvla-readme-bridge-ft
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/openvla/openvla/blob/c8f03f48af692657d3060c19588038c7220e9af9/README.md
+    date: 2025-03-23
+    verified_on: 2026-10-24
+    summary: "OpenVLA README gives LoRA and full fine-tuning commands on BridgeData V2."
+    quote: "We show how you can fully fine-tune OpenVLA on [BridgeData V2]"
+  - id: ev-bridgev2-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2308.12952v3
+    date: 2024-01-17
+    verified_on: 2026-10-24
+    summary: "BridgeData V2 paper: the Bridge robot is a WidowX 250, which ties 'the WidowX robot from the BridgeData V2 evaluations' to this robot."
+    quote: "showing the WidowX 250 robot arm and various cameras."

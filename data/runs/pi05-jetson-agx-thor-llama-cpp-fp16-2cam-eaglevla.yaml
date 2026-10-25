@@ -1,0 +1,45 @@
+id: pi05-jetson-agx-thor-llama-cpp-fp16-2cam-eaglevla
+policy: pi05
+compute: jetson-agx-thor
+checkpoint: π0.5 LIBERO (openpi pi05_libero) converted to GGUF
+date: '2026-10-08'
+runtime: llama-cpp
+runtime_note: 'EagleVLA-Edge: llama.cpp-based VLA engine (GGUF FP16 weights) with CUDA graph reuse, GPU-resident intermediate buffers / KV and unrolled flow-matching denoising.'
+precision: fp16
+cameras: 2
+resolution: 224x224
+inference_latency_ms:
+  p50: 202.8
+inference_hz: 4.93
+outcome: runs
+platform:
+  board: 'Jetson Thor (paper/README: "Jetson Thor")'
+note: 'Inference cost only; not task success. Full VLM + action-expert pass (ViT + LLM + 10-step action expert), LIBERO inputs (agent-view + wrist at 224x224). Paper''s ''control frequency'' (10.25 Hz) is 1/reaction time with VLM-skipping scheduling; not executed actions/s. Board inferred to be the 128 GB T5000 class from the paper''s 130 W max-power entry for Thor (T4000 is 40–70 W). Naive PyTorch π0.5 on the same board per the paper: 457.9 ms (2.18 Hz) (not filed as a separate run: the baseline precision is not stated).'
+source_ref: ev-eaglevla-paper
+evidence:
+- id: ev-eaglevla-paper
+  tier: community-reported
+  type: paper
+  url: https://arxiv.org/abs/2607.12659v6
+  date: '2026-10-08'
+  verified_on: '2026-10-24'
+  versions:
+    arxiv: 2607.12659v6
+  summary: 'EagleVLA (formerly Jetson-PI) v6 Table 4: π0.5 latency on Jetson Thor, LIBERO, with graph reuse + intermediate buffer & unroll; total 202.8 ms.'
+  quote: +Intermediate Buffer & Unroll 32.0 91.3 79.5 202.8 97.6 10.25
+- id: ev-eaglevla-edge-readme
+  tier: community-reported
+  type: source-code
+  url: https://github.com/PKU-SEC-Lab/EagleVLA-Edge/blob/619e92e878a25df3e9cc0ce87b8f3a61283146e7/README.md
+  date: '2026-10-23'
+  verified_on: '2026-10-24'
+  summary: EagleVLA-Edge README reports the same configuration as P50 latency (ms).
+  quote: '| + Intermediate buffer, GPU KV, and unroll | 32.0 | 91.3 | 79.5 | 202.8 |'
+- id: ev-openpi-libero-inputs
+  tier: community-reported
+  type: source-code
+  url: https://github.com/Physical-Intelligence/openpi/blob/215abfb217dbac7d5f1273282331b9b1866c0479/src/openpi/policies/libero_policy.py
+  date: '2026-08-24'
+  verified_on: '2026-10-24'
+  summary: 'openpi LIBERO input mapping: one third-person image and one wrist image; the third π slot is zero-padded.'
+  quote: '"right_wrist_0_rgb": np.zeros_like(base_image),'

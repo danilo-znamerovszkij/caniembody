@@ -1,0 +1,28 @@
+robot: so101
+policy: lingbot-va
+state: partial
+partial_scope: "Training on SO-101 data is evidenced (an upstream contributor reproduced post-training on a user's SO-101 dataset); on-robot inference is reported only with low success and jitter in an open, unresolved issue."
+framework: lingbot-va
+caveats:
+  - "Community-reported only; not documented upstream or maintainer-tested."
+  - "The reporter's SO-101 deployments (open-loop and closed-loop with KV-cache updates) produced random or back-and-forth motion and only one, apparently accidental, success. A later commenter attributes the jitter to an action-reshaping bug in the reporter's client script; no SO-101 success is confirmed in the thread."
+capabilities:
+  train:
+    state: works
+    notes: "Upstream contributor converted the 83-episode SO-101 dataset and trained it with the official post-training code (8 GPUs, reasonable visualizations after ~200 steps)."
+    evidence: [ev-gh-lingbotva-29, ev-dataset-pick-n-place-sq]
+evidence:
+  - id: ev-gh-lingbotva-29
+    tier: community-reported
+    type: github-issue
+    url: https://github.com/Robbyant/lingbot-va/issues/29
+    date: 2026-02-26
+    verified_on: 2026-10-25
+    summary: "Issue 'Finetuning on custom pick and place dataset on SO-101 arm' (open): user fine-tuned robbyant/lingbot-va-base on an SO-101 dataset and deployed it with poor results; contributor lilin-hitcrt reproduced training on the converted dataset and shared a debug config (wan_va/configs/va_demo_train_cfg.py)."
+    quote: "I've converted your dataset to the proper format and tested it with our training code. Following the provided data format and default parameters, the model trains successfully on 8 GPUs and shows good visualization results after ~200 steps."
+  - id: ev-dataset-pick-n-place-sq
+    tier: community-reported
+    type: community-post
+    url: https://huggingface.co/datasets/AkashKarnatak/pick-n-place-sq
+    verified_on: 2026-10-25
+    summary: "The dataset used in the issue: meta/info.json robot_type=so101_follower, LeRobot v3.0 format, 83 episodes, top + wrist cameras."

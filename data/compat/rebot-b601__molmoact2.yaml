@@ -1,0 +1,24 @@
+robot: rebot-b601
+policy: molmoact2
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-harshmuriki-molmoact2-rebot
+    - ev-hub-lilkm-molmoact2-birebot
+evidence:
+- id: ev-hub-harshmuriki-molmoact2-rebot
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/Harshmuriki/molmoact2_finetuned_seeed_rebot_100k
+  verified_on: '2026-10-24'
+  summary: "config.json type=molmoact2; train_config.json dataset Harshmuriki/rebot_pick_place_wrist_v3 whose meta/info.json robot_type=seeed_b601_dm_follower (Seeed plugin naming for the B601-DM, 100 episodes)."
+- id: ev-hub-lilkm-molmoact2-birebot
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/lilkm/molmoact2_bi_rebot
+  verified_on: '2026-10-24'
+  summary: "config.json type=molmoact2; train_config.json dataset lilkm/bi_rebot_pick_and_place_cubes whose meta/info.json robot_type=bi_rebot_b601_follower (bimanual B601-DM, 50 episodes)."

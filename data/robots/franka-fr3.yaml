@@ -1,0 +1,63 @@
+id: franka-fr3
+name: Franka Research 3
+maker: Franka Robotics
+aliases: [FR3, Franka FR3, Franka Research 3 arm, Franka Panda successor]
+class: arm
+summary: >-
+  Franka Robotics' 7-DoF research arm with torque sensors in every joint and 1 kHz low-level control. LeRobot has no
+  native support, plugin or fork for the FR3: the Franka entry in LeRobot's third-party list (LeFranX) targets the
+  older Franka FER / Panda (see franka-panda), and evidence does not transfer between the two.
+dof: 7
+payload_g: {max: 3000}
+repeatability_mm: {max: 0.1}
+specs_source_ref: ev-franka-fr3-datasheet
+open_source: false
+homepage: https://franka.de/franka-research-3
+frameworks:
+  ros2:
+    support: upstream-repo
+    repo_url: https://github.com/frankarobotics/franka_ros2
+    note: "Franka's own ROS 2 integration (franka_fr3_moveit_config, FR3 Duo launch files)."
+    source_ref: ev-franka-ros2
+notes: "Franka spec: 3 kg payload, 855 mm reach, position repeatability <±0.1 mm, 7 integrated joint torque sensors."
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-third-party
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/third_party_robots.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeFranX is listed as a LeRobot extension (⚠️ fork/extension) for the Franka research arm."
+    quote: "LeRobot extension for the <a href=\"https://franka.de/\">Franka</a> research arm"
+  - id: ev-lerobot-fork-marker
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/third_party_robots.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "The ⚠️ marker means fork/extension, not drop-in plugin."
+    quote: "⚠️ marks projects that are forks/extensions of LeRobot. They may require custom setup rather than working with an unmodified install."
+  - id: ev-franka-fr3
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://franka.de/franka-research-3
+    verified_on: 2026-10-24
+    summary: "Franka FR3 spec: payload 3 kg, repeatability <±0.1 mm, 7 DoF, 7 torque sensors."
+    quote: "Payload 3 kg Reach 855 mm Workspace efficiency 94.5 % Position repeatability <± 0.1 mm Degrees of freedom 7"
+  - id: ev-franka-ros2
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/frankarobotics/franka_ros2/blob/4acc05c01ebfcdf916ee6b3df966df0ad7b2f9ec/README.md
+    verified_on: 2026-10-24
+    summary: "franka_ros2: ROS 2 integration for Franka research robots, FR3 MoveIt config."
+    quote: "ros2 launch franka_fr3_moveit_config moveit.launch.py robot_ip:=dont-care use_fake_hardware:=true"
+  - id: ev-franka-fr3-datasheet
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://franka.de/hubfs/Datasheet%20Franka%20Research%203_R02212_2.4_EN.pdf?hsLang=en
+    verified_on: 2026-10-25
+    summary: "Official FR3 datasheet (R02212 2.4). Its spec table lists 7 degrees of freedom, 3 kg rated payload, 855 mm maximum reach and position repeatability <+/- 0.1 mm (ISO 9283)."
+    quote: "<+/- 0.1 mm (ISO 9283)"

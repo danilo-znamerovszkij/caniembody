@@ -1,0 +1,24 @@
+id: rtx-pro-6000-blackwell-server
+name: NVIDIA RTX PRO 6000 Blackwell Server
+class: datacenter
+memory_gb: 96
+arch: Blackwell
+ai_tops: FP4 Tensor Core 4 PFLOPS
+power_w: Up to 600W (configurable)
+notes: Server (passively cooled) edition with 96 GB GDDR7. The RTX PRO 6000 Blackwell Workstation and Max-Q editions are different SKUs. Hugging Face Jobs lists an "Nvidia RTX PRO 6000" flavor (96 GB); its edition is not stated there.
+verified_on: '2026-10-24'
+sources:
+- id: ev-nvidia-rtxpro6000s-specs
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/data-center/rtx-pro-6000-blackwell-server-edition/
+  verified_on: '2026-10-24'
+  summary: 'RTX PRO 6000 Blackwell Server Edition spec table: Blackwell, FP4 4 PFLOPS, FP16/BF16 1 PFLOP.'
+  quote: GPU Architecture NVIDIA Blackwell Architecture CUDA Parallel Processing Cores 24,064 NVIDIA RT Cores 188 (4th Gen) FP4 Tensor Core 4 PFLOPS FP8 Tensor Core 2 PFLOPS FP16 | BF16 Tensor Core 1 PFLOP
+- id: ev-nvidia-rtxpro6000s-quick
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/data-center/rtx-pro-6000-blackwell-server-edition/
+  verified_on: '2026-10-24'
+  summary: 'Quick specs: 96GB GDDR7 with ECC, max power up to 600W.'
+  quote: GPU Memory 96GB GDDR7 with ECC Display Ports 4x DisplayPort 2.1 Max Power Consumption Up to 600W (configurable)

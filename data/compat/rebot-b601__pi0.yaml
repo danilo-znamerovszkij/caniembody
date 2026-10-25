@@ -1,0 +1,27 @@
+robot: rebot-b601
+policy: pi0
+state: partial
+partial_scope: Training on reBot B601-DM data is documented by the vendor (Seeed wiki 'B601-DM with LeRobot'). The wiki's on-robot evaluation command (lerobot-record with --policy.path and no teleoperator) is rejected by the Seeed LeRobot fork the wiki installs, which directs policy deployment to lerobot-rollout, so on-robot inference is not validly documented.
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-seeed-wiki-b601-dm-lerobot
+evidence:
+- id: ev-seeed-wiki-b601-dm-lerobot
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://github.com/Seeed-Studio/wiki-documents/blob/86afe5634df5713aec98cf77c09a7e8d670feb1d/sites/en/docs/Robotics/Robot_Kits/reBot_Arm/B601_DM/reBot_Arm_B601_DM_Lerobot.md
+  date: '2026-10-15'
+  verified_on: '2026-10-25'
+  summary: 'Seeed wiki ''B601-DM with LeRobot'' (Training and Evaluation section). Pi0 tab: lerobot-train --policy.type=pi0 --policy.pretrained_path=lerobot/pi0_base on your reBot dataset, then evaluate with lerobot-record --robot.type=seeed_b601_dm_follower --policy.path=...'
+  quote: 'Using it in LeRobot is simple: just set the policy type to `--policy.type=pi0` during training (no need to repeat the general training/evaluation concepts covered in the ACT section).'
+- id: ev-seeed-lerobot-fork-record
+  tier: upstream-documented
+  type: source-code
+  url: https://github.com/Seeed-Projects/lerobot/blob/4aaff99be4a1d81568c08c8f0296b41b40c99ec4/src/lerobot/scripts/lerobot_record.py
+  date: '2026-08-28'
+  verified_on: '2026-10-25'
+  summary: 'Seeed''s LeRobot fork (main, pyproject version 0.6.2), which the wiki tells users to install: RecordConfig raises an error when no teleoperator is given and points policy deployment to lerobot-rollout.'
+  quote: For policy-based deployment, use lerobot-rollout instead.

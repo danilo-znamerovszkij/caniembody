@@ -1,0 +1,49 @@
+id: action-chunking
+term: "Action chunking"
+aka: ["chunked action prediction", "ACT-style chunking"]
+short: "Predicting a sequence of future actions per model call and executing them before querying the policy again, instead of predicting one action per control step."
+body: |
+  Action chunking means a policy outputs a fixed-length sequence of future actions (a *chunk*) from one observation, and the controller executes some or all of those actions before calling the policy again. It was introduced to robot imitation learning by Zhao, Kumar, Levine and Finn in "Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware" (2023), together with the [ACT](/policy/act) policy and the ALOHA teleoperation rig. The paper takes the term from psychology and argues that predicting the next *k* steps "reduces the effective horizon of the task by k-fold, mitigating compounding errors".
+
+  Two numbers matter and are often confused: how many actions the model predicts, and how many the robot executes before the next call (see [action horizon](/glossary/action-horizon)). In LeRobot v0.6.1, ACT defaults to `chunk_size=100` and `n_action_steps=100`; [SmolVLA](/policy/smolvla) and [π0](/policy/pi0) default to 50 and 50. Executing fewer actions than were predicted makes the robot more reactive at the cost of more model calls.
+
+  Chunking is now the norm rather than the exception: [Diffusion Policy](/policy/diffusion), π0, [π0.5](/policy/pi05), [GR00T N1.7](/policy/groot-n1-7) and [OpenVLA-OFT](/policy/openvla-oft) all predict chunks.
+
+  A common misconception is that chunking solves latency. It does not. A chunk is executed open-loop, so the robot ignores new observations until the next call, and under synchronous inference it pauses while that call runs. ACT's temporal ensembling, [asynchronous inference](/glossary/async-inference) and [real-time chunking](/glossary/real-time-chunking) each address a different part of this problem. Chunking also makes [control rate](/glossary/control-rate) and model call rate two different numbers.
+related: [action-horizon, real-time-chunking, async-inference, control-rate, inference-latency, behavioral-cloning]
+policies: [act, diffusion, smolvla, pi0, pi05, groot-n1-7, openvla-oft]
+sources:
+  - id: ev-act-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2304.13705
+    date: 2023-04-23
+    verified_on: 2026-10-24
+    summary: "Zhao et al. introduce Action Chunking with Transformers (ACT)."
+    quote: "we develop a simple yet novel algorithm, Action Chunking with Transformers (ACT), which learns a generative model over action sequences."
+  - id: ev-act-paper-full
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/html/2304.13705
+    date: 2023-04-23
+    verified_on: 2026-10-24
+    summary: "ACT paper: chunking reduces the effective task horizon k-fold."
+    quote: "rather than just one step at a time. This reduces the effective horizon of the task by"
+  - id: ev-lerobot-act-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/act/configuration_act.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot v0.6.1 ACT default chunk size is 100."
+    quote: "chunk_size: int = 100"
+  - id: ev-lerobot-smolvla-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/smolvla/configuration_smolvla.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot v0.6.1 SmolVLA default chunk size is 50."
+    quote: "chunk_size: int = 50"

@@ -1,0 +1,42 @@
+id: degrees-of-freedom
+term: "Degrees of freedom"
+aka: ["DoF", "DOF"]
+short: "The number of independent coordinates needed to specify a mechanism's configuration; for a serial robot arm, usually its number of actuated joints."
+body: |
+  The degrees of freedom (DoF) of a mechanism are the number of independent coordinates needed to specify its configuration. For a serial arm built from revolute or prismatic joints, this equals the number of joints. A rigid body in 3D space has six DoF, three translational and three rotational, so an arm needs at least six joints to place its end-effector at an arbitrary position *and* orientation within its workspace. Arms with more than six joints are kinematically redundant.
+
+  DoF figures in product descriptions are inconsistent about the gripper. The [SO-101](/robot/so101) has six STS3215 motors: five arm joints (shoulder pan, shoulder lift, elbow flex, wrist flex, wrist roll) and one gripper. It is often called "6-DoF", but its arm has five DoF, so it cannot reach every orientation at every position. LeRobot's action-representation guide, by contrast, uses "a 6-DOF arm with a gripper" for an arm with six joints plus a gripper. A precise statement separates the two, for example "5-DoF arm + 1-DoF gripper".
+
+  DoF fixes the size of the action and [proprioceptive](/glossary/proprioception) state vectors. An SO-101 policy outputs six numbers per step, a bimanual [bi-SO](/robot/bi-so) setup twelve, and a humanoid such as the [Unitree G1](/robot/unitree-g1) many more. Cross-embodiment VLAs therefore pad or project to a fixed width ([SmolVLA](/policy/smolvla) uses 32 in LeRobot v0.6.1), and a checkpoint pretrained on other robots still has to be fine-tuned to learn a new robot's action mapping (see [embodiment gap](/glossary/embodiment-gap)).
+
+  A common misconception is that more DoF is always better. Extra joints add reach and dexterity, but each one enlarges the action space that a policy must learn from the same number of demonstrations.
+related: [proprioception, embodiment-gap, leader-follower-arm, affordance]
+policies: [smolvla]
+sources:
+  - id: ev-lerobot-so101-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/so101.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "SO-101 follower has six STS3215 motors (five arm joints plus gripper)."
+    quote: "The follower arm uses 6x STS3215 motors with 1/345 gearing."
+  - id: ev-lerobot-action-repr-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/action_representations.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot action-representation guide: joint-space action for a 6-DOF arm with a gripper."
+    quote: "For a 6-DOF arm with a gripper, a joint-space action might look like:"
+  - id: ev-lerobot-smolvla-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/smolvla/configuration_smolvla.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "SmolVLA pads actions to 32 dimensions."
+    quote: "max_action_dim: int = 32"

@@ -1,0 +1,25 @@
+robot: aloha
+policy: openvla-oft
+state: works
+framework: openvla-oft
+caveats:
+  - "Real-robot results use the OFT+ variant (OFT plus FiLM language conditioning) on the original ALOHA (two ViperX 300 S arms, 3 cameras), run at 25 Hz instead of ALOHA's native 50 Hz."
+capabilities:
+  train: {state: works, evidence: [ev-oft-paper, ev-oft-aloha-md]}
+  inference_real: {state: works, evidence: [ev-oft-paper, ev-oft-aloha-md]}
+evidence:
+  - id: ev-oft-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2502.19645
+    date: 2025-02-27
+    verified_on: 2026-10-24
+    summary: "OpenVLA-OFT paper fine-tunes OpenVLA with OFT+ on four real ALOHA tasks (fold shorts, fold shirt, scoop X into bowl, put X into pot); ALOHA here is the original ALOHA of Zhao et al. 2023 (ref. [56], arXiv 2304.13705), not ALOHA 2."
+    quote: "The ALOHA platform comprises two ViperX 300 S arms, three camera viewpoints (one top-down, two wrist-mounted), and robot state inputs (14-dimensional joint angles). It operates at 25 Hz (reduced from the original 50 Hz to enable faster training while still maintaining smooth robotic control)"
+  - id: ev-oft-aloha-md
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/moojink/openvla-oft/blob/e4287e94541f459edc4feabc4e181f537cd569a8/ALOHA.md
+    verified_on: 2026-10-24
+    summary: "Upstream repo documents ALOHA data preprocessing, fine-tuning (vla-scripts/finetune.py) and server-client real-robot evaluation (run_aloha_eval.py + deploy.py)."
+    quote: "# OpenVLA-OFT+ in Real-World ALOHA Robot Tasks"

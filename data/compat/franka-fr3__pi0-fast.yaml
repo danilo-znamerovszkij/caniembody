@@ -1,0 +1,36 @@
+robot: franka-fr3
+policy: pi0-fast
+state: works-with-caveats
+framework: openpi
+caveats:
+  - "Community-reported only (third-party EmbodiedForge/droid-fr3, a DROID fork that replaces polymetis with the Franky SDK); not documented by Physical Intelligence or maintainer-tested."
+  - "Documents running the DROID-fine-tuned pi0_fast_droid checkpoint (DROID 7 joint + 1 gripper action space, 15 Hz) via an openpi WebSocket server; no task success results are published."
+capabilities:
+  inference_real:
+    state: works-with-caveats
+    evidence: [ev-droid-fr3-doc, ev-droid-fr3-client]
+evidence:
+  - id: ev-droid-fr3-doc
+    tier: community-reported
+    type: source-code
+    url: https://github.com/EmbodiedForge/droid-fr3/blob/a5d9d90b303b6e0f9a19c71864b7b47db6c4a60d/docs/pi0-fast-droid-inference.md
+    date: 2026-05-10
+    verified_on: 2026-10-25
+    summary: "droid-fr3 evaluation tutorial (Chinese): run pi0_fast_droid evaluation on an already-configured FR3 with 3 calibrated ZED cameras; openpi policy server on a GPU host, client on the robot PC, 10-step chunks executed at 15 Hz."
+    quote: "本文面向算法开发者，说明如何在已配置好的 FR3 机器人上运行 pi0_fast_droid 模型评测。"
+  - id: ev-droid-fr3-client
+    tier: community-reported
+    type: source-code
+    url: https://github.com/EmbodiedForge/droid-fr3/blob/a5d9d90b303b6e0f9a19c71864b7b47db6c4a60d/scripts/server/run_policy_client.py
+    date: 2026-05-10
+    verified_on: 2026-10-25
+    summary: "Client script: connects to an openpi server, sends DROID observations, executes the returned action chunk on the FR3 through the repo's Franky-based RobotEnv."
+    quote: "PC2 policy client for pi0_fast_droid inference."
+  - id: ev-openpi-norm-stats-fr3
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/Physical-Intelligence/openpi/blob/070759fae105d05e958efe78fe6fb08631f23da5/docs/norm_stats.md
+    date: 2025-06-20
+    verified_on: 2026-10-25
+    summary: "Supporting only (not deployment evidence): openpi publishes pi0_base and pi0_fast_base pre-training normalization statistics for an FR3 + Robotiq 2F-85 setup (asset 'franka', separate from the DROID asset used above)."
+    quote: "Franka Emika (non-DROID) | Franka FR3 arm with Robotiq 2F-85 gripper | franka"

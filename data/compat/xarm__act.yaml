@@ -1,0 +1,24 @@
+robot: xarm
+policy: act
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-jjbin-act, ev-hub-shizhec-act]
+evidence:
+  - id: ev-hub-jjbin-act
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/jjbin2001/act_xarm_black_white_sorting
+    date: 2026-05-28
+    verified_on: 2026-10-24
+    summary: "config.json type=act; train_config dataset jjbin2001/xarm_black_white_sorting (100 episodes), whose meta/info.json robot_type=xarm7_follower. Auto-generated card, no rollout results."
+  - id: ev-hub-shizhec-act
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/Shizhec/xarm6_pick_toy_to_bowl_joint_act_v1
+    date: 2026-05-14
+    verified_on: 2026-10-24
+    summary: "config.json type=act; train_config dataset Shizhec/xarm6_pick_toy_to_bowl_joint_v1 (100 episodes), whose meta/info.json robot_type='UFACTORY Robot' (xArm6). Auto-generated card, no rollout results."

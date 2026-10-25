@@ -1,0 +1,96 @@
+id: openarm
+name: OpenArm
+maker: Enactic
+aliases: [OpenArm 2.0, OpenArms, openarm_follower, bi_openarm_follower]
+class: bimanual
+summary: >-
+  Open-source, human-scale 7-DoF arm from Enactic with backdrivable quasi-direct-drive Damiao motors on CAN-FD. It is
+  usually built as a bimanual pair. LeRobot supports single-arm and bimanual setups natively, on Linux only.
+dof: 7
+dof_note: "Per arm, plus a parallel gripper (8 motors per arm in LeRobot's config)."
+arms: 2
+actuators: "Damiao QDD motors over CAN-FD: DM8009 (J1-J2), DM4340 (J3-J4), DM4310 (J5-J7 + gripper)"
+payload_g: {min: 4100, max: 6000}
+specs_source_ref: ev-openarm-docs
+open_source: true
+license: Apache-2.0
+bom_url: https://docs.openarm.dev/
+homepage: https://openarm.dev
+frameworks:
+  lerobot:
+    support: native
+    since: "0.4.4"
+    robot_type: [openarm_follower, bi_openarm_follower]
+    docs_url: https://huggingface.co/docs/lerobot/openarm
+    note: >-
+      Leader: openarm_leader / bi_openarm_leader. An OpenArm Mini leader was also added in 0.4.4. Linux only, because
+      the CAN USB adapter has no macOS driver. Single-arm (PR #2795) and bimanual (PR #2835) types were both first
+      released in 0.4.4.
+    source_ref: ev-lerobot-openarm-src
+sensors_supported: [rgb-mono, rgb-dual, rgb-multi, realsense-depth]
+teleop_options: ["OpenArm leader (openarm_leader / bi_openarm_leader)", "OpenArm Mini leader"]
+notes: >-
+  Payload per Enactic: 4.1 kg nominal (held 1 min in worst posture) and 6.0 kg peak (3 s move + 1 s hold) per arm.
+  The LeRobot docs cite $6,500 USD for a complete bimanual system. That figure is not on the maker's own page and is
+  not recorded as a price. OpenArm is sold as a DIY kit or assembled through verified manufacturers.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/README.md
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot README lists OpenARM among natively supported hardware."
+    quote: "SO100, LeKiwi, Koch, HopeJR, OMX, EarthRover, Reachy2, Gamepads, Keyboards, Phones, OpenARM, Unitree G1, reBot B601."
+  - id: ev-lerobot-openarm-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/openarm.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot OpenArm guide: 7DOF, Linux-only, cites $6,500 bimanual system cost."
+    quote: "At $6,500 USD for a complete bimanual system, OpenArm delivers research-grade capabilities at a fraction of traditional humanoid robot costs."
+  - id: ev-lerobot-openarm-src
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/robots/openarm_follower/config_openarm_follower.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "OpenArm follower config: 7 DOF per arm, Damiao DM8009/DM4340/DM4310 motors."
+    quote: "# Motor configuration for OpenArms (7 DOF per arm)"
+  - id: ev-lerobot-bi-openarm-src
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/robots/bi_openarm_follower/config_bi_openarm_follower.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Registers bi_openarm_follower."
+    quote: "@RobotConfig.register_subclass(\"bi_openarm_follower\")"
+  - id: ev-lerobot-v044-openarm
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.4.4
+    date: 2026-02-27
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.4"}
+    summary: "OpenArm single and bimanual first released in v0.4.4."
+    quote: "feat(robots): add OpenArm robot & teleoperator by @imstevenpmwork in https://github.com/huggingface/lerobot/pull/2795"
+  - id: ev-openarm-docs
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://docs.openarm.dev/
+    verified_on: 2026-10-24
+    summary: "Enactic OpenArm 2.0 spec: 7 DOF per arm, 4.1 kg nominal / 6.0 kg peak payload, CAN-FD."
+    quote: "DOF 7 per arm Nominal payload 4.1 kg (held for 1 minute in the worst posture) Peak payload 6.0 kg (3 s move + 1 s hold in the worst posture)"
+  - id: ev-openarm-license
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/enactic/openarm/blob/main/LICENSE
+    verified_on: 2026-10-24
+    summary: "enactic/openarm repository is Apache-2.0 licensed."
+    quote: "Apache License Version 2.0, January 2004"

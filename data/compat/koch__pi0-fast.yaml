@@ -1,0 +1,17 @@
+robot: koch
+policy: pi0-fast
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-ethancsl-pi0fast-koch
+evidence:
+- id: ev-hub-ethancsl-pi0fast-koch
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/ethanCSL/pi0fast_koch_pick_n_place_vla_steering_height_test2
+  verified_on: '2026-10-24'
+  summary: "config.json type=pi0_fast; train_config.json dataset ethanCSL/svla_koch_pick_n_place_vla_steering_height_test2 whose meta/info.json robot_type=koch_follower (61 episodes)."

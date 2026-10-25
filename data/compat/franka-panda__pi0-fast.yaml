@@ -1,0 +1,48 @@
+robot: franka-panda
+policy: pi0-fast
+state: works-with-caveats
+framework: openpi
+caveats:
+  - "Documented for the DROID platform (Panda, two ZED 2 exterior cameras plus a ZED Mini wrist camera, DROID control laptop/NUC), not for an arbitrary Panda setup. openpi warns that its expert checkpoints may not generalize to other setups."
+  - "Inference runs on a remote GPU policy server (~RTX 4090). openpi notes that 0.5-1 s latency per action chunk is normal."
+capabilities:
+  train:
+    state: works
+    notes: "openpi documents training generalist policies on the full DROID dataset (approximate open-source pipeline for pi0-FAST-DROID)."
+    evidence: [ev-openpi-readme-fast-droid, ev-fast-paper-droid]
+  inference_real:
+    state: works
+    evidence: [ev-fast-paper-droid, ev-openpi-readme-fast-droid, ev-openpi-droid-example, ev-droid-paper]
+evidence:
+  - id: ev-fast-paper-droid
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2501.09747
+    date: 2025-01-16
+    verified_on: 2026-10-24
+    summary: "π0-FAST paper: a FAST policy trained on DROID is evaluated zero-shot on real DROID tabletop tasks in unseen environments across three university campuses."
+    quote: "Notably, FAST tokenization enables the first successful training of a strong generalist policy on the DROID dataset [38], which can be evaluated zero-shot in unseen environments, without fine-tuning, by simply prompting it in natural language."
+  - id: ev-openpi-readme-fast-droid
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/Physical-Intelligence/openpi/blob/215abfb217dbac7d5f1273282331b9b1866c0479/README.md
+    date: 2026-08-24
+    verified_on: 2026-10-24
+    summary: "openpi lists the pi0_fast_droid 'Inference' checkpoint for 0-shot use on the DROID robot platform."
+    quote: '$\pi_0$-FAST model fine-tuned on the [DROID dataset](https://droid-dataset.github.io/): can perform a wide range of simple table-top manipulation tasks 0-shot in new scenes on the DROID robot platform'
+  - id: ev-openpi-droid-example
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/Physical-Intelligence/openpi/blob/215abfb217dbac7d5f1273282331b9b1866c0479/examples/droid/README.md
+    date: 2026-08-24
+    verified_on: 2026-10-24
+    summary: "openpi DROID example: serve pi0_fast_droid and run the DROID robot client (main.py) on the DROID control laptop."
+    quote: "uv run scripts/serve_policy.py policy:checkpoint --policy.config=pi0_fast_droid --policy.dir=gs://openpi-assets/checkpoints/pi0_fast_droid"
+  - id: ev-droid-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2403.12945v2
+    date: 2025-04-22
+    verified_on: 2026-10-24
+    summary: "The DROID platform and dataset are built on the Franka Emika Panda. (The DROID control software also accepts an FR3, so the same openpi route plausibly covers FR3-based DROID rigs.)"
+    quote: "We chose the Franka Emika Panda 7 DoF robot arm as the base of our setup since it is widely adopted in the robot research community, reliable, relatively affordable and was available at most participating institutions."

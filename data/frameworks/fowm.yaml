@@ -1,0 +1,10 @@
+id: fowm
+name: FOWM (yunhaif/fowm)
+maintainer: Yunhai Feng, Nicklas Hansen et al.
+repo: yunhaif/fowm
+docs_url: https://github.com/yunhaif/fowm
+license: MIT
+current_version: main
+current_version_date: 2023-10-25
+versioning: none
+notes: "Official code for Finetuning Offline World Models in the Real World, the method LeRobot's tdmpc policy implements. Public code covers the simulated xArm tasks. No tagged releases; main at bf7985876eb4 (2023-10-25)."

@@ -1,0 +1,24 @@
+robot: omx
+policy: pi05
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-linhanwang-pi05-omx
+    - ev-hub-masatoka-pi05-omx
+evidence:
+- id: ev-hub-linhanwang-pi05-omx
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/LinhanWang/pi05_omx_three_tasks
+  verified_on: '2026-10-24'
+  summary: "Checkpoint folder 010000: config.json type=pi05; train_config.json dataset LinhanWang/omx_three_tasks whose meta/info.json robot_type=omx_follower (150 episodes); pretrained from lerobot/pi05_base."
+- id: ev-hub-masatoka-pi05-omx
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/masato-ka/pi05-omx-transfer-cube-v1-0809
+  verified_on: '2026-10-24'
+  summary: "config.json type=pi05; train_config.json dataset masato-ka/omx-transfer-cube-v1_20260809_231300 whose meta/info.json robot_type=omx_follower (25 episodes); pretrained from lerobot/pi05_base."

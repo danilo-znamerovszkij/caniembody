@@ -1,0 +1,44 @@
+robot: hope-jr
+policy: act
+state: partial
+partial_scope: "Training ACT on data recorded with the Hope-JR hand (robot type hope_jr_hand) is documented upstream and labelled experimental; the arm is not covered. The page's evaluation step passes --policy.path to lerobot-record, but lerobot-record in v0.6.1 requires --teleop.type and has no policy option (policies are deployed with lerobot-rollout), so on-robot inference is not validly documented."
+framework: lerobot
+framework_version_tested: "0.6.1"
+capabilities:
+  train:
+    state: works
+    notes: "Documented for hope_jr_hand only, with a homunculus_glove teleoperator for recording; upstream calls Record/Replay/Train experimental."
+    evidence: [ev-lerobot-hopejr-train, ev-lerobot-hopejr-experimental]
+  teleop_record:
+    state: works
+    evidence: [ev-lerobot-hopejr-experimental]
+caveats:
+  - "Upstream states that Record, Replay and Train with Hope-JR are still experimental."
+evidence:
+  - id: ev-lerobot-hopejr-train
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hope_jr.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "The Hope-JR page trains an ACT policy on a hope_jr_hand dataset (outputs/train/hopejr_hand)."
+    quote: "--policy.type=act \\\n  --output_dir=outputs/train/hopejr_hand"
+  - id: ev-lerobot-hopejr-experimental
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hope_jr.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Upstream labels the Hope-JR record/replay/train workflow experimental; recording uses --robot.type=hope_jr_hand with a homunculus_glove teleoperator."
+    quote: "Record, Replay and Train with Hope-JR is still experimental."
+  - id: ev-lerobot-record-no-policy
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/scripts/lerobot_record.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "In v0.6.1, RecordConfig has no policy field and raises an error when no teleoperator is given, pointing policy deployment to lerobot-rollout."
+    quote: "For policy-based deployment, use lerobot-rollout instead."

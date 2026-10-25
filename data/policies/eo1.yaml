@@ -1,0 +1,129 @@
+id: eo1
+name: EO-1
+aliases: [EO1, EmbodiedOneVision, eo-1-3b, IPEC-COMMUNITY/EO-1-3B]
+family: vla
+summary: >-
+  Unified embodied foundation model from the EO-Robotics project: a Qwen2.5-VL-3B backbone trained on interleaved
+  vision-text-action data. LeRobot integrates the robot-control path: a continuous flow-matching action head that
+  predicts action chunks (default 8 steps) from images, EO-1 state tokens and a language task.
+authors: EO-Robotics (Delin Qu, Haoming Song et al.)
+paper_url: https://arxiv.org/abs/2508.21112
+params: 3000000000
+params_note: "Authors describe EO-1 as comprising 3B parameters (rounded)."
+params_source_ref: ev-eo1-paper-params
+backbone: Qwen2.5-VL-3B-Instruct
+action_output: flow-matching
+action_chunking: true
+arch_source_ref: ev-lerobot-eo1-docs
+license: Apache-2.0 (LeRobot integration)
+weights_license: MIT
+open_weights: true
+frameworks:
+  lerobot:
+    support: native
+    since: "0.6.0"
+    policy_type: eo1
+    docs_url: https://huggingface.co/docs/lerobot/eo1
+    note: "Added in v0.6.0 (\"feat(policies): add EO-1 model\"). Install with the `eo1` extra."
+    source_ref: ev-lerobot-eo1-config
+checkpoints:
+  - hub_id: lerobot/eo1-base
+    note: "LeRobot-org checkpoint; Hub license tag MIT."
+  - hub_id: IPEC-COMMUNITY/EO-1-3B
+    note: "Upstream release from the EO-1 project; Hub license tag MIT."
+requirements:
+  train:
+    vram_gb: {min: 24, max: 40}
+    batch_size: 8
+    condition: >-
+      Peak training VRAM at batch size 8 with AdamW (LeRobot default), "Multimodal" group (groot, eo1) in the LeRobot
+      compute hardware guide; suggested starter GPU A100 40 GB+. The guide calls its figures indicative,
+      order-of-magnitude numbers for picking hardware, not exact predictions. Precision not stated.
+    source_ref: ev-lerobot-hw-guide
+  inference:
+    vram_gb: {min: 6.5}
+    condition: >-
+      Upstream EO-1 repository README: loading the pretrained model with transformers + lerobot and running inference
+      "requires ~6.5GB GPU memory". Refers to the upstream EO-1 code path, not measured on the LeRobot v0.6.1 port;
+      precision and batch size not stated.
+    source_ref: ev-eo1-upstream-readme
+observation_space:
+  cameras: {min: 1}
+  state: robot state (observation.state), represented as EO-1 state tokens; padded to max_state_dim 32
+  language: required
+  source_ref: ev-lerobot-eo1-docs-data
+notes: >-
+  Family vla: the LeRobot docs call EO-1 a "Vision-Language-Action policy". Upstream EO-1 also does interleaved
+  autoregressive text/reasoning decoding (hybrid), but the LeRobot integration covers only the continuous
+  flow-matching robot-control path. rtc_compatible and peft_supported are left unset: the LeRobot RTC and PEFT docs
+  do not name EO-1. The upstream EO-Robotics/EO1 GitHub repo had no license detected by the GitHub API on
+  2026-10-24, so the upstream code license is unknown; the LeRobot integration is Apache-2.0.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-eo1-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/eo1.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot EO-1 docs: Qwen2.5-VL backbone plus continuous flow-matching action head; needs ≥1 camera, state and a language task."
+    quote: "EO-1 uses a Qwen2.5-VL backbone for vision-language understanding and adds a continuous flow-matching action head for robot control."
+  - id: ev-lerobot-eo1-docs-data
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/eo1.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: EO-1 data requirements list at least one image, observation.state, action and a language task.
+    quote: "At least one visual observation, for example `observation.images.image`"
+  - id: ev-lerobot-eo1-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/eo1/configuration_eo1.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Policy type string is `eo1`."
+    quote: '@PreTrainedConfig.register_subclass("eo1")'
+  - id: ev-lerobot-v060-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.6.0
+    date: 2026-07-06
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.0"}
+    summary: EO-1 was added in LeRobot v0.6.0 (absent from the v0.5.1 policies tree).
+    quote: "* feat(policies): add EO-1 model by @HaomingSong in https://github.com/huggingface/lerobot/pull/3403"
+  - id: ev-eo1-paper-params
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2508.21112v1
+    date: 2025-08-28
+    verified_on: 2026-10-24
+    summary: EO-1 paper states the model comprises 3B parameters.
+    quote: "a unified embodied foundation model comprising 3B parameters"
+  - id: ev-eo1-upstream-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/EO-Robotics/EO1/blob/451c363d7dff682700789afae0b9b17c004e8f8c/README.md
+    date: 2025-11-12
+    verified_on: 2026-10-24
+    summary: Upstream EO-1 README gives ~6.5GB GPU memory for inference with the pretrained model.
+    quote: "you can load the model and run inference directly with just a few lines of code (requires ~6.5GB GPU memory)"
+  - id: ev-lerobot-hw-guide
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hardware_guide.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Compute hardware guide: Multimodal group (`groot`, `eo1`) peak VRAM ~24–40GB at BS 8 with AdamW; figures are indicative."
+    quote: "| Multimodal | `groot`, `eo1`                              |                ~24–40GB | A100 40 GB+                       |"
+  - id: ev-hub-eo1-checkpoints
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/lerobot/eo1-base
+    verified_on: 2026-10-24
+    summary: "Hub API: lerobot/eo1-base and IPEC-COMMUNITY/EO-1-3B exist, both tagged license:mit."

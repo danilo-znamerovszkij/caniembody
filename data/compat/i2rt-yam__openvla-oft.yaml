@@ -1,0 +1,33 @@
+robot: i2rt-yam
+policy: openvla-oft
+state: works-with-caveats
+framework: openvla-oft
+caveats:
+  - "Community-reported only; not documented upstream or maintainer-tested (evidence is a baseline in the MolmoAct2 paper, not the OpenVLA-OFT authors)."
+  - "The paper does not name the codebase used for this baseline; openvla-oft is recorded because it is the authors' reference implementation."
+  - "Bimanual YAM setup; single-task fine-tunes averaged 35.5% success over 8 real-world tasks (50 trials each) in that study."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-molmoact2-paper-baselines, ev-molmoact2-paper-c3]
+  inference_real:
+    state: works-with-caveats
+    notes: "Average 35.5% success across 8 bimanual YAM tasks (Table 19 of the MolmoAct2 paper)."
+    evidence: [ev-molmoact2-paper-baselines, ev-molmoact2-paper-c3]
+evidence:
+  - id: ev-molmoact2-paper-baselines
+    tier: community-reported
+    type: paper
+    url: https://arxiv.org/abs/2605.02881
+    date: 2026-05-04
+    verified_on: 2026-10-24
+    summary: "MolmoAct2 paper (Ai2): OpenVLA-OFT is one of four baselines fine-tuned per task and evaluated on a real bimanual YAM setup (8 tasks x 50 trials; OpenVLA-OFT average 35.5%)."
+    quote: "compare against four strong VLA and world-model baselines: Cosmos Policy (Kim et al., 2026a), X-VLA (Zheng et al., 2025), OpenVLA-OFT (Kim et al., 2025)"
+  - id: ev-molmoact2-paper-c3
+    tier: community-reported
+    type: paper
+    url: https://arxiv.org/abs/2605.02881
+    date: 2026-05-04
+    verified_on: 2026-10-24
+    summary: "Appendix C.3 (Real-world Bimanual YAM): every baseline was trained with the same protocol and its converged checkpoint evaluated on the robot."
+    quote: "to ensure a fair comparison, we applied the identical training protocol to each of the four baseline policies. All policies were trained to convergence, and the resulting checkpoints were used for evaluation."

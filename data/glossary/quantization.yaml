@@ -1,0 +1,48 @@
+id: quantization
+term: "Quantization and numeric precision"
+aka: ["fp32", "bf16", "fp16", "int8", "int4", "reduced precision"]
+short: "Running a model's weights or activations at lower numeric precision (bf16, fp16, int8, int4) to save memory and often time; every latency number must state it."
+body: |
+  Quantization, in the broad sense, is running a neural network at lower numeric precision than the fp32 it was trained in. Strictly, *quantization* maps values to integers (int8, int4) plus scale factors; casting to 16-bit floating point (fp16, bf16) is reduced precision rather than quantization, but the trade-offs are discussed together. Jacob et al. (2017), "Quantization and Training of Neural Networks for Efficient Integer-Arithmetic-Only Inference", established the standard integer scheme.
+
+  The formats differ in more than size. fp32 uses 32 bits. fp16 and bf16 both use 16 bits, but bf16 keeps fp32's exponent width, so "the range of values it can represent is the same as that of IEEE 754 floating-point format (FP32)" with less mantissa precision; fp16 has a narrower range. int8 and int4 store weights in 8 or 4 bits plus scales.
+
+  Precision changes speed, memory and success, and not always in the expected direction. The OpenVLA paper (Kim et al., 2024) served its 7B model on BridgeData V2 tasks at three precisions: bf16 used 16.8 GB at 71.3% success, int8 10.2 GB at 58.1%, and int4 7.0 GB at 71.9%. It observed that "8-bit quantization slows down inference across most GPUs, due to the overhead of the added quantization operations". Lower precision is not automatically faster.
+
+  This is why a latency or memory figure without precision is unusable. LeRobot v0.6.1 loads [π0](/policy/pi0) and [π0.5](/policy/pi05) in float32 by default, with bfloat16 as an option, so "π0 on an [RTX 4090](/compute/rtx-4090)" can mean two different measurements. On memory-limited devices such as the [Jetson Orin Nano](/compute/jetson-orin-nano-8gb), precision can decide whether a model loads at all. Every measurement in this matrix must state precision, runtime and camera count (see [inference latency](/glossary/inference-latency)).
+related: [inference-latency, peft-lora, vla, control-rate]
+policies: [openvla, pi0, pi05, smolvla]
+sources:
+  - id: ev-jacob-2017
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/1712.05877
+    date: 2017-12-15
+    verified_on: 2026-10-24
+    summary: "Jacob et al. introduce integer-arithmetic-only quantized inference."
+    quote: "We propose a quantization scheme that allows inference to be carried out using integer-only arithmetic, which can be implemented more efficiently than floating point inference on commonly available integer-only hardware."
+  - id: ev-bf16-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/1905.12322
+    date: 2019-05-29
+    verified_on: 2026-10-24
+    summary: "BFLOAT16 has the same range as FP32."
+    quote: "the range of values it can represent is the same as that of IEEE 754 floating-point format (FP32) and conversion to/from FP32 is simple."
+  - id: ev-openvla-paper-full
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/html/2406.09246
+    date: 2024-06-13
+    verified_on: 2026-10-24
+    summary: "OpenVLA quantized inference: bf16 16.8 GB 71.3%, int8 10.2 GB 58.1%, int4 7.0 GB 71.9% (Table 2); int8 slower on most GPUs."
+    quote: "We observe that 8-bit quantization slows down inference across most GPUs, due to the overhead of the added quantization operations."
+  - id: ev-lerobot-pi0-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/pi0/configuration_pi0.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot v0.6.1 π0 defaults to float32, bfloat16 optional."
+    quote: "dtype: str = \"float32\"  # Options: \"bfloat16\", \"float32\""

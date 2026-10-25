@@ -1,0 +1,41 @@
+id: jetson-orin-nx-16gb
+name: NVIDIA Jetson Orin NX 16GB
+class: edge
+memory_gb: 16
+unified: true
+arch: Ampere (1024 CUDA cores, 32 Tensor Cores)
+ai_tops: 157 TOPS (with JetPack 6.2 Super mode)
+power_w: 10W - 15W - 25W - 40W
+notes: Module (needs a carrier board). 157 TOPS and the 40W mode require the JetPack 6.2+ Super modes (MAXN_SUPER, flashed with the jetson-orin-nano-devkit-super configuration); older JetPack releases cap at 25W/MAXN. Record power mode and JetPack version with every run. 16 GB is unified memory shared with the OS.
+verified_on: '2026-10-24'
+sources:
+- id: ev-nvidia-jetson-orin-tops
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-orin/
+  verified_on: '2026-10-24'
+  summary: 'NVIDIA Jetson Orin spec table AI Performance row. Column order on the page: AGX Orin Developer Kit / AGX Orin 64GB (275), AGX Orin Industrial (248), AGX Orin 32GB (241), Orin NX 16GB (157), Orin NX 8GB (117), Orin Nano Super Developer Kit (67), Orin Nano 8GB (67), Orin Nano 4GB (34).'
+  quote: AI Performance 275 TOPS 248 TOPs 241 TOPS 157 TOPS 117 TOPS 67 TOPS 67 TOPS 34 TOPS
+- id: ev-nvidia-jetson-orin-memory
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-orin/
+  verified_on: '2026-10-24'
+  summary: Jetson Orin spec table Memory row (AGX Orin 64GB / Industrial / 32GB, then Orin NX 16GB at 16GB 128-bit LPDDR5).
+  quote: 64GB 256-bit LPDDR5 (+ ECC) 204.8GB/s 32GB 256-bit LPDDR5 204.8GB/s 16GB 128-bit LPDDR5 102.4GB/s 8GB 128-bit LPDDR5 102.4GB/s
+- id: ev-jetson-power-modes-nx16
+  tier: upstream-documented
+  type: official-docs
+  url: https://docs.nvidia.com/jetson/archives/r36.4.3/DeveloperGuide/SD/PlatformPowerAndPerformance/JetsonOrinNanoSeriesJetsonOrinNxSeriesAndJetsonAgxOrinSeries.html
+  verified_on: '2026-10-24'
+  versions:
+    jetson_linux: 36.4.3
+  summary: Jetson Linux r36.4.3 power-mode table for Orin NX 16GB and 16GB Super (10W, 15W, 25W, 40W, MAXN/MAXN_SUPER).
+  quote: Jetson Orin NX 16GB Jetson Orin NX 16GB Super Property Mode Mode MAXN 10W 15W* 25W MAXN_SUPER 10W 15W 25W 40W*
+- id: ev-jetpack-6-2-super
+  tier: upstream-documented
+  type: release-notes
+  url: https://developer.nvidia.com/embedded/jetpack-sdk-62
+  verified_on: '2026-10-24'
+  summary: 'NVIDIA JetPack 6.2 page: JetPack 6.2 (Jetson Linux 36.4.3) introduces the high-power Super modes for Orin Nano and Orin NX production modules.'
+  quote: JetPack 6.2 supports new high-power Super Mode for NVIDIA Jetson Orin Nano and Jetson Orin NX production modules.

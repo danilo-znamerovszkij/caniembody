@@ -1,0 +1,47 @@
+robot: trossen-widowx
+policy: pi05
+state: works-with-caveats
+framework: lerobot
+caveats:
+  - "Trossen recommends LeRobot async inference (policy server + robot client) for π0.5; synchronous lerobot-record runs the policy in the control loop, which large VLAs are often too slow for."
+  - "Needs the lerobot[pi] extra (transformers/peft), which the plugin's base install omits."
+  - "Vendor on-robot results are qualitative so far (no published success-rate counts)."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-trossen-pi05-lerobot-card, ev-trossen-pi05-pour-card]
+  inference_real:
+    state: works
+    evidence: [ev-trossen-plugin-readme, ev-trossen-pi05-lerobot-card, ev-trossen-pi05-pour-card]
+evidence:
+  - id: ev-trossen-plugin-readme
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/TrossenRobotics/lerobot_trossen/blob/337ed74df1ee617ddfb5987a9f7464cf3089c4a2/README.md
+    date: 2026-09-16
+    verified_on: 2026-10-24
+    summary: "Official Trossen plugin README runs a π0.5 checkpoint (--policy_type=pi05, TrossenRoboticsCommunity pi05-block-transfer-lerobot) on a bimanual WidowX AI (bi_widowxai_follower_robot) via LeRobot async inference, lerobot[async,pi]>=0.6.0."
+    quote: "This is the recommended path for slow VLA policies (π₀, π₀.₅, SmolVLA): the client keeps the robot control loop responsive while the server runs inference, and overlapping action chunks are blended on the client (real-time chunking)."
+  - id: ev-trossen-pi05-lerobot-card
+    tier: upstream-documented
+    type: model-card
+    url: https://huggingface.co/TrossenRoboticsCommunity/pi05-block-transfer-lerobot/blob/ef188f51fd55da409f315472fe1e91e457bb6162/README.md
+    date: 2026-06-03
+    verified_on: 2026-10-24
+    summary: "Trossen-published π0.5 LoRA fine-tune (config.json type=pi05, base lerobot/pi05_base) trained with LeRobot on bimanual WidowX AI block-transfer data, with an on-robot async-eval video; card says 'policy confirmed working on hardware', rep count TODO."
+    quote: "π₀.₅ fine-tune for bimanual red-cube handover / block transfer on the Trossen AI"
+  - id: ev-trossen-pi05-pour-card
+    tier: upstream-documented
+    type: model-card
+    url: https://huggingface.co/TrossenRoboticsCommunity/bimanual-widowxai-pour-items-red-cup-pi05/blob/e4281ebd9506852c8f9526ba3553181e4651a853/README.md
+    date: 2026-09-25
+    verified_on: 2026-10-24
+    summary: "Trossen-published π0.5 checkpoint (config.json type=pi05, LeRobot/PyTorch, 0.5.1-era processor naming) fine-tuned on 100 bimanual WidowX AI pouring episodes; evaluated qualitatively on the real rig."
+    quote: "Evaluated on the real robot — the bimanual WidowX AI stationary rig — and reported by the operator as performing the pouring task well."
+  - id: ev-trossen-openpi-tutorial
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://docs.trossenrobotics.com/trossen_arm/v1.9/tutorials/openpi.html
+    verified_on: 2026-10-24
+    summary: "Separate route: Trossen's experimental openpi tutorial (Trossen fork of openpi) also fine-tunes π0.5 on bimanual WidowX AI data and reports a successful red-block transfer."
+    quote: "openpi_trossen_ai_pi05_red_block [success] : π0.5 model successfully picks up and transfers red block on first try."

@@ -1,0 +1,59 @@
+id: reward-model
+term: "Reward model"
+aka: ["learned reward", "reward classifier", "success detector"]
+short: "A learned function that scores how well a trajectory or state accomplishes a task, used in place of a hand-written reward for RL, data weighting or evaluation."
+body: |
+  A reward model is a learned function that scores how well an agent's behavior accomplishes a task, either as a single number per episode or as a per-frame signal. It replaces a hand-engineered reward where one is impractical to write: "is the towel folded?" is easy to judge and hard to code. The modern template comes from Christiano et al., "Deep Reinforcement Learning from Human Preferences" (2017), which learned a reward model from human comparisons of trajectory segments and optimized a policy against it, solving tasks "without access to the reward function".
+
+  In robot learning, reward models serve three roles: the reward signal for real-world reinforcement learning, a success detector that ends episodes, and a score for weighting or filtering demonstration data. LeRobot v0.6.1 includes several. [HIL-SERL](/policy/hil-serl) trains a vision-based reward classifier from a handful of demonstrations. [SARM](/policy/sarm) is a video-based, stage-aware reward model for long-horizon manipulation, usable with Reward-Aligned Behavior Cloning. [Robometer](/policy/robometer) predicts "dense, frame-level task progress and frame-level success from a trajectory video and a task description". [TOPReward](/policy/topreward) is a zero-shot reward model that reads token log-probabilities from an off-the-shelf VLM.
+
+  These models appear in this matrix but are not robot policies: they never command actuators, so they are listed outside the compatibility grid and have no robot cells.
+
+  A common misconception is that a reward model is ground truth. A policy optimized against a learned reward can exploit its errors, so success rates scored by the same model used for training overstate real performance. Independent evaluation, by people or by scripted checks, is still required.
+related: [human-in-the-loop-rl, imitation-learning, behavioral-cloning, world-model]
+policies: [hil-serl, sarm, robometer, topreward]
+sources:
+  - id: ev-christiano-2017
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/1706.03741
+    date: 2017-06-12
+    verified_on: 2026-10-24
+    summary: "Christiano et al. learn a reward model from human preferences."
+    quote: "We show that this approach can effectively solve complex RL tasks without access to the reward function"
+  - id: ev-lerobot-sarm-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/sarm.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot v0.6.1 SARM reward model docs."
+    quote: "SARM (Stage-Aware Reward Modeling) is a video-based reward modeling framework for long-horizon robot manipulation tasks."
+  - id: ev-lerobot-robometer-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/robometer.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot v0.6.1 Robometer docs."
+    quote: "It predicts dense, frame-level task progress and frame-level success from a trajectory video and a task description."
+  - id: ev-lerobot-topreward-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/topreward.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot v0.6.1 TOPReward docs."
+    quote: "that extracts token log-probabilities from an off-the-shelf vision-language model (VLM) as a robotic reward signal."
+  - id: ev-lerobot-hilserl-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hilserl.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot HIL-SERL trains a reward classifier from demonstrations."
+    quote: "The approach starts from a small set of human demonstrations, uses them to train a reward classifier"

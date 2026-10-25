@@ -1,0 +1,17 @@
+robot: koch
+policy: openvla
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: openvla
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-phospho-openvla-koch
+evidence:
+- id: ev-hub-phospho-openvla-koch
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/phospho-ai/openvla-koch
+  verified_on: '2026-10-24'
+  summary: "Model card (base_model openvla/openvla-7b) states OpenVLA was fine-tuned on Koch robot datasets to control one; dataset_statistics.json has a single key koch_lerobot. Dataset robot_type not verifiable from the repo."

@@ -1,0 +1,27 @@
+robot: mobile-aloha
+policy: diffusion
+state: works-with-caveats
+framework: act-plus-plus
+caveats:
+  - "With 50 demonstrations Diffusion Policy was less precise than ACT on Wipe Wine (65% success); the authors attribute this to too few demonstrations."
+  - "Documented with the Mobile ALOHA authors' codebase (MarkFzp/act-plus-plus, DDIM scheduler, co-training with static ALOHA data), not LeRobot's diffusion policy."
+capabilities:
+  train: {state: works, evidence: [ev-mobile-aloha-paper, ev-act-plus-plus]}
+  inference_real: {state: works, evidence: [ev-mobile-aloha-paper]}
+evidence:
+  - id: ev-mobile-aloha-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2401.02117
+    date: 2024-01-04
+    verified_on: 2026-10-24
+    summary: "Mobile ALOHA paper (Sec. 6.2) trains Diffusion Policy on Mobile ALOHA: 100% on Push Chairs with co-training, 65% on Wipe Wine."
+    quote: "Overall, Diffusion Policy performs similarly to ACT on Push Chairs, both obtaining 100% with co-training. For Wipe Wine, we observe worse performance with diffusion at 65% success."
+  - id: ev-act-plus-plus
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/MarkFzp/act-plus-plus/blob/26bab0789d05b7496bacef04f5c6b2541a4403b5/README.md
+    date: 2024-01-11
+    verified_on: 2026-10-24
+    summary: "Authors' repo implementing ACT, Diffusion Policy and VINN with co-training for Mobile ALOHA."
+    quote: "This repo contains the implementation of ACT, Diffusion Policy and VINN, together with 2 simulated environments:"

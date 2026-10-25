@@ -1,0 +1,19 @@
+robot: xarm
+policy: diffusion
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+framework_version_tested: "0.6.1"
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-shizhec-diffusion]
+evidence:
+  - id: ev-hub-shizhec-diffusion
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/Shizhec/xarm6_pick_toy_to_bowl_joint_diffusion_v4
+    date: 2026-09-14
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "config.json type=diffusion; train_config dataset Shizhec/xarm6_pick_toy_to_bowl_joint_v3, whose meta/info.json robot_type='UFACTORY Robot' (xArm6); card lists LeRobot version 0.6.1. Auto-generated card, no rollout results."

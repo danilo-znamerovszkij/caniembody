@@ -1,0 +1,62 @@
+id: i2rt-yam
+name: I2RT YAM
+maker: I2RT Robotics
+aliases: [YAM, YAM arm, I2RT YAM arm, yam_follower]
+class: arm
+summary: >-
+  I2RT's compact CNC-machined research arm: 2 kg nominal payload, 750 mm workspace, 5.02 kg including gripper.
+  LeRobot reaches it through the third-party lerobot_yam plugin suite (follower plus GELLO-style leader). I2RT also
+  has a separate active, force-feedback YAM leader plugin.
+payload_g: {max: 2000}
+specs_source_ref: ev-i2rt-yam
+open_source: false
+homepage: https://i2rt.com/products/yam-6-dof-arm
+price_usd:
+  low: 2999
+  note: "YAM with gripper, I2RT store list price. Edu and bulk discounts are available via sales."
+  source_ref: ev-i2rt-yam-price
+frameworks:
+  lerobot:
+    support: plugin
+    robot_type: [yam_follower]
+    package: lerobot_robot_yam
+    repo_url: https://github.com/pravsels/lerobot_yam
+    docs_url: https://huggingface.co/docs/lerobot/third_party_robots
+    note: >-
+      Third-party plugin suite (MIT): lerobot_robot_yam (yam_follower) and lerobot_teleoperator_yam_gello (yam_leader),
+      on PyPI as lerobot-robot-yam. Needs a CAN interface. Also listed: lerobot_teleoperator_yamactiveleader for I2RT's
+      bilateral force-feedback leader.
+    source_ref: ev-lerobot-third-party
+teleop_options: ["GELLO-style YAM leader (yam_leader)", "I2RT active YAM leader (lerobot_teleoperator_yamactiveleader)"]
+notes: "DoF is not recorded because the product page states it only in the URL slug ('yam-6-dof-arm'), not in its text."
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-third-party
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/third_party_robots.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot third-party page lists lerobot_yam (yam_follower / yam_leader)."
+    quote: "robot arm <code>yam_follower</code> and teleoperator arm <code>yam_leader</code>."
+  - id: ev-yam-plugin
+    tier: community-reported
+    type: source-code
+    url: https://github.com/pravsels/lerobot_yam/blob/1626d68e0d3bb4116653daad0719e96ab607795e/lerobot_robot_yam/lerobot_robot_yam/config_yam_follower.py
+    verified_on: 2026-10-24
+    summary: "Plugin registers robot type yam_follower (package lerobot_robot_yam)."
+  - id: ev-i2rt-yam
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://i2rt.com/products/yam-6-dof-arm
+    verified_on: 2026-10-24
+    summary: "I2RT YAM: nominal payload 2 kg, 750 mm workspace, 5.02 kg with gripper."
+    quote: "Nominal Payload: 2 kg Max. workspace range: 750 mm Arm weight (including gripper): 5.02 kg"
+  - id: ev-i2rt-yam-price
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://i2rt.com/products/yam-6-dof-arm
+    verified_on: 2026-10-24
+    summary: "I2RT store: YAM with gripper $2,999.00."
+    quote: "Regular price $2,999.00"

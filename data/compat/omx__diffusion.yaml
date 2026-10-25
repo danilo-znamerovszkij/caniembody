@@ -1,0 +1,24 @@
+robot: omx
+policy: diffusion
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-mingminng-diffusion-omx
+    - ev-hub-mingminng-diffusion-omx-2
+evidence:
+- id: ev-hub-mingminng-diffusion-omx
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/Mingminng/diffusion_omx_pick_color_motor_3_V1
+  verified_on: '2026-10-24'
+  summary: "config.json type=diffusion; train_config.json dataset Mingminng/omx_pick_color_motor_3 whose meta/info.json robot_type=omx_follower (60 episodes)."
+- id: ev-hub-mingminng-diffusion-omx-2
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/Mingminng/diffusion_omx_pick_motor10
+  verified_on: '2026-10-24'
+  summary: "config.json type=diffusion; train_config.json dataset Mingminng/omx_pick_motor7 whose meta/info.json robot_type=omx_follower (10 episodes)."

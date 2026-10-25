@@ -1,0 +1,11 @@
+import assert from 'node:assert';
+import { fitFor } from '../src/lib/fit.ts';
+const nano = { id: 'n', name: 'Nano', memory_gb: 8, unified: true };
+const run = (hz: number, outcome: any = 'runs') => ({ id: String(hz), runtime: 'onnx', precision: 'fp16', cameras: 2, inference_hz: hz, outcome });
+assert.equal(fitFor({ gb: 16, precision: 'bf16' }, nano, [run(3)]).kind, 'measured', 'a measured run beats arithmetic');
+assert.equal((fitFor(undefined, nano, [run(1), run(5)]) as any).run.inference_hz, 5, 'best rate wins');
+assert.equal(fitFor(undefined, nano, [run(0, 'oom')]).kind, 'fails');
+assert.equal(fitFor({ gb: 16 }, nano, []).kind, 'exceeds');
+assert.equal(fitFor({ gb: 8 }, nano, []).kind, 'none', 'equal is not exceeding');
+assert.equal(fitFor({ gb: 99 }, { ...nano, memory_gb: 0 }, []).kind, 'none', 'cpu-only: no memory arithmetic');
+console.log('fit ok');

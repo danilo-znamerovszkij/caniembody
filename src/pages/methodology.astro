@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import { STATE_META, TIER_META } from '../lib/ui.ts';
+import { STALE_DAYS, stats } from '../lib/data.ts';
+import { pageTitle, crumbs } from '../lib/seo.ts';
+import { SITE, GH } from '../site.ts';
+const s = stats();
+const VERSION = '1.0';
+const DATE = '2026-10-24';
+---
+<Base title={pageTitle('Methodology: how cells, tiers and measurements are assigned')}
+  description="How every cell in the robot policy compatibility matrix is assigned a state and evidence tier, how measurements are recorded, how staleness is computed, and how to dispute a cell."
+  modified={DATE}
+  jsonld={[crumbs([['Matrix', '/'], ['Methodology', '/methodology']]), { '@context': 'https://schema.org', '@type': 'TechArticle', headline: `${SITE.title} methodology v${VERSION}`, datePublished: DATE, dateModified: DATE, version: VERSION, url: `${SITE.url}/methodology`, license: 'https://creativecommons.org/licenses/by/4.0/' }]}>
+  <div class="wrap narrow">
+    <section class="ph">
+      <div class="eyebrow"><a href="/">Matrix</a><span>/</span><span>Methodology</span><span>·</span><span>v{VERSION} · {DATE}</span></div>
+      <h1>Methodology</h1>
+      <p class="lede">These rules decide what a cell may claim. The validator enforces them on every change, so a claim without a source fails the build. It is versioned; cite it as <span class="mono">{SITE.title} methodology v{VERSION} ({DATE}), {SITE.url}/methodology</span>.</p>
+    </section>
+    <article class="prose">
+      <h2>What a cell claims</h2>
+      <p>A cell answers one question: <strong>can this policy run on this robot</strong>, in the framework named on the cell, at the version named on the cell. It does not claim the policy performs well. Success rates belong to evaluation projects; this reference links out to them and never computes them.</p>
+
+      <h2 id="states">Six states</h2>
+      <ul>
+        {Object.entries(STATE_META).filter(([k]) => k !== 'untested').map(([k, m]) => <li><span class="st" data-s={k} aria-hidden="true">{m.glyph}</span> <strong>{m.label}</strong>: {m.desc}.{k === 'works' && ' Requires at least one T1 or T2 evidence record.'}{k === 'works-with-caveats' && ' Requires one or more concrete, one-sentence caveats.'}{k === 'partial' && ' Requires a stated scope, e.g. “training evidenced by public checkpoint; on-robot inference not documented.”'}{k === 'not-supported' && ' Requires a stated reason backed by evidence.'}{k === 'unknown' && ' Every cell starts here and stays here until evidence exists.'}</li>)}
+      </ul>
+      <p>State is never conveyed by colour alone: each has a glyph and a fill or outline.</p>
+      <p id="untested"><span class="st" data-s="untested" aria-hidden="true">○</span> <strong>Untested</strong> is a display layer on top of <em>unknown</em>, not a seventh state. It marks pairs with no evidence where the robot is integrated in LeRobot (natively or through a plugin) and the policy ships natively in a LeRobot release, so the framework's tools connect them. It is computed from the sourced framework-support records, labelled T4 inferred everywhere, never stored as a cell and never counted as evidence. It means "nobody has published a run", not "it works": action and state dimensions, camera count and compute still decide.</p>
+
+      <h2 id="tiers">Four evidence tiers</h2>
+      <ul>
+        {Object.entries(TIER_META).map(([k, t]) => <li><span class="tier" data-t={k}>{t.short}</span> <strong>{t.label}</strong>: {t.desc}.</li>)}
+      </ul>
+      <p>A cell displays its <em>highest</em> tier and links to <em>all</em> of its evidence. T1 evidence must carry a verbatim quote from the source. T4 is always rendered with a dashed, italic treatment and the word “inferred”. It can never support a <em>works</em> state. The validator enforces that each tier may only be backed by certain evidence types (T1: docs, release notes, source code, model cards, papers; T2: maintainer runs; T4: spec derivations), so reasoning cannot be promoted to documentation.</p>
+      <p>Evidence from vendor content pages and unsourced comparison tables is never imported, not even as T4. If a figure cannot be traced to a primary source, the cell stays unknown.</p>
+
+      <h2 id="measurements">Measurements</h2>
+      <p>Every measured number carries the <strong>runtime</strong> (PyTorch eager, torch.compile, ONNX, TensorRT…), the <strong>precision</strong> (fp32, bf16, fp16, int8…) and the <strong>number of cameras</strong> fed to the model. CI rejects any latency or rate without all three. On the same 8 GB Jetson Orin Nano, SmolVLA measured 0.86 Hz in PyTorch fp32 and 5.25 Hz as split ONNX fp16 (<a href="/compute/jetson-orin-nano-8gb">runs</a>).</p>
+      <p>Two rates are kept apart. <strong>Inference rate</strong> (<span class="mono">inference_hz</span>) is model calls per second, i.e. 1000 / p50 latency. <strong>Control rate</strong> (<span class="mono">control_rate_hz</span>) is actions executed per second after action chunking. A policy that predicts 50-action chunks at 2 Hz can drive a 30 Hz control loop, so compare like with like. Edge runs also record JetPack version and power mode. Measurements are inference cost only, never task success.</p>
+
+      <h2 id="compute">The compute selector</h2>
+      <p>Selecting a compute target re-evaluates each policy against it, in this order:</p>
+      <ol>
+        <li>If a measured run exists for that policy on that exact target, the matrix shows the fastest measured inference rate with its runtime, precision and camera count.</li>
+        <li>If runs exist but all report out-of-memory, too slow or error, cells marked <em>works</em> are shown as <em>partial</em> for that target, with the measured outcome.</li>
+        <li>Otherwise, if the policy's <em>sourced</em> minimum inference memory exceeds the target's memory, the cell is demoted to <em>partial</em> and labelled <strong>inferred</strong>. On Jetson and Apple Silicon the memory is shared with the CPU, so the real budget is lower still.</li>
+        <li>Otherwise nothing changes, and the popover says there is no measurement yet.</li>
+      </ol>
+      <p>Jetson variants are never interchangeable: an Orin Nano result says nothing about an AGX Orin.</p>
+
+      <h2 id="freshness">Freshness</h2>
+      <p>Every evidence record has a <span class="mono">verified_on</span> date and the exact versions it applies to. A cell's age is measured from its newest evidence. Cells older than {STALE_DAYS} days are marked <strong>stale</strong>. They stay visible with a marker; they are never silently removed. Cells tested more than two minor releases behind the framework's current release are marked <strong>version drift</strong>. A daily job watches upstream releases and opens a review issue listing affected cells. The homepage always states the last full review date and the stale percentage (currently {s.pctStale.toFixed(0)}%).</p>
+
+      <h2 id="disputes">Disputes</h2>
+      <p>Every cell page has a <strong>Dispute this cell</strong> button that opens a pre-filled issue. While a dispute is open, the cell shows a marker linking to it, because the argument is part of the record. A source settles a dispute. The data changes only through a reviewed pull request, and the cell's git history is shown on its page.</p>
+
+      <h2 id="contribute">Contributing</h2>
+      <p>Reports of failure are as valuable as reports of success. A <em>not-supported</em> cell with a reason is a real contribution. The <a href={`${GH}/issues/new/choose`}>issue forms</a> collect everything a cell needs, and a bot turns your submission into a pull request. You never have to write YAML. If you prefer YAML, every record is one small file in <a href={`${GH}/tree/main/data`}><span class="mono">/data</span></a>, validated against <a href={`${GH}/tree/main/schema`}>JSON Schema</a>.</p>
+
+      <h2 id="never">What this project never does</h2>
+      <ul>
+        <li>Never writes “should work” or “probably”. That is inference, and it is labelled as such.</li>
+        <li>Never ranks policies or computes success rates.</li>
+        <li>Never hosts weights or datasets.</li>
+        <li>Never fakes freshness: page modification dates come from the git history of the underlying record.</li>
+      </ul>
+
+      <h2 id="cite">Citing</h2>
+      <p>The dataset is versioned with semantic versioning and tagged releases; cite the version and DOI in <a href={`${GH}/blob/main/CITATION.cff`}><span class="mono">CITATION.cff</span></a>. URLs on this site are permanent; renamed identifiers redirect. Data is <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, code is MIT.</p>
+    </article>
+  </div>
+</Base>
+<style>
+  .prose h2:first-child { margin-top: 0; }
+  .prose .st, .prose .tier { vertical-align: 1px; }
+</style>

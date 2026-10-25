@@ -1,0 +1,38 @@
+robot: so100
+policy: groot-n1-7
+state: works
+framework: isaac-groot
+capabilities:
+  inference_real:
+    state: works
+    notes: Isaac-GR00T's SO100/SO101 eval script drives a LeRobot so100_follower or so101_follower; the worked example data is SO-101.
+    evidence:
+    - ev-isaac-groot-eval-so100
+  train:
+    state: works
+    notes: Fine-tuning example uses an so101_follower dataset; SO-100 data follows the same NEW_EMBODIMENT recipe.
+    evidence:
+    - ev-isaac-groot-so100-example
+evidence:
+- id: ev-isaac-groot-eval-so100
+  tier: upstream-documented
+  type: source-code
+  url: https://github.com/NVIDIA/Isaac-GR00T/blob/n1.7-release/gr00t/eval/real_robot/SO100/eval_so100.py
+  date: '2026-04-18'
+  verified_on: '2026-10-24'
+  versions:
+    isaac-groot: n1.7-release
+  summary: Isaac-GR00T n1.7-release real-robot eval script (LeRobot RobotConfig + GR00T policy server) states it targets both SO100 and SO101; it imports LeRobot so100_follower and so101_follower configs.
+  quote: |-
+    This script runs closed-loop policy evaluation on the SO100 / SO101 robots
+    using the GR00T Policy API.
+- id: ev-isaac-groot-so100-example
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/NVIDIA/Isaac-GR00T/blob/n1.7-release/examples/SO100/README.md
+  date: '2026-04-18'
+  verified_on: '2026-10-24'
+  versions:
+    isaac-groot: n1.7-release
+  summary: Isaac-GR00T n1.7-release 'SO100' example fine-tunes GR00T-N1.7-3B (NEW_EMBODIMENT) on izuluaga/finish_sandwich (meta/info.json robot_type=so101_follower) and runs closed-loop eval with --robot.type=so101_follower.
+  quote: This guide shows how to finetune dataset collected from [SO100](https://huggingface.co/docs/lerobot/en/so101) robot, and evaluate the model on the real robot.

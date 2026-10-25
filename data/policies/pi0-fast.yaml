@@ -1,0 +1,140 @@
+id: pi0-fast
+name: π0-FAST
+aliases: [pi0_fast, pi0fast, pi0-fast, Pi0-FAST, π₀-FAST, PiFast, lerobot/pi0fast-base]
+family: vla
+summary: >-
+  Autoregressive variant of π0 from Physical Intelligence: the PaliGemma VLM predicts discrete FAST action tokens
+  (DCT + BPE compression of action chunks) that are decoded back to continuous actions.
+authors: Physical Intelligence
+paper_url: https://arxiv.org/abs/2501.09747
+backbone: PaliGemma (SigLIP vision tower + Gemma 2B)
+action_output: autoregressive-tokens
+action_chunking: true
+arch_source_ref: ev-lerobot-pi0fast-docs
+license: Apache-2.0
+weights_license: Gemma (Hub license tag `gemma` on lerobot/pi0fast-base)
+open_weights: true
+frameworks:
+  lerobot:
+    support: native
+    since: "0.4.3"
+    policy_type: pi0_fast
+    docs_url: https://huggingface.co/docs/lerobot/pi0fast
+    note: >-
+      Current implementation added in v0.4.3 ("add autoregressive VLAs with tokenization PiFast"). An earlier
+      implementation registered as `pi0fast` existed in v0.3.2–v0.3.3 and was deprecated/removed in v0.4.0 ("deprecate
+      pi0fast"); the directory is absent at v0.4.0–v0.4.2. Default FAST tokenizer: lerobot/fast-action-tokenizer.
+    source_ref: ev-lerobot-v043-notes
+  openpi:
+    support: upstream-repo
+    repo_url: https://github.com/Physical-Intelligence/openpi
+    docs_url: https://github.com/Physical-Intelligence/openpi
+    note: "Official release; base checkpoint gs://openpi-assets/checkpoints/pi0_fast_base, plus π0-FAST-DROID."
+    source_ref: ev-openpi-readme-fast
+checkpoints:
+  - hub_id: lerobot/pi0fast-base
+    note: "LeRobot-format base model; Hub license tag gemma."
+  - hub_id: lerobot/pi0fast-libero
+    note: "LIBERO fine-tune used for the docs' results (82.5% average); no license tag on the Hub."
+requirements:
+  train:
+    vram_gb: {min: 24, max: 40}
+    batch_size: 8
+    condition: >-
+      Peak training VRAM at batch size 8 with AdamW (LeRobot default), "Large VLA" group (pi0, pi0_fast, pi05, xvla,
+      wall_x) in the LeRobot compute hardware guide; suggested A100 40 GB+, "24 GB tight at BS 1". The guide calls its
+      figures indicative, order-of-magnitude numbers, not exact predictions. Precision not stated.
+    source_ref: ev-lerobot-hw-guide
+  inference:
+    vram_gb: {min: 8}
+    condition: >-
+      openpi README single-GPU requirement for inference ("> 8 GB", example RTX 4090), stated for all openpi models and
+      the openpi runtime, not LeRobot. Precision not stated. No LeRobot measurement for π0-FAST found.
+    source_ref: ev-openpi-requirements
+observation_space:
+  state: proprio/state vector, padded to max_state_dim 32
+  language: optional
+  source_ref: ev-pi0fast-base-card
+notes: >-
+  RTC: not listed in LeRobot's RTC docs. In v0.6.1 code PI0FastConfig has an rtc_config field, but the policy does not
+  override supports_rtc() (base default False) and select_action asserts RTC is disabled; left unset here pending a
+  documented statement. KV-caching is on by default (use_kv_cache=true).
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-pi0fast-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/pi0fast.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: LeRobot π0-FAST docs; PaliGemma (SigLIP + Gemma 2B) predicting discrete FAST tokens decoded to continuous actions.
+    quote: "The model takes images, text instructions, and robot state as input, and outputs discrete FAST tokens that are decoded back to continuous actions."
+  - id: ev-lerobot-pi0fast-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/pi0_fast/configuration_pi0_fast.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Policy type string is `pi0_fast` (also registered at v0.4.3); chunk_size default 50."
+    quote: '@PreTrainedConfig.register_subclass("pi0_fast")'
+  - id: ev-lerobot-v043-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.4.3
+    date: 2026-01-22
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.3"}
+    summary: v0.4.3 added the current π0-FAST (pi0_fast) implementation.
+    quote: "* feat(policies): add autoregressive VLAs with tokenization PiFast by @jadechoghari in https://github.com/huggingface/lerobot/pull/2734"
+  - id: ev-lerobot-v040-notes-deprecate
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.4.0
+    date: 2025-10-23
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.0"}
+    summary: The earlier `pi0fast` implementation (v0.3.x) was deprecated in v0.4.0.
+    quote: "* chore(policies): deprecate pi0fast by @imstevenpmwork in https://github.com/huggingface/lerobot/pull/2203"
+  - id: ev-fast-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2501.09747
+    date: 2025-01-16
+    verified_on: 2026-10-24
+    summary: FAST paper introduces the DCT-based action tokenizer used with the π0 VLA.
+    quote: "Our tokenization approach, Frequency-space Action Sequence Tokenization (FAST), enables us to train autoregressive VLAs for highly dexterous and high-frequency tasks where standard discretization methods fail completely."
+  - id: ev-openpi-readme-fast
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/Physical-Intelligence/openpi/blob/215abfb217dbac7d5f1273282331b9b1866c0479/README.md
+    verified_on: 2026-10-24
+    versions: {openpi: "215abfb"}
+    summary: openpi (official PI repo) ships π0-FAST with base checkpoints.
+    quote: "- the [π₀-FAST model](https://www.physicalintelligence.company/research/fast), an autoregressive VLA, based on the FAST action tokenizer."
+  - id: ev-openpi-requirements
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/Physical-Intelligence/openpi/blob/215abfb217dbac7d5f1273282331b9b1866c0479/README.md
+    verified_on: 2026-10-24
+    versions: {openpi: "215abfb"}
+    summary: "openpi single-GPU memory requirements: inference >8 GB, LoRA fine-tuning >22.5 GB, full fine-tuning >70 GB."
+    quote: "| Inference          | > 8 GB          | RTX 4090           |"
+  - id: ev-lerobot-hw-guide
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hardware_guide.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Compute hardware guide: Large VLA group (incl. `pi0_fast`) ~24–40GB at BS 8 with AdamW; indicative figures."
+    quote: "| Large VLA  | `pi0`, `pi0_fast`, `pi05`, `xvla`, `wall_x` |                ~24–40GB | A100 40 GB+ (24 GB tight at BS 1) |"
+  - id: ev-pi0fast-base-card
+    tier: upstream-documented
+    type: model-card
+    url: https://huggingface.co/lerobot/pi0fast-base
+    date: 2026-01-09
+    verified_on: 2026-10-24
+    summary: lerobot/pi0fast-base card lists inputs, next-token objective and FAST-token action representation; license gemma.
+    quote: "- **Inputs:** images (multi-view), proprio/state, optional language instruction"

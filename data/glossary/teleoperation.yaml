@@ -1,0 +1,40 @@
+id: teleoperation
+term: "Teleoperation"
+aka: ["teleop", "remote operation"]
+short: "Real-time human control of a robot through an input device; in robot learning, the standard way to collect demonstrations for imitation learning."
+body: |
+  Teleoperation is real-time control of a robot by a human through an input device. In robot learning it is primarily a data-collection method: the operator performs the task through the robot, and the robot's observations and commanded actions are recorded as demonstrations for [imitation learning](/glossary/imitation-learning). Demonstration quality bounds what a policy can learn. The GELLO paper (Wu et al., 2023) states it directly: "the performance of the learned policies is bottlenecked by the quality, scale, and variety of the demonstration data".
+
+  Interfaces differ in how the operator's input maps to the robot. Joint-space devices, chiefly a [leader arm](/glossary/leader-follower-arm), command each joint directly and need no inverse kinematics. Task-space devices such as VR controllers, 3D mice and phones command an end-effector pose that must be converted to joint targets. The ALOHA system in Zhao et al. (2023) used joint-space mapping and recorded at 50 Hz.
+
+  In LeRobot v0.6.1, `lerobot-teleoperate` drives a robot from a teleoperator such as `so101_leader`, and `lerobot-record` writes episodes to a [LeRobotDataset](/glossary/lerobot-dataset). The resulting dataset is the training set for policies such as [ACT](/policy/act) and [SmolVLA](/policy/smolvla).
+
+  The teleoperation interface determines the action space in the dataset. A leader-arm recording on an [SO-101](/robot/so101) stores joint-position targets; an end-effector recording does not, and a policy trained on one cannot be run on the other without conversion. Teleoperation rate matters too: in the ACT paper's user study, lowering the teleoperation frequency from 50 Hz to 5 Hz made human operators 62% slower.
+related: [leader-follower-arm, imitation-learning, behavioral-cloning, lerobot-dataset, control-rate]
+policies: [act, smolvla, hil-serl]
+sources:
+  - id: ev-gello-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2309.13037
+    date: 2023-09-22
+    verified_on: 2026-10-24
+    summary: "GELLO: teleoperated demonstrations bound learned-policy performance."
+    quote: "However, the performance of the learned policies is bottlenecked by the quality, scale, and variety of the demonstration data."
+  - id: ev-act-paper-full
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/html/2304.13705
+    date: 2023-04-23
+    verified_on: 2026-10-24
+    summary: "ACT paper: ALOHA teleoperates and records at 50 Hz; 5 Hz teleoperation is 62% slower."
+    quote: "Lowering the frequency results in a 62% slowdown in completion time."
+  - id: ev-lerobot-il-robots
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/il_robots.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot uses a teleoperation device such as a leader arm to record trajectories."
+    quote: "such as a leader arm or keyboard to teleoperate the robot and record its motion trajectories."

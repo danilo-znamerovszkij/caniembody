@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "framework.schema.json",
+  "type": "object",
+  "required": ["id", "name", "repo", "current_version", "current_version_date"],
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/id" },
+    "name": { "type": "string" },
+    "maintainer": { "type": "string" },
+    "repo": { "type": "string", "pattern": "^[\\w.-]+/[\\w.-]+$", "description": "GitHub owner/repo, polled by the version watcher" },
+    "docs_url": { "$ref": "common.schema.json#/$defs/url" },
+    "license": { "type": "string" },
+    "current_version": { "type": "string" },
+    "current_version_date": { "$ref": "common.schema.json#/$defs/date" },
+    "versioning": { "enum": ["releases", "tags", "none"], "description": "none = no tagged releases; pin by commit" },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

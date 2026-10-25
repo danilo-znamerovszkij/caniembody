@@ -1,0 +1,37 @@
+robot: so100
+policy: pi0
+state: works
+framework: lerobot
+framework_version_tested: 0.6.1
+capabilities:
+  train:
+    state: works
+    notes: pi0 (3.5B) multi-task baseline trained on the SO100 tasks in the SmolVLA paper.
+    evidence:
+    - ev-smolvla-paper-so100
+  inference_real:
+    state: works
+    evidence:
+    - ev-lerobot-inference-pi0-rtc
+    - ev-smolvla-paper-so100
+evidence:
+- id: ev-lerobot-inference-pi0-rtc
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/inference.mdx
+  date: '2026-08-03'
+  verified_on: '2026-10-24'
+  versions:
+    lerobot: 0.6.1
+  summary: 'LeRobot v0.6.1 rollout guide: Real-Time Chunking example deploys a pi0 policy on so100_follower.'
+  quote: |2-
+        --policy.path=${HF_USER}/pi0_policy \
+        --robot.type=so100_follower \
+- id: ev-smolvla-paper-so100
+  tier: upstream-documented
+  type: paper
+  url: https://arxiv.org/html/2506.01844v1
+  date: '2025-06-02'
+  verified_on: '2026-10-24'
+  summary: 'SmolVLA paper (Hugging Face/LeRobot team), Table 3: real-world SO100 benchmark (pick-place, stacking, sorting) comparing ACT (single-task), pi0 3.5B and SmolVLA (multi-task).'
+  quote: 'Table 3: Real-world benchmarks (SO100). Success rate (%) across three tasks using policies trained in multi-task and single-task settings.'

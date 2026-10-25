@@ -1,0 +1,24 @@
+robot: koch
+policy: pi0
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-rgarreta-pi0-koch
+    - ev-hub-ssaito-pi0-koch
+evidence:
+- id: ev-hub-rgarreta-pi0-koch
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/rgarreta/pi0_koch_pick_place_lego_v8
+  verified_on: '2026-10-24'
+  summary: "config.json type=pi0; train_config.json dataset rgarreta/koch_pick_place_lego_v8 whose meta/info.json robot_type=koch (50 episodes)."
+- id: ev-hub-ssaito-pi0-koch
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/ssaito/pi0_koch_test_6
+  verified_on: '2026-10-24'
+  summary: "config.json type=pi0; train_config.json dataset ssaito/koch_test_104 whose meta/info.json robot_type=koch (50 episodes)."

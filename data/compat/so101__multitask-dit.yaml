@@ -1,0 +1,26 @@
+robot: so101
+policy: multitask-dit
+state: partial
+partial_scope: Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source.
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-tchuang-dit-so101
+    - ev-hub-henryzhang-dit-so101
+evidence:
+- id: ev-hub-tchuang-dit-so101
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/tc-huang/multi_task_dit_mahjong_v1_tray07_twos_dart
+  date: '2026-10-13'
+  verified_on: '2026-10-24'
+  summary: config.json type=multi_task_dit; train_config.json dataset.repo_id=tc-huang/mahjong_v1_tray07_twos_dart, whose meta/info.json robot_type=so101_follower (1000 episodes).
+- id: ev-hub-henryzhang-dit-so101
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/HenryZhang/VLAReplica_dit_v4_expert
+  date: '2026-04-15'
+  verified_on: '2026-10-24'
+  summary: config.json type=multi_task_dit; train_config.json dataset.repo_id=HenryZhang/VLAReplicaMerge_v4, whose meta/info.json robot_type=so101_follower (250 episodes).

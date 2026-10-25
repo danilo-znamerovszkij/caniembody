@@ -1,0 +1,44 @@
+robot: openarm
+policy: smolvla
+state: works
+framework: lerobot
+framework_version_tested: "0.6.1"
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-gtgando-smolvla-openarm, ev-hub-tetraxcode-smolvla-openarm]
+  inference_real:
+    state: works
+    notes: "Documented on the bimanual OpenArm (--robot.type=bi_openarm_follower, three OpenCV cameras) with OpenArm Mini leaders, running the policy under lerobot-rollout --strategy.type=dagger with RTC inference (--inference.type=rtc); human interventions are recorded for fine-tuning."
+    evidence: [ev-lerobot-hil-openarm-default, ev-lerobot-hil-openarm-mode]
+evidence:
+  - id: ev-lerobot-hil-openarm-default
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hil_data_collection.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot's human-in-the-loop data collection guide runs trained policies on the bimanual OpenArm follower by default."
+    quote: "> The provided commands default to `bi_openarm_follower` + `bi_openarm_mini`."
+  - id: ev-lerobot-hil-openarm-mode
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hil_data_collection.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "The guide names this policy for the lerobot-rollout dagger command on bi_openarm_follower (RTC inference (--inference.type=rtc))."
+    quote: "**With RTC for large models (Pi0, Pi0.5, SmolVLA):**"
+  - id: ev-hub-gtgando-smolvla-openarm
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/gtgando/openarm-smolvla-pick-place-40k
+    verified_on: 2026-10-24
+    summary: "config.json type=smolvla; train_config.json dataset gtgando/openarm-pick-place-50ep whose meta/info.json robot_type=openarm_follower (100 episodes)."
+  - id: ev-hub-tetraxcode-smolvla-openarm
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/TetraxCode/my_smolvla_openarm
+    verified_on: 2026-10-24
+    summary: "config.json type=smolvla; train_config.json dataset TetraxCode/openarm_pick_place_v1 whose meta/info.json robot_type=openarm_bimanual (19 episodes); fine-tuned from lerobot/smolvla_base."

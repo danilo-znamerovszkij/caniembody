@@ -1,0 +1,17 @@
+robot: rebot-b601
+policy: vla-jepa
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-nikodembartnik-vlajepa-rebot
+evidence:
+- id: ev-hub-nikodembartnik-vlajepa-rebot
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/nikodembartnik/vla_jepa_rebot_towel_folding_2026-10-12_14-10-32
+  verified_on: '2026-10-24'
+  summary: "config.json type=vla_jepa; train_config.json dataset nikodembartnik/rebot_mini_towel_folding_merged whose meta/info.json robot_type=rebot_b601_follower (LeRobot-native B601-DM, 200 episodes); pretrained from lerobot/VLA-JEPA-Pretrain."

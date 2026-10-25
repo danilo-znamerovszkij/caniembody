@@ -1,0 +1,38 @@
+robot: arx5
+policy: pi05
+state: works-with-caveats
+framework: openpi
+caveats:
+  - "Community-reported only (RoboChallenge benchmark by Dexmal/Hugging Face, plus a community checkpoint); not documented by Physical Intelligence or maintainer-tested."
+  - "Per-task fine-tuned π0.5 succeeded unevenly on ARX5 tasks, e.g. 90% on place shoes on rack and put cup on coaster but 0% on arrange paper cups."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-robochallenge-methods, ev-hub-pravsels-pi05]
+  inference_real:
+    state: works-with-caveats
+    evidence: [ev-robochallenge-hw, ev-robochallenge-methods]
+evidence:
+  - id: ev-robochallenge-hw
+    tier: community-reported
+    type: paper
+    url: https://arxiv.org/abs/2510.17950
+    date: 2025-10-20
+    verified_on: 2026-10-24
+    summary: "RoboChallenge (Table30) real-robot benchmark fleet includes a table-mounted ARX-5 arm; 10 of the 30 tasks run on ARX5."
+    quote: "ARX-5 arm. A 6-DOF ARX-5 arm, mounted on a table."
+  - id: ev-robochallenge-methods
+    tier: community-reported
+    type: paper
+    url: https://arxiv.org/abs/2510.17950
+    date: 2025-10-20
+    verified_on: 2026-10-24
+    summary: "π0.5 is one of the baselines fine-tuned and evaluated on all 30 Table30 tasks including the ARX5 tasks; it was the strongest model overall (43.7% average success)."
+    quote: "As our initial survey, we tested four popular open source VLA algorithms:"
+  - id: ev-hub-pravsels-pi05
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/pravsels/pi05-arx5-multitask-v1
+    date: 2026-03-24
+    verified_on: 2026-10-24
+    summary: "Model card: π0.5 (openpi, Orbax checkpoints) fine-tuned from pi05_base on 186 ARX5 single-arm and bimanual LeRobot v2.1 datasets; training-loss table only, no robot eval."

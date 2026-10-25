@@ -1,0 +1,49 @@
+robot: so101
+policy: smolvla
+state: works
+framework: lerobot
+framework_version_tested: 0.6.1
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-smolvla-paper-so101
+  inference_real:
+    state: works
+    evidence:
+    - ev-lerobot-smolvla-doc
+    - ev-smolvla-paper-so101
+  teleop_record:
+    state: works
+    evidence:
+    - ev-smolvla-paper-datasets
+evidence:
+- id: ev-lerobot-smolvla-doc
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/smolvla.mdx
+  date: '2026-08-03'
+  verified_on: '2026-10-24'
+  versions:
+    lerobot: 0.6.1
+  summary: 'LeRobot v0.6.1 SmolVLA guide: fine-tune smolvla_base, then run the fine-tuned model on the real robot with lerobot-rollout --robot.type=so101_follower; its figure shows real-world SO101 results.'
+  quote: |-
+    lerobot-rollout \
+      --strategy.type=base \
+      --robot.type=so101_follower \
+- id: ev-smolvla-paper-so101
+  tier: upstream-documented
+  type: paper
+  url: https://arxiv.org/html/2506.01844v1
+  date: '2025-06-02'
+  verified_on: '2026-10-24'
+  summary: 'SmolVLA paper, Table 4: real-world SO101 Pick-Place-Lego benchmark, ACT vs SmolVLA, in- and out-of-distribution.'
+  quote: Similarly, on SO101 (see Table 4), SmolVLA surpasses ACT in both in-distribution and out-of-distribution (OOD) settings.
+- id: ev-smolvla-paper-datasets
+  tier: upstream-documented
+  type: paper
+  url: https://arxiv.org/html/2506.01844v1
+  date: '2025-06-02'
+  verified_on: '2026-10-24'
+  summary: 'SmolVLA paper: real-world evaluation datasets were recorded on SO-100 (three tasks) and SO-101 (one task).'
+  quote: For real-world evaluation, we collected three datasets using the SO-100 robot arm

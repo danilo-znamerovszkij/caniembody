@@ -1,0 +1,36 @@
+robot: trossen-widowx
+policy: pi0
+state: works-with-caveats
+framework: openpi
+caveats:
+  - "Trossen labels its openpi tutorial experimental, with minimal testing on the Trossen AI setup."
+  - "Fine-tuning is required (the π0 base mixture has no Trossen AI data); in the vendor's tests the 50-episode fine-tune failed on a different block size/colour, a wooden block, and under disturbances."
+  - "Uses Trossen's openpi fork, which trains on LeRobot Dataset v2 (LeRobot v0.1.0); v3.0 datasets are not compatible with that training pipeline."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-trossen-openpi-tutorial]
+  inference_real:
+    state: works
+    evidence: [ev-trossen-openpi-tutorial]
+evidence:
+  - id: ev-trossen-openpi-tutorial
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://docs.trossenrobotics.com/trossen_arm/v1.9/tutorials/openpi.html
+    verified_on: 2026-10-24
+    summary: "Trossen's openpi tutorial fine-tunes π0 (LoRA) on a 50-episode bimanual WidowX AI handover dataset, serves it with openpi's policy server and drives the arms through the LeRobot plugin client; reports one success and three failure scenarios."
+    quote: "openpi_trossen_ai_red_block [success] : Robot successfully picks up and transfers red block in second try."
+  - id: ev-trossen-pi0-openpi-ckpt
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/TrossenRoboticsCommunity/pi0-block-transfer-trossen-ai-openpi
+    verified_on: 2026-10-24
+    summary: "Trossen-published openpi (orbax params + assets/trossen/norm_stats.json) π0 checkpoint for Trossen AI block transfer, linked from the tutorial as the fine-tuned π0 checkpoint."
+  - id: ev-trossen-pi0-lerobot-ckpt
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/TrossenRoboticsCommunity/pi0-handover-cube-widowxai
+    date: 2025-08-05
+    verified_on: 2026-10-24
+    summary: "LeRobot route (training only): config.json type=pi0; train_config dataset TrossenRoboticsCommunity/bimanual-widowxai-handover-cube, whose meta/info.json robot_type=bi_widowxai_follower. Card is auto-generated; no on-robot results."

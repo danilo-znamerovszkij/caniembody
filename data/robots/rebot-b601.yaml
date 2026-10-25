@@ -1,0 +1,92 @@
+id: rebot-b601
+name: reBot Arm B601-DM
+maker: Seeed Studio
+aliases: [reBot B601, reBot B601-DM, reBot Arm B601, reBot-DevArm, rebot_b601_follower, bi_rebot_b601_follower]
+class: arm
+summary: >-
+  Open-source, low-cost 6-DoF arm with gripper from Seeed Studio, driven by Damiao CAN motors. It is teleoperated with
+  the reBot Arm 102 leader (FashionStar UART servos). LeRobot supports single-arm and bimanual setups natively since
+  0.6.0.
+dof: 6
+dof_note: "6 + 1 gripper ('6+1 DOF' per Seeed)."
+arms: 1
+actuators: "Damiao CAN motors (follower); FashionStar UART smart servos on the reBot Arm 102 leader"
+payload_g: {max: 1500}
+repeatability_mm: {max: 0.2}
+specs_source_ref: ev-seeed-rebot-store
+open_source: true
+license: "CERN-OHL-W-2.0 (hardware), Apache-2.0 (software)"
+homepage: https://github.com/Seeed-Projects/reBot-DevArm
+frameworks:
+  lerobot:
+    support: native
+    since: "0.6.0"
+    robot_type: [rebot_b601_follower, bi_rebot_b601_follower]
+    docs_url: https://huggingface.co/docs/lerobot/rebot_b601
+    note: >-
+      Leader: rebot_102_leader / bi_rebot_102_leader. Install extra: pip install -e ".[rebot]" (pulls in motorbridge).
+      Re-zeroes on every connect. An MIT control mode was added in 0.6.0 (PR #3778). The Robstride-motor sibling
+      B601-RS is not a LeRobot native type.
+    source_ref: ev-lerobot-rebot-doc
+  ros2:
+    support: upstream-repo
+    repo_url: https://github.com/Seeed-Projects/reBot-DevArm
+    note: "Seeed lists ROS2 integration (kinematics, trajectory planning, gravity compensation) as done."
+    source_ref: ev-seeed-rebot-readme
+sensors_supported: [rgb-mono, rgb-dual, rgb-multi, realsense-depth]
+teleop_options: ["reBot Arm 102 leader (rebot_102_leader / bi_rebot_102_leader)", "PICO 4 VR (third-party plugin, per Seeed)"]
+notes: >-
+  Seeed sells the arm as motor, structural, gripper, full and pre-assembled kits. Per-variant prices load dynamically
+  on the store page and are not recorded.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/README.md
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot README lists reBot B601 among natively supported hardware."
+    quote: "SO100, LeKiwi, Koch, HopeJR, OMX, EarthRover, Reachy2, Gamepads, Keyboards, Phones, OpenARM, Unitree G1, reBot B601."
+  - id: ev-lerobot-rebot-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/rebot_b601.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot reBot guide: registered follower/leader types, single and bimanual."
+    quote: "| `rebot_b601_follower` | single-arm B601-DM follower robot | | `bi_rebot_b601_follower` | bimanual (dual-arm) follower robot |"
+  - id: ev-lerobot-rebot-src
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/robots/rebot_b601_follower/config_rebot_b601_follower.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Config: B601-DM is a 6-DOF arm plus gripper on Damiao CAN motors."
+    quote: "The B601-DM is a 6-DOF arm plus gripper driven by Damiao CAN motors."
+  - id: ev-lerobot-v060-rebot
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.6.0
+    date: 2026-07-06
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.0"}
+    summary: "reBot B601-DM natively integrated in v0.6.0."
+    quote: "feat(robots): natively integrate Seeed Studio reBot B601-DM arm by @pkooij in https://github.com/huggingface/lerobot/pull/3624"
+  - id: ev-seeed-rebot-store
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://www.seeedstudio.com/reBot-Arm-B601-DM-Bundle.html
+    verified_on: 2026-10-24
+    summary: "Seeed store: 1.5 kg rated payload, ±0.2 mm repeatability, 6+1 DoF."
+    quote: "The reBot Arm B601-DM combines a 1.5 kg rated payload, ±0.2 mm repeatability"
+  - id: ev-seeed-rebot-readme
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/Seeed-Projects/reBot-DevArm/blob/44bc1ed11bc1c3c2db035b51507a6ecae34fc79c/README.md
+    verified_on: 2026-10-24
+    summary: "Seeed reBot-DevArm README: licenses, kit options, ROS2 and LeRobot integration status."
+    quote: "| ROS2 Integration | ✅ Done | Kinematics, trajectory planning, gravity compensation |"

@@ -1,0 +1,23 @@
+robot: trossen-widowx
+policy: diffusion
+state: works-with-caveats
+framework: lerobot
+caveats:
+  - "Community-reported only; not documented upstream or maintainer-tested."
+  - "The single report concerns a policy deliberately overfit to one pick-and-place trajectory, not a generalizing policy."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-lerobot-issue-1811]
+  inference_real:
+    state: works
+    evidence: [ev-lerobot-issue-1811]
+evidence:
+  - id: ev-lerobot-issue-1811
+    tier: community-reported
+    type: github-issue
+    url: https://github.com/huggingface/lerobot/issues/1811
+    date: 2025-08-29
+    verified_on: 2026-10-24
+    summary: "A user fine-tuning on a Trossen WidowX AI pick-and-place dataset reports that ACT and Diffusion Policy overfit to one trajectory and work when rolled out on the physical robot (the issue itself is about π0-FAST failing to converge)."
+    quote: "I was able to get  ACT and diffusion policy to overfit on the same dataset and when rolled out on the physical robot works perfectly unlike pi0Fast"

@@ -1,0 +1,9 @@
+id: openvla-oft
+name: OpenVLA-OFT
+maintainer: Moo Jin Kim et al.
+repo: moojink/openvla-oft
+docs_url: https://github.com/moojink/openvla-oft
+license: MIT
+current_version: main
+current_version_date: 2025-09-09
+versioning: none

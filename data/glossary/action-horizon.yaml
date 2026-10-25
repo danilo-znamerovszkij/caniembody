@@ -1,0 +1,59 @@
+id: action-horizon
+term: "Action horizon"
+aka: ["prediction horizon", "execution horizon", "chunk size", "n_action_steps"]
+short: "How many future action steps a policy predicts per call (prediction horizon) and how many it executes before replanning (execution horizon)."
+body: |
+  "Action horizon" names two different quantities, and published tables often mix them. The *prediction horizon* is the number of future actions the model outputs per inference call, which is the length of the [action chunk](/glossary/action-chunking). The *execution horizon* is how many of those actions the robot executes before the policy is called again. Chi et al.'s Diffusion Policy paper (2023) defines both: "T_o as the observation horizon, T_p as the action prediction horizon and T_a as the action execution horizon". It found an execution horizon of 8 steps optimal for most of its tasks, trading temporal consistency against reaction time.
+
+  Names differ by codebase. In LeRobot v0.6.1, [ACT](/policy/act), [SmolVLA](/policy/smolvla) and [π0](/policy/pi0) call the prediction horizon `chunk_size` and the execution horizon `n_action_steps`; [Diffusion Policy](/policy/diffusion) calls the prediction horizon `horizon`. The π0 configuration notes that `chunk_size` is what openpi calls `action_horizon`. Defaults are 100/100 for ACT, 50/50 for SmolVLA and π0, 64/32 for Diffusion Policy, and 40/40 for [GR00T N1.7](/policy/groot-n1-7).
+
+  A horizon in steps means nothing without the [control rate](/glossary/control-rate). Fifty steps is one second at 50 Hz and about 1.7 seconds at 30 Hz. In time units, the execution horizon is the longest the robot runs open-loop between observations under synchronous inference.
+
+  A common misconception is that longer horizons are simply better or worse. Longer chunks mean fewer model calls and smoother motion but slower reaction to change. LeRobot's async-inference docs also warn that larger chunks "might also result in less precise actions". The right value depends on the task, the control rate and [inference latency](/glossary/inference-latency).
+related: [action-chunking, control-rate, inference-latency, diffusion-policy, real-time-chunking]
+policies: [act, smolvla, pi0, diffusion, groot-n1-7]
+sources:
+  - id: ev-chi-2023-full
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/html/2303.04137
+    date: 2023-03-07
+    verified_on: 2026-10-24
+    summary: "Diffusion Policy defines prediction and execution horizons; 8-step execution optimal for most tasks."
+    quote: "found the action horizon of 8 steps to be optimal for most tasks that we tested."
+  - id: ev-lerobot-pi0-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/pi0/configuration_pi0.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot π0 chunk_size equals openpi action_horizon."
+    quote: "chunk_size: int = 50  # Number of action steps to predict, in openpi called \"action_horizon\""
+  - id: ev-lerobot-diffusion-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/diffusion/configuration_diffusion.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot Diffusion Policy default horizon 64, n_action_steps 32."
+    quote: "horizon: int = 64"
+  - id: ev-lerobot-groot-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/groot/configuration_groot.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot GR00T N1.7 default chunk_size 40."
+    quote: "chunk_size: int = 40"
+  - id: ev-lerobot-async-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/async.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot async docs: larger chunks may reduce precision."
+    quote: "However, larger values of `actions_per_chunk` might also result in less precise actions, due to the compounding errors consequent to predicting actions over longer timespans."

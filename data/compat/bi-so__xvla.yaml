@@ -1,0 +1,41 @@
+robot: bi-so
+policy: xvla
+state: partial
+partial_scope: Fine-tuning on bimanual SO data is documented upstream (so101_bimanual action mode); on-robot inference on a bimanual SO is not documented by a primary source.
+framework: lerobot
+framework_version_tested: 0.6.1
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-lerobot-xvla-bimanual-train
+    - ev-lerobot-xvla-so101-bimanual-mode
+    - ev-hub-zonglin-xvla-biso100
+evidence:
+- id: ev-lerobot-xvla-bimanual-train
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/xvla.mdx
+  date: '2026-08-03'
+  verified_on: '2026-10-24'
+  versions:
+    lerobot: 0.6.1
+  summary: 'LeRobot v0.6.1 X-VLA guide: ''Training on Bimanual Robot'' example fine-tunes lerobot/xvla-base on a bimanual SO-100 dataset with --policy.action_mode=so101_bimanual.'
+  quote: --dataset.repo_id=<USER>/bimanual-so100-handover-cube \
+- id: ev-lerobot-xvla-so101-bimanual-mode
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/xvla.mdx
+  date: '2026-08-03'
+  verified_on: '2026-10-24'
+  versions:
+    lerobot: 0.6.1
+  summary: LeRobot v0.6.1 X-VLA ships a dedicated so101_bimanual action mode (12-D real action = 2x(5 joints + gripper), padded to the 20-D model action).
+  quote: 'The `so101_bimanual` action mode handles the mismatch between model output (20D) and real robot control (12D):'
+- id: ev-hub-zonglin-xvla-biso100
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/zonglin11/lerobot_bi_so100_pickup_lego
+  date: '2025-12-12'
+  verified_on: '2026-10-24'
+  summary: config.json type=xvla; train_config.json dataset.repo_id=zonglin11/lerobot_bi_so100_pickup_lego, whose meta/info.json robot_type=bi_so100_follower (12 episodes).

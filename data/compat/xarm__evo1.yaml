@@ -1,0 +1,30 @@
+robot: xarm
+policy: evo1
+state: works-with-caveats
+framework: evo-1
+caveats:
+  - "Evidence covers the xArm6 only, driven by Evo-1's own websocket client script (official xArmAPI), not by the LeRobot xArm plugin; no xArm checkpoint is published."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-evo1-paper]
+  inference_real:
+    state: works
+    evidence: [ev-evo1-paper, ev-evo1-xarm6-client]
+evidence:
+  - id: ev-evo1-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2511.04555
+    date: 2025-11-06
+    verified_on: 2026-10-24
+    summary: "The Evo-1 paper's real-world experiments train and evaluate Evo-1 on a 6-DoF xArm6 (wrist + fixed camera) across four manipulation tasks."
+    quote: "To evaluate the model’s performance in diverse real-world scenarios, we conduct experiments using a 6-DoF xArm6 robotic arm equipped with a parallel gripper, and design four manipulation tasks involving diverse object manipulation and real-time interaction"
+  - id: ev-evo1-xarm6-client
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/MINT-SJTU/Evo-1/blob/5fd14b015013c4fd0aacf5f8f48f868ca9b870a2/README.md
+    date: 2026-08-18
+    verified_on: 2026-10-24
+    summary: "The official Evo-1 repo ships an xArm6 inference client (Evo_1/scripts/Evo1_client_xarm6.py, using xarm.wrapper.XArmAPI)."
+    quote: "We provide an example of inference client script [Evo1_client_xarm6](Evo_1/scripts/Evo1_client_xarm6.py) for xArm6."

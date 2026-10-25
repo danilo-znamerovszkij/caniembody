@@ -1,0 +1,110 @@
+id: fastwam
+name: Fast-WAM
+aliases: [fastwam, FastWAM, Fast-WAM]
+family: world-model
+summary: >-
+  World Action Model on a Wan2.2-TI2V-5B video backbone plus a 1B action expert, trained with a joint flow-matching
+  objective over action chunks and future video latents. Keeps video modeling during training but predicts actions
+  directly at inference, without generating future frames.
+authors: Tianyuan Yuan, Zibin Dong, Yicheng Liu, Hang Zhao (IIIS, Tsinghua University; Galaxea AI)
+paper_url: https://arxiv.org/abs/2603.16666
+params: 6000000000
+params_note: "Authors state a total model size of 6B parameters (Wan2.2-5B backbone + 1B action expert), rounded."
+params_source_ref: ev-fastwam-paper-params
+backbone: Wan2.2-TI2V-5B (video DiT, text encoder, video VAE) + 1B action expert
+action_output: flow-matching
+action_chunking: true
+arch_source_ref: ev-fastwam-paper-arch
+open_weights: true
+frameworks:
+  lerobot:
+    support: native
+    since: "0.6.0"
+    policy_type: fastwam
+    docs_url: https://huggingface.co/docs/lerobot/fastwam
+    note: "Added in v0.6.0 (\"feat(policies): Add FastWAM Policy\"). Default action_horizon 32. DiT uses PyTorch SDPA only (flash-attn has no effect)."
+    source_ref: ev-lerobot-fastwam-config
+checkpoints:
+  - hub_id: lerobot/fastwam_base
+    note: "LeRobot-org base checkpoint (Hub license tag apache-2.0)."
+  - hub_id: lerobot/fastwam_libero_uncond_2cam224
+    note: "LeRobot-org LIBERO checkpoint, 2 cameras at 224 px (no Hub license tag)."
+  - hub_id: lerobot/fastwam_robotwin_uncond_3cam_384
+    note: "LeRobot-org RoboTwin checkpoint, 3 cameras (no Hub license tag)."
+  - hub_id: ZibinDong/fastwam_libero_uncond_2cam224
+    note: "Checkpoint used for the LIBERO results in the LeRobot docs (96.4% average over 2000 episodes)."
+  - hub_id: yuanty/fastwam
+    note: "Released upstream checkpoints."
+observation_space:
+  cameras: {min: 1}
+  state: observation.state when policy.proprio_dim is set (optional)
+  language: required
+  source_ref: ev-lerobot-fastwam-docs-data
+notes: >-
+  Family world-model: the LeRobot docs call FastWAM a "World Action Model policy" and the paper frames it against
+  imagine-then-execute world action models; the video branch is trained but not rolled out at inference. Language:
+  a task instruction is required, or precomputed `context`/`context_mask` text tensors. Multiple cameras are
+  concatenated along width to `policy.image_size` (default one 224x448 image). The LeRobot docs' LIBERO reproduction
+  ran in float32 on 1x H20 140 GB; that is a reference setup, not a stated minimum, so requirements are unset (not in
+  the LeRobot compute hardware guide). Code license: the GitHub API reports NOASSERTION for yuantianyuan01/FastWAM, so
+  it is left unknown; weights license is unknown for the upstream repo. Not named by the RTC or PEFT docs.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-fastwam-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/fastwam.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: LeRobot docs describe FastWAM as a World Action Model that predicts actions directly at inference.
+    quote: "FastWAM keeps video modeling during training, but uses direct action prediction at inference time instead of iteratively generating future observations."
+  - id: ev-lerobot-fastwam-docs-data
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/fastwam.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Data requirements: one or more cameras, optional state (proprio_dim), action, and a language task or precomputed context."
+    quote: "a language task instruction through the dataset task field, or precomputed `context` and `context_mask` tensors"
+  - id: ev-lerobot-fastwam-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/fastwam/configuration_fastwam.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Policy type string is `fastwam`; default action_horizon 32."
+    quote: '@PreTrainedConfig.register_subclass("fastwam")'
+  - id: ev-lerobot-v060-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.6.0
+    date: 2026-07-06
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.0"}
+    summary: FastWAM was added in LeRobot v0.6.0.
+    quote: "* feat(policies): Add FastWAM Policy by @Maximellerbach in https://github.com/huggingface/lerobot/pull/3834"
+  - id: ev-fastwam-paper-params
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2603.16666v1
+    date: 2026-03-17
+    verified_on: 2026-10-24
+    summary: Fast-WAM paper states a 1B action expert and 6B total parameters on a Wan2.2-5B backbone.
+    quote: "resulting in a 1B action expert and a total model size of 6B parameters."
+  - id: ev-fastwam-paper-arch
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2603.16666v1
+    date: 2026-03-17
+    verified_on: 2026-10-24
+    summary: Fast-WAM uses a joint flow-matching objective over action tokens and future video latents.
+    quote: "Fast-WAM is trained with a joint flow matching objective over action tokens and future video latents."
+  - id: ev-hub-fastwam-checkpoints
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/lerobot/fastwam_base
+    verified_on: 2026-10-24
+    summary: "Hub API: lerobot/fastwam_base (license:apache-2.0), lerobot/fastwam_libero_uncond_2cam224, lerobot/fastwam_robotwin_uncond_3cam_384, ZibinDong/fastwam_libero_uncond_2cam224 and yuanty/fastwam exist (no license tags on the latter four)."

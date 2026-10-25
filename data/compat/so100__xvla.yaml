@@ -1,0 +1,26 @@
+robot: so100
+policy: xvla
+state: partial
+partial_scope: Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source.
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-mcbuehler-xvla-so100
+    - ev-hub-beilinghamburger-xvla-so100
+evidence:
+- id: ev-hub-mcbuehler-xvla-so100
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/mcbuehler/xvla_so100_pp_3cams_black_v0
+  date: '2026-01-02'
+  verified_on: '2026-10-24'
+  summary: config.json type=xvla; train_config.json dataset.repo_id=mcbuehler/pp_3cams_black_v0, whose meta/info.json robot_type=so100_follower (51 episodes).
+- id: ev-hub-beilinghamburger-xvla-so100
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/Beilinghamburger/xvla_so100_vla_200
+  date: '2025-12-16'
+  verified_on: '2026-10-24'
+  summary: config.json type=xvla; train_config.json dataset.repo_id=Beilinghamburger/so100_200, whose meta/info.json robot_type=so100_follower (200 episodes).

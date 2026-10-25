@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "common.schema.json",
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "date": { "type": "string", "format": "date" },
+    "url": { "type": "string", "format": "uri", "pattern": "^https://" },
+    "tier": { "enum": ["upstream-documented", "maintainer-tested", "community-reported", "inferred"] },
+    "state": { "enum": ["works", "works-with-caveats", "partial", "not-supported", "planned", "unknown"] },
+    "range": {
+      "type": "object",
+      "properties": { "min": { "type": "number" }, "max": { "type": "number" } },
+      "additionalProperties": false
+    },
+    "versions": {
+      "description": "Exact software versions in play, e.g. {lerobot: '0.6.1', torch: '2.9'}",
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["id", "tier", "type", "url", "verified_on", "summary"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^ev-[a-z0-9-]+$" },
+        "tier": { "$ref": "#/$defs/tier" },
+        "type": {
+          "enum": ["official-docs", "release-notes", "source-code", "model-card", "paper", "maintainer-run",
+                   "github-issue", "github-pr", "community-post", "blog", "hub-checkpoint", "vendor-docs", "spec-derivation"]
+        },
+        "url": { "$ref": "#/$defs/url" },
+        "date": { "$ref": "#/$defs/date", "description": "When the source itself was published/released, if known" },
+        "verified_on": { "$ref": "#/$defs/date", "description": "When a human/agent last confirmed the source says this" },
+        "versions": { "$ref": "#/$defs/versions" },
+        "summary": { "type": "string", "minLength": 10 },
+        "quote": { "type": "string", "description": "Short verbatim excerpt from the source supporting the claim. Required for upstream-documented." },
+        "archived_url": { "$ref": "#/$defs/url" }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        { "if": { "properties": { "tier": { "const": "upstream-documented" } } }, "then": { "required": ["quote"] } },
+        { "if": { "properties": { "tier": { "const": "inferred" } } }, "then": { "properties": { "type": { "const": "spec-derivation" } } } }
+      ]
+    },
+    "sources": { "type": "array", "items": { "$ref": "#/$defs/evidence" } },
+    "measurement": {
+      "description": "One measured inference run. runtime/precision/cameras are mandatory (spec §4.3).",
+      "type": "object",
+      "required": ["compute", "runtime", "precision", "cameras", "source_ref"],
+      "properties": {
+        "compute": { "$ref": "#/$defs/id" },
+        "runtime": { "enum": ["pytorch-eager", "torch-compile", "onnx", "onnx-split", "tensorrt", "vla-cpp", "llama-cpp", "mlx", "other"] },
+        "runtime_note": { "type": "string" },
+        "precision": { "enum": ["fp32", "tf32", "bf16", "fp16", "fp8", "int8", "int4", "nf4", "mixed"] },
+        "cameras": { "type": "integer", "minimum": 0 },
+        "resolution": { "type": "string", "pattern": "^[0-9]+x[0-9]+$" },
+        "batch_size": { "type": "integer", "minimum": 1 },
+        "inference_latency_ms": {
+          "type": "object",
+          "properties": { "p50": { "type": "number" }, "p95": { "type": "number" }, "mean": { "type": "number" } },
+          "additionalProperties": false
+        },
+        "inference_hz": { "type": "number", "description": "Model calls per second" },
+        "control_rate_hz": { "type": "number", "description": "Executed actions per second, after chunking" },
+        "action_chunk": { "type": "integer", "minimum": 1 },
+        "vram_gb": { "type": "number", "description": "Peak device memory, GB" },
+        "rtc_enabled": { "type": "boolean" },
+        "outcome": { "enum": ["runs", "oom", "too-slow", "error"], "default": "runs" },
+        "platform": { "type": "object", "additionalProperties": { "type": "string" } },
+        "note": { "type": "string" },
+        "source_ref": { "type": "string", "pattern": "^ev-[a-z0-9-]+$" }
+      }
+    }
+  }
+}

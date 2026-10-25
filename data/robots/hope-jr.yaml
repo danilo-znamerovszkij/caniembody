@@ -1,0 +1,94 @@
+id: hope-jr
+name: HopeJR
+maker: TheRobotStudio (with Hugging Face)
+aliases: [HOPEJr, Hope Jr, HopeJr arm, hope_jr_arm, hope_jr_hand]
+class: arm
+summary: >-
+  Open-source DIY humanoid project from TheRobotStudio. LeRobot integrates its 7-motor arm and its tendon-driven
+  dexterous hand as two separate robots. Both are teleoperated with the Homunculus exoskeleton and glove.
+dof: 7
+dof_note: "Arm: 7 motors (shoulder pitch/yaw/roll, elbow flex, wrist roll/yaw/pitch). The hand is a separate robot with 16 actuators."
+arms: 1
+actuators: >-
+  Arm: 1x SM8512BL (shoulder pitch) + 6x Feetech STS3250. Hand: 16x Feetech SCS0009 micro servos.
+specs_source_ref: ev-lerobot-hopejr-arm
+open_source: true
+homepage: https://github.com/TheRobotStudio/HOPEJr
+frameworks:
+  lerobot:
+    support: native
+    since: "0.3.2"
+    robot_type: [hope_jr_arm, hope_jr_hand]
+    docs_url: https://huggingface.co/docs/lerobot/hope_jr
+    note: >-
+      Arm and hand are separate robot types, teleoperated by homunculus_arm and homunculus_glove. Install extra:
+      pip install -e ".[hopejr]". Added in PR #935, before the first tagged release (0.3.2).
+    source_ref: ev-lerobot-hopejr-config
+teleop_options: ["Homunculus exoskeleton arm (homunculus_arm)", "Homunculus glove (homunculus_glove)"]
+notes: >-
+  The maker repo contains both a full-humanoid design (Humanoid/) and the arm, hand and exoskeleton work integrated
+  with LeRobot (Arm/). LeRobot only integrates the arm and hand, not the full humanoid. GitHub detects no license file
+  in the HOPEJr repo, so the license is left blank.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/README.md
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot README lists HopeJR among natively supported hardware."
+    quote: "SO100, LeKiwi, Koch, HopeJR, OMX, EarthRover, Reachy2, Gamepads, Keyboards, Phones, OpenARM, Unitree G1, reBot B601."
+  - id: ev-lerobot-hopejr-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hope_jr.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "HopeJR guide: separate calibration/teleop for hand (glove) and arm (exoskeleton)."
+    quote: "Run this script to find the USB ports for the arm, hand, glove, and exoskeleton:"
+  - id: ev-lerobot-hopejr-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/robots/hope_jr/config_hope_jr.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Registers hope_jr_hand and hope_jr_arm."
+    quote: "@RobotConfig.register_subclass(\"hope_jr_arm\")"
+  - id: ev-lerobot-hopejr-arm
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/robots/hope_jr/hope_jr_arm.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Arm motor map: sm8512bl shoulder pitch + six sts3250 joints."
+    quote: "\"shoulder_pitch\": Motor(1, \"sm8512bl\", MotorNormMode.RANGE_M100_100),"
+  - id: ev-lerobot-hopejr-hand
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/robots/hope_jr/hope_jr_hand.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Hand motor map: 16 scs0009 servos (thumb 4, four fingers x3)."
+    quote: "\"pinky_pip_dip\": Motor(16, \"scs0009\", MotorNormMode.RANGE_0_100),"
+  - id: ev-lerobot-v032-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.3.2
+    date: 2025-08-01
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.3.2"}
+    summary: "HopeJR was added before the first tagged release."
+    quote: "Add Hope Jr by @aliberts in https://github.com/huggingface/lerobot/pull/935"
+  - id: ev-hopejr-readme
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/TheRobotStudio/HOPEJr/blob/0a60df1e326b092436edfb011b833fb9a3bc397b/README.md
+    verified_on: 2026-10-24
+    summary: "Maker repo: full humanoid design plus the arm/teleop work integrated with LeRobot."
+    quote: "- **LeRobot Integration**: Full software integration allowing recording, training, and inference"

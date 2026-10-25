@@ -1,0 +1,58 @@
+id: leader-follower-arm
+term: "Leader–follower arm"
+aka: ["leader arm", "follower arm", "puppeteering", "joint-space teleoperation"]
+short: "A teleoperation setup in which a human moves a passive 'leader' arm and a kinematically matched 'follower' robot copies its joint positions in real time."
+body: |
+  A leader–follower arm pair is a joint-space [teleoperation](/glossary/teleoperation) device. The operator physically moves the leader, an arm with the same kinematic structure as the robot, and the follower is commanded to match the leader's joint positions in real time. Because joints map one to one, no inverse kinematics is needed, and the operator directly controls the arm's full configuration, including wrist orientation.
+
+  The design became standard in low-cost robot learning with ALOHA, described by Zhao et al. (2023): "The user teleoperates by backdriving the leader robots, with the follower robots mirroring the motion." GELLO (Wu et al., 2023) generalized it to industrial arms, building 3D-printed controllers with "the same kinematic structure as the target arm".
+
+  In this matrix, the [SO-100](/robot/so100), [SO-101](/robot/so101) and [Koch](/robot/koch) arms are used as leader–follower pairs in LeRobot, and [bi-SO](/robot/bi-so) is two pairs. On the SO-101, the follower uses six STS3215 servos with 1/345 gearing, while the leader mixes 1/191, 1/345 and 1/147 ratios so that it can hold its own weight yet "be moved without requiring much force". LeRobot's HIL-SERL guide notes that the SO-101 leader's gearing lets it track the follower during exploration, which makes human takeover smoother than with the SO-100.
+
+  Two misconceptions recur. A leader is not plug-and-play with any follower: joint zero positions, directions and limits must be calibrated so that leader readings map to follower targets, and LeRobot stores a calibration per device `id`. And a passive leader records only what the operator does; it provides no force feedback, so contact-rich demonstrations rely on the operator's vision.
+related: [teleoperation, degrees-of-freedom, imitation-learning, human-in-the-loop-rl]
+policies: [act, smolvla, hil-serl]
+sources:
+  - id: ev-act-paper-full
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/html/2304.13705
+    date: 2023-04-23
+    verified_on: 2026-10-24
+    summary: "ALOHA: leader robots are backdriven, followers mirror them."
+    quote: "The user teleoperates by backdriving the leader robots, with the follower robots mirroring the motion."
+  - id: ev-gello-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2309.13037
+    date: 2023-09-22
+    verified_on: 2026-10-24
+    summary: "GELLO builds controllers kinematically matched to the target arm."
+    quote: "we build a GELLO controller device that has the same kinematic structure as the target arm"
+  - id: ev-lerobot-so101-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/so101.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot SO-101 docs: follower and leader motor gearing."
+    quote: "The follower arm uses 6x STS3215 motors with 1/345 gearing. The leader, however, uses three differently geared motors to make sure it can both sustain its own weight and it can be moved without requiring much force."
+  - id: ev-lerobot-hilserl-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hilserl.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot HIL-SERL: SO-101 leader tracks the follower, smoother takeover than SO-100."
+    quote: "The SO101 leader arm has reduced gears that allows it to move and track the follower arm during exploration."
+  - id: ev-lerobot-il-robots
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/il_robots.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot stores calibration per robot id."
+    quote: "Note that the `id` associated with a robot is used to store the calibration file."

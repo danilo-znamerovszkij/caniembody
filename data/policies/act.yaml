@@ -1,0 +1,116 @@
+id: act
+name: ACT
+aliases: [Action Chunking with Transformers]
+family: bc
+summary: >-
+  Action Chunking with Transformers: a CVAE encoder-decoder transformer with a ResNet-18 image backbone that predicts
+  chunks of future joint actions. Single-task, trained from scratch on ~50 demonstrations; LeRobot's recommended
+  starting policy.
+authors: Stanford University, with Meta and UC Berkeley (Zhao, Kumar, Levine, Finn — ALOHA project)
+paper_url: https://arxiv.org/abs/2304.13705
+params: 80000000
+params_note: >-
+  Authors state "around 80M" for their configuration. LeRobot's default implementation is smaller: the LeRobot paper
+  (Table 2) lists ACT at 52M parameters.
+params_source_ref: ev-act-paper-params
+backbone: ResNet-18 (ImageNet-pretrained) + transformer encoder-decoder (CVAE)
+action_output: regression
+action_chunking: true
+arch_source_ref: ev-lerobot-act-docs-arch
+license: Apache-2.0 (LeRobot implementation)
+weights_license: Apache-2.0
+open_weights: true
+frameworks:
+  lerobot:
+    support: native
+    policy_type: act
+    docs_url: https://huggingface.co/docs/lerobot/act
+    note: >-
+      Present at v0.3.2, the earliest tagged LeRobot release. `since` left blank: the only earlier PyPI release (0.1.0,
+      2024-03, a prototype) was not inspected. Not listed by the RTC docs (RTC targets flow-matching policies).
+    source_ref: ev-lerobot-act-config
+checkpoints:
+  - hub_id: lerobot/act_aloha_sim_transfer_cube_human
+    note: "ALOHA sim transfer-cube checkpoint (Apache-2.0 on the Hub)."
+  - hub_id: lerobot/act_aloha_sim_insertion_human
+    note: "ALOHA sim insertion checkpoint (Apache-2.0 on the Hub)."
+requirements:
+  train:
+    vram_gb: {min: 2, max: 6}
+    batch_size: 8
+    condition: >-
+      Peak training VRAM at batch size 8 with AdamW (LeRobot default), "Light BC" group (act, vqbet, tdmpc) in the
+      LeRobot compute hardware guide. The guide calls its figures indicative, order-of-magnitude numbers for picking
+      hardware, not exact predictions. Precision not stated.
+    reference_time: >-
+      5 epochs on a ~45k-frame dataset (640×480): ~30–60 min at batch 8 on a single RTX 4090/3090; ~1–2 h at batch 8 on
+      a single L4/A10G; ~6–14 h at batch 4 on Apple M1/M2/M3 Max (MPS) (indicative, ±50%).
+    source_ref: ev-lerobot-hw-guide
+  inference:
+    vram_gb: {measured: 0.21124}
+    precision: fp32
+    condition: >-
+      Peak memory at inference measured by the LeRobot paper (Table 2): 211.24 MB on both RTX 4090 and A100, full fp32.
+      (Same table: 817.4MB CPU-only, 462MB on Apple MPS.)
+    source_ref: ev-lerobot-paper-mem
+observation_space:
+  state: current robot joint positions (code requires at least one image or an environment-state input)
+  language: unsupported
+  source_ref: ev-lerobot-act-docs-inputs
+notes: >-
+  The ACT docs recommend starting at batch size 8 and expect "a few hours for 100k training steps on a single GPU".
+  The original paper reports ~5 h training on a single 11 GB RTX 2080 Ti and ~0.01 s inference on the same machine.
+verified_on: 2026-10-24
+sources:
+  - id: ev-act-paper-params
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2304.13705
+    date: 2023-04-23
+    verified_on: 2026-10-24
+    summary: ACT paper (Appendix D) states the model size, training time and inference time.
+    quote: "The model has around 80M parameters, and we train from scratch for each task. The training takes around 5 hours on a single 11G RTX 2080 Ti GPU, and the inference time is around 0.01 seconds on the same machine."
+  - id: ev-lerobot-act-docs-arch
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/act.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: LeRobot ACT docs describe the ResNet-18 backbone and transformer encoder/decoder that outputs an action chunk.
+    quote: "**Vision Backbone**: ResNet-18 processes images from multiple camera viewpoints"
+  - id: ev-lerobot-act-docs-inputs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/act.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "ACT inputs are multi-view RGB images, joint positions and a latent z; the rollout example marks --task as skippable for ACT."
+    quote: '--task="Your task description" \ # can be skipped for ACT'
+  - id: ev-lerobot-act-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/act/configuration_act.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Policy type string is `act` (chunk_size 100 by default)."
+    quote: '@PreTrainedConfig.register_subclass("act")'
+  - id: ev-lerobot-hw-guide
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hardware_guide.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Compute hardware guide: Light BC (`act`, `vqbet`, `tdmpc`) peak VRAM ~2–6GB at BS 8 with AdamW; figures are indicative."
+    quote: "| Light BC   | `act`, `vqbet`, `tdmpc`                     |                  ~2–6GB | Laptop GPU (RTX 3060), L4, A10G   |"
+  - id: ev-lerobot-paper-mem
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2602.22818
+    date: 2026-02-26
+    verified_on: 2026-10-24
+    summary: "LeRobot paper Table 2: ACT (52M) peak memory 817.4MB CPU, 462MB MPS, 211.24 MB RTX 4090, 211.24 MB A100, fp32."
+    quote: "Table 2: Peak memory consumption of policy models currently supported by lerobot . All models are run in full precision (fp32). Diffusion and Flow Models are run with 10 denoising steps at inference."

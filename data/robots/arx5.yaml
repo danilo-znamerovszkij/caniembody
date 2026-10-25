@@ -1,0 +1,43 @@
+id: arx5
+name: ARX5
+maker: ARX Robotics
+aliases: [ARX-5, ARX X5, arx5_follower, bi_arx5_follower]
+class: arm
+summary: >-
+  ARX Robotics' ARX5 research arm. LeRobot reaches it through a third-party plugin suite (lerobot-arx5 by Ville
+  Kuosmanen) that provides single-arm and bimanual follower types and matching leader-arm teleoperators.
+open_source: false
+homepage: https://arx-x.com/
+frameworks:
+  lerobot:
+    support: plugin
+    robot_type: [arx5_follower, bi_arx5_follower]
+    package: lerobot_robot_arx5
+    repo_url: https://github.com/villekuosmanen/lerobot-arx5
+    docs_url: https://huggingface.co/docs/lerobot/third_party_robots
+    note: >-
+      Third-party plugin (MIT), on PyPI as lerobot_robot_arx5. Teleop plugin: lerobot_teleoperator_arx5 (types
+      arx5_leader, bi_arx5_leader). Shared low-level control lives in arx5-common.
+    source_ref: ev-arx5-plugin-readme
+teleop_options: ["ARX5 leader arm (arx5_leader / bi_arx5_leader)"]
+notes: >-
+  DoF, payload, price and open_source status are not recorded: ARX's website is JavaScript-rendered and its specs
+  could not be read from a primary source today. open_source is set to false only because no open hardware license
+  was found. ARX publishes software at github.com/ARXroboticsX.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-third-party
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/third_party_robots.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot third-party page lists lerobot-arx5 (robot + teleoperator) under Full Kits."
+    quote: "<a href=\"https://pypi.org/project/lerobot-robot-arx5/\"><code>lerobot-arx5</code></a> robot arm with its"
+  - id: ev-arx5-plugin-readme
+    tier: community-reported
+    type: source-code
+    url: https://github.com/villekuosmanen/lerobot-arx5/blob/d87b5f1d8bba052abf4182cbd27f20a7cc66f76f/README.md
+    verified_on: 2026-10-24
+    summary: "README: lerobot_robot_arx5 provides arx5_follower and bi_arx5_follower; pip install lerobot_robot_arx5."

@@ -1,0 +1,3 @@
+id: rgb-multi
+name: "RGB, three or more cameras"
+description: "Three or more RGB views, e.g. ALOHA-style top + two wrist cameras, or humanoid head + wrist cameras."

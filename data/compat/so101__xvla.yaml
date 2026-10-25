@@ -1,0 +1,26 @@
+robot: so101
+policy: xvla
+state: partial
+partial_scope: Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source.
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-whosricky-xvla-so101
+    - ev-hub-zhiqiang-xvla-so101
+evidence:
+- id: ev-hub-whosricky-xvla-so101
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/whosricky/xvla-so101-pick-red-cube-2cam
+  date: '2025-12-12'
+  verified_on: '2026-10-24'
+  summary: config.json type=xvla; train_config.json dataset.repo_id=whosricky/pick-red-cube-v3, whose meta/info.json robot_type=so101_follower (182 episodes).
+- id: ev-hub-zhiqiang-xvla-so101
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/zhiqiang3/xvla_so101_pickplace_front_wrist_camera_merge_all
+  date: '2025-12-15'
+  verified_on: '2026-10-24'
+  summary: config.json type=xvla; train_config.json dataset.repo_id=zhiqiang3/so101_pickplace_front_wrist_camera_merge_all, whose meta/info.json robot_type=so101_follower (170 episodes).

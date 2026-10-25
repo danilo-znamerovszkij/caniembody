@@ -1,0 +1,26 @@
+robot: franka-panda
+policy: openvla-oft
+state: partial
+partial_scope: "Simulation only: LIBERO; no real-robot training or inference documented."
+framework: openvla-oft
+capabilities:
+  inference_sim:
+    state: works
+    notes: "Fine-tuned and evaluated on the four LIBERO suites (Spatial, Object, Goal, Long); upstream releases LIBERO-finetuned checkpoints."
+    evidence: [ev-oft-paper-libero, ev-oft-readme-libero]
+evidence:
+  - id: ev-oft-paper-libero
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2502.19645v2
+    date: 2025-04-28
+    verified_on: 2026-10-25
+    summary: "OpenVLA-OFT paper, Sec. V-A: LIBERO, the simulation benchmark used, features a simulated Franka Emika Panda arm."
+    quote: "We evaluate on the LIBERO simulation benchmark [26], which features a Franka Emika Panda arm in simulation with demonstrations containing camera images, robot state, task annotations, and delta end-effector pose actions."
+  - id: ev-oft-readme-libero
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/moojink/openvla-oft/blob/e4287e94541f459edc4feabc4e181f537cd569a8/README.md
+    verified_on: 2026-10-25
+    summary: "OpenVLA-OFT README quick start loads the LIBERO-Spatial fine-tuned checkpoint and lists the GPU needed for LIBERO sim tasks."
+    quote: "1 GPU with ~16 GB VRAM for LIBERO sim benchmark tasks"

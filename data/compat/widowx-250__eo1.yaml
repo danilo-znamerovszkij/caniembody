@@ -1,0 +1,29 @@
+robot: widowx-250
+policy: eo1
+state: works
+framework: eo1
+capabilities:
+  train:
+    state: works
+    evidence: [ev-eo1-paper-widowx]
+  inference_real:
+    state: works
+    notes: "13-task 'WidowX Out-of-Box' kitchen suite plus open-world instruction following. The upstream client drives a WidowX 250s through the BridgeData WidowX controller stack with a RealSense D435."
+    evidence: [ev-eo1-paper-widowx, ev-eo1-repo-widowx]
+evidence:
+  - id: ev-eo1-paper-widowx
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2508.21112v5
+    date: 2026-02-25
+    verified_on: 2026-10-24
+    summary: "EO-1 paper (v5), Sec. 4.5: EO-1 is evaluated in the real world on a WidowX 250 S (13 out-of-box tasks) among other robots."
+    quote: "We evaluate its performance on both short-horizon and long-horizon tasks using different robots, including Franka Panda, WidowX 250 S, Agibot G-1, and Lerobot SO100."
+  - id: ev-eo1-repo-widowx
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/EO-Robotics/EO1/blob/451c363d7dff682700789afae0b9b17c004e8f8c/experiments/5_widowx/README.md
+    date: 2025-11-12
+    verified_on: 2026-10-24
+    summary: "EO1 repo ships a WidowX 250s real-robot client (eval_widowx.py, bridge_data_robot submodule)."
+    quote: "This directory contains the implementation for controlling WidowX 250s robots using the EO-1 model."

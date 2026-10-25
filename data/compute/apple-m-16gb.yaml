@@ -1,0 +1,26 @@
+id: apple-m-16gb
+name: Apple Silicon 16 GB
+class: apple-silicon
+memory_gb: 16
+unified: true
+arch: Apple M-series
+notes: 'A memory class, not a single chip: any M-series Mac with 16 GB unified memory (e.g. M4 base configuration in the 2024 Mac mini). Chip generation (M1–M5) and variant (base/Pro/Max/Ultra, GPU core count) change inference speed substantially, so runs on this target must record the exact chip in platform.chip. PyTorch uses the MPS backend; unified memory is shared with macOS, so usable model memory is lower than 16 GB.'
+verified_on: '2026-10-24'
+sources:
+- id: ev-apple-mac-mini-2024-memory
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://support.apple.com/en-us/121555
+  verified_on: '2026-10-24'
+  summary: 'Apple tech specs for Mac mini (2024): M4 ships with 16GB (configurable to 24GB or 32GB); M4 Pro with 24GB (configurable to 48GB or 64GB) unified memory.'
+  quote: 'Apple M4 chip 16GB unified memory Configurable to: 24GB or 32GB Apple M4 Pro chip 24GB unified memory Configurable to: 48GB or 64GB'
+- id: ev-lerobot-mps
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/torch_accelerators.mdx
+  date: '2026-08-03'
+  verified_on: '2026-10-24'
+  versions:
+    lerobot: 0.6.1
+  summary: 'LeRobot docs: Apple Silicon GPUs are used through the PyTorch MPS backend (--policy.device=mps).'
+  quote: '- **MPS**: acceleration with Apple Silicon GPUs'

@@ -1,0 +1,26 @@
+---
+import Tier from './Tier.astro';
+import { fmtAge } from '../lib/ui.ts';
+import { daysBetween, TODAY, type Evidence } from '../lib/data.ts';
+const { items, highlight } = Astro.props as { items: Evidence[]; highlight?: string[] };
+const sorted = [...items].sort((a, b) => (b.verified_on ?? '').localeCompare(a.verified_on ?? ''));
+---
+{sorted.length ? (
+  <ol class="evidence">
+    {sorted.map((e) => (
+      <li id={e.id}>
+        <div class="ev-head">
+          <Tier t={e.tier} />
+          <span class="mono">{e.type}</span>
+          {e.date && <span class="mono">source {e.date}</span>}
+          <span class="mono">verified {e.verified_on} <span class="muted">({fmtAge(daysBetween(e.verified_on, TODAY))})</span></span>
+          {e.versions && Object.entries(e.versions).map(([k, v]) => <span class="pill">{k} {v}</span>)}
+        </div>
+        <p class="ev-sum">{e.summary}</p>
+        {e.quote && <blockquote>“{e.quote}”</blockquote>}
+        <a class="url" href={e.url} rel="noopener">{e.url}</a>
+        {e.archived_url && <> · <a class="url" href={e.archived_url}>archived</a></>}
+      </li>
+    ))}
+  </ol>
+) : <p class="empty">No evidence recorded.</p>}

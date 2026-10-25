@@ -1,0 +1,74 @@
+id: earthrover-mini-plus
+name: EarthRover Mini Plus
+maker: FrodoBots
+aliases: [Earth Rover Mini Plus, EarthRover Mini+, Earth Rover MINI+, earthrover_mini_plus, FrodoBots EarthRover]
+class: mobile-base
+summary: >-
+  Small four-wheel-drive outdoor rover from FrodoBots with front and rear cameras. It has no arm. LeRobot connects to
+  it through the cloud using the FrodoBots Earth Rovers SDK, which must be running locally, and it is driven by
+  keyboard for navigation datasets.
+arms: 0
+open_source: true
+homepage: https://github.com/frodobots-org/earth-rovers-sdk
+frameworks:
+  lerobot:
+    support: native
+    since: "0.4.3"
+    robot_type: [earthrover_mini_plus]
+    docs_url: https://huggingface.co/docs/lerobot/earthrover_mini_plus
+    note: >-
+      Requires the FrodoBots SDK server (earth-rovers-sdk) and SDK credentials from FrodoBots. Teleop is
+      --teleop.type=keyboard_rover. Added in PR #2575 (the earlier PR #2544 was reverted).
+    source_ref: ev-lerobot-earthrover-src
+teleop_options: ["Keyboard, WASD (keyboard_rover)"]
+notes: >-
+  Per the FrodoBots SDK README, the MINI+ has two cameras (front and rear, 1080p sensors streamed at 1024x576 and
+  480x270), an MPU6050 IMU, two motors with four-wheel drive, 1.4 kg weight, 4 km/h top speed and a 12 km range.
+  Hardware sources, firmware and 3D-print files are in FrodoBots' earth-rover-mini repository, where GitHub detects
+  no license file, so the license is left blank. No camera preset in this matrix matches a front+rear rover pair.
+  Price is not recorded because the FrodoBots shop is not machine-readable.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/README.md
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot README lists EarthRover among natively supported hardware."
+    quote: "SO100, LeKiwi, Koch, HopeJR, OMX, EarthRover, Reachy2, Gamepads, Keyboards, Phones, OpenARM, Unitree G1, reBot B601."
+  - id: ev-lerobot-earthrover-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/earthrover_mini_plus.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot guide: cloud-connected via the FrodoBots SDK."
+    quote: "The EarthRover Mini Plus is a fully open source mobile robot that connects through the cloud using the Frodobots SDK."
+  - id: ev-lerobot-earthrover-src
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/robots/earthrover_mini_plus/config_earthrover_mini_plus.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Registers earthrover_mini_plus."
+    quote: "@RobotConfig.register_subclass(\"earthrover_mini_plus\")"
+  - id: ev-lerobot-v043-earthrover
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.4.3
+    date: 2026-01-22
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.3"}
+    summary: "EarthRover Mini Plus first released in v0.4.3."
+    quote: "feat(robots): Earth Rover Mini Plus integration by @imstevenpmwork in https://github.com/huggingface/lerobot/pull/2575"
+  - id: ev-frodobots-sdk-readme
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/frodobots-org/earth-rovers-sdk/blob/1fc6890308988ead376561e2bc9cee0620a63a37/README.md
+    verified_on: 2026-10-24
+    summary: "FrodoBots SDK README: MINI+ chassis, cameras, IMU, and hardware-source repository."
+    quote: "- **Chassis**: 1.4 kg (car only), 95 mm wheels, two motors with four-wheel drive, turns on the spot, IP34, 18° max slope, 12 km range per charge, top speed 4 km/h."

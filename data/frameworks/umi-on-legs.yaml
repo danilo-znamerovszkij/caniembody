@@ -1,0 +1,10 @@
+id: umi-on-legs
+name: UMI on Legs (real-stanford/umi-on-legs)
+maintainer: Huy Ha, Yihuai Gao et al. (Stanford REAL lab)
+repo: real-stanford/umi-on-legs
+docs_url: https://github.com/real-stanford/umi-on-legs
+license: MIT
+current_version: main
+current_version_date: 2024-08-29
+versioning: none
+notes: "Code for UMI on Legs: whole-body controller training and real-world deployment on a Unitree Go2 with an ARX5 arm, the UMI real-world environment class and the ARX5 SDK. Manipulation policies are UMI-style Diffusion Policy. No tagged releases; main at d75c9c182d80 (2024-08-29)."

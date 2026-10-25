@@ -1,0 +1,60 @@
+id: xlerobot
+name: XLeRobot
+maker: Vector Wang (Vector-Wangel) and contributors
+aliases: [XLeRobot dual-arm mobile robot, xlerobot_2wheels, xlerobot_mecanum]
+class: mobile-manipulator
+summary: >-
+  Low-cost open-source dual-arm mobile home robot: two SO-101 arms on a LeKiwi-style base (3-omniwheel, plus 2-wheel
+  and mecanum variants) with a head camera. Parts start at about $660. It ships its own LeRobot plugin packages
+  instead of being native to LeRobot.
+dof: 5
+dof_note: "Per arm (SO-101: five joints + gripper); 2 arms, plus mobile base."
+arms: 2
+specs_source_ref: ev-xlerobot-readme
+open_source: true
+license: Apache-2.0
+bom_url: https://xlerobot.readthedocs.io/en/latest/hardware/getting_started/material.html
+homepage: https://github.com/Vector-Wangel/XLeRobot
+price_usd:
+  low: 660
+  note: >-
+    Self-sourced Basic build (uses your laptop, single RGB head camera), excluding 3D printing, tools, shipping and
+    taxes, per the maker README. A developer assembly kit is sold via WowRobo.
+  source_ref: ev-xlerobot-readme
+frameworks:
+  lerobot:
+    support: plugin
+    robot_type: [xlerobot, xlerobot_2wheels, xlerobot_mecanum]
+    package: lerobot_robot_xlerobot
+    repo_url: https://github.com/Vector-Wangel/XLeRobot
+    note: >-
+      Plugin packages live in software/plugins/ of the maker repo: lerobot_robot_xlerobot (3-omniwheel),
+      lerobot_robot_xlerobot_2wheels and lerobot_robot_xlerobot_mecanum. Each also registers a *_client type.
+      lerobot_teleoperator_xlerobot_vr (xlerobot_vr) is also provided. Not on PyPI as of 2026-10-24, so install
+      editable from the repo. Not listed on LeRobot's v0.6.1 third-party page.
+    source_ref: ev-xlerobot-plugins
+sensors_supported: [rgb-mono, rgb-dual, rgb-multi, realsense-depth]
+teleop_options: ["Quest 3 VR (xlerobot_vr)", "Keyboard / Xbox controller / Switch Joy-Con (per maker README)"]
+verified_on: 2026-10-24
+sources:
+  - id: ev-xlerobot-readme
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/Vector-Wangel/XLeRobot/blob/b017b5e6354bd9f61f4247a920c72622ca0aade0/README.md
+    verified_on: 2026-10-24
+    summary: "Maker README: built on SO-100/101 + LeKiwi; Basic build ~$660 (excl. printing/shipping/tax); optional RealSense head cam."
+    quote: "| **Basic** (use your laptop, single RGB head cam) | **~$660** |"
+  - id: ev-xlerobot-plugins
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/Vector-Wangel/XLeRobot/blob/b017b5e6354bd9f61f4247a920c72622ca0aade0/software/plugins/README.md
+    verified_on: 2026-10-24
+    summary: "Plugin packages auto-discovered by LeRobot; types xlerobot, xlerobot_2wheels, xlerobot_mecanum."
+    quote: "- `lerobot_robot_xlerobot/` — the 3-omniwheel base (`--robot.type=xlerobot`)."
+  - id: ev-soarm-xlerobot
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/TheRobotStudio/SO-ARM100/blob/a758567c3978dfeefe282ede0500085a48fe8f78/README.md
+    verified_on: 2026-10-24
+    summary: "SO-ARM100 README lists XLeRobot as an add-on: 2x SO101 arms, LeKiwi base, wrist + head cameras."
+    quote: "A dual-arm mobile robot for daily use, with 2x SO101 arms, 1x Lekiwi base, 1x 300Wh Anker Battery, 2x wrist RGB cameras, 1x head depth camera (with a 2-dof neck). Total cost 660$."

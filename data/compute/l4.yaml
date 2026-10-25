@@ -1,0 +1,31 @@
+id: l4
+name: NVIDIA L4
+class: datacenter
+memory_gb: 24
+arch: Ada Lovelace
+ai_tops: FP8 Tensor Core 485 teraFLOPs* (*shown with sparsity)
+power_w: 72W
+notes: Low-profile 72 W inference card. Available on Hugging Face Jobs (1x and 4x L4).
+verified_on: '2026-10-24'
+sources:
+- id: ev-nvidia-l4-specs
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/data-center/l4/
+  verified_on: '2026-10-24'
+  summary: 'L4 spec table: FP8 485 TFLOPS with sparsity, 24GB, 72W TDP.'
+  quote: FP8 Tensor Core 485 teraFLOPs* INT8 Tensor Core 485 TOPs* GPU memory 24GB GPU memory bandwidth 300GB/s NVENC | NVDEC | JPEG decoders 2 | 4 | 4 Max thermal design power (TDP) 72W
+- id: ev-nvidia-l4-arch
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/data-center/l4/
+  verified_on: '2026-10-24'
+  summary: 'L4 page: powered by the Ada Lovelace architecture.'
+  quote: The NVIDIA L4 Tensor Core GPU powered by the NVIDIA Ada Lovelace architecture
+- id: ev-hf-jobs-pricing
+  tier: upstream-documented
+  type: official-docs
+  url: https://huggingface.co/docs/hub/jobs-pricing
+  verified_on: '2026-10-24'
+  summary: Hugging Face Jobs pricing lists L4 flavors (24 GB).
+  quote: 1x Nvidia L4 8 vCPU 30 GB 24 GB 400 GB $0.80

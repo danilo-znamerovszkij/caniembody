@@ -1,0 +1,29 @@
+robot: arx5
+policy: diffusion
+state: works-with-caveats
+framework: umi-on-legs
+caveats:
+  - "Third-party research paper (UMI on Legs, from the Diffusion Policy authors' lab), not documented in Diffusion Policy's own docs or in LeRobot; the ARX5 LeRobot plugin documents no Diffusion Policy run."
+  - "The ARX5 was mounted on a Unitree Go2 quadruped and driven through a learned whole-body controller; policies were trained on handheld UMI gripper demonstrations (or the public UMI cup checkpoint), not on ARX5 robot data."
+capabilities:
+  inference_real:
+    state: works
+    notes: "Diffusion Policy inference on a desktop RTX 4090 over the network; tasks: dynamic tossing, kettlebell pushing and in-the-wild cup rearrangement (zero-shot with the public UMI checkpoint)."
+    evidence: [ev-umi-on-legs-system, ev-umi-on-legs-policy]
+evidence:
+  - id: ev-umi-on-legs-system
+    tier: community-reported
+    type: paper
+    url: https://arxiv.org/abs/2407.10353v1
+    date: 2024-07-14
+    verified_on: 2026-10-25
+    summary: "UMI on Legs, Sec. 3.3: the robot is a Unitree Go2 with a 6-DOF ARX5 arm; diffusion policy inference runs on a separate desktop RTX 4090."
+    quote: "consists of a 12-DOF Unitree Go2 quadruped robot and a 6-DOF ARX5 robot arm, both powered by the battery of Go2."
+  - id: ev-umi-on-legs-policy
+    tier: community-reported
+    type: paper
+    url: https://arxiv.org/abs/2407.10353v1
+    date: 2024-07-14
+    verified_on: 2026-10-25
+    summary: "UMI on Legs, Fig. 3: the manipulation policy is a diffusion policy (Chi et al. default U-Net configuration) trained on real-world UMI demonstrations, whose end-effector trajectory drives the whole-body controller."
+    quote: "infers a camera-frame end-effector trajectory using a diffusion policy (a), trained using real-world UMI demonstrations."

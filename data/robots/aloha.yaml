@@ -1,0 +1,114 @@
+id: aloha
+name: ALOHA (stationary)
+maker: Stanford (Tony Z. Zhao et al.); kits sold by Trossen Robotics
+aliases: [ALOHA, ALOHA 2, Aloha stationary, aloha_static, viperx]
+class: bimanual
+summary: >-
+  Low-cost open-source bimanual teleoperation rig: two ViperX follower arms, two WidowX leader arms and four cameras.
+  ACT was introduced on it. LeRobot hosts real and simulated ALOHA datasets and ACT checkpoints, but native robot
+  control was removed in 0.4.0. Only a single-arm `viperx` type ever shipped in a release (0.3.2–0.3.3).
+dof: 6
+dof_note: >-
+  Per follower arm (ViperX): waist, shoulder, elbow, forearm_roll, wrist_angle, wrist_rotate + gripper. Shoulder and
+  elbow each have a second "shadow" motor, so LeRobot's viperx type drives 9 motors.
+arms: 2
+actuators: "Dynamixel XM540-W270 (waist to wrist_angle) and XM430-W350 (wrist_rotate, gripper) on the ViperX follower"
+specs_source_ref: ev-lerobot-viperx-motors
+open_source: true
+license: MIT (ALOHA codebase)
+homepage: https://tonyzhaozh.github.io/aloha/
+frameworks:
+  lerobot:
+    support: removed
+    since: "0.3.2"
+    until: "0.3.3"
+    robot_type: [viperx]
+    note: >-
+      On main a 4-arm `aloha` robot type existed from Sep 2024 (PR #316) until the Hardware API redesign (PR #777,
+      2025-06-05), but neither landed in a PyPI release. 0.3.2–0.3.3 shipped only the single-arm `viperx` follower
+      (its README still showed the old --robot.type=aloha) plus a `widowx` teleoperator. Both were deprecated in 0.4.0
+      (PR #2205). LeRobot v0.6.1 has no ALOHA robot type. ALOHA-format datasets and ACT checkpoints remain usable for
+      training. Trossen's lerobot_trossen plugin covers its newer WidowX AI "ALOHA-style" kits (see trossen-widowx),
+      not the original ViperX/WidowX ALOHA.
+    source_ref: ev-lerobot-v040-deprecate
+sensors_builtin: [rgb-multi]
+teleop_options: ["Two WidowX leader arms (original ALOHA puppeteering)"]
+notes: >-
+  in_grid because large public LeRobot-format ALOHA data exists: lerobot/aloha_static_* (15 real-robot datasets
+  listed on the Hub on 2026-10-24) and lerobot/aloha_sim_*. There are also official ACT checkpoints
+  (lerobot/act_aloha_sim_transfer_cube_human, lerobot/act_aloha_sim_insertion_human). Rows for this robot reflect
+  dataset/checkpoint compatibility, not live control in current LeRobot.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-v040-deprecate
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.4.0
+    date: 2025-10-23
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.0"}
+    summary: "LeRobot 0.4.0 deprecated the stretch, viperx and widowx devices (viperx/stretch3 dirs absent from v0.4.0)."
+    quote: "chore(robots): deprecate strech, vipex and widowx robots by @imstevenpmwork in https://github.com/huggingface/lerobot/pull/2205"
+  - id: ev-lerobot-viperx-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.3.3/src/lerobot/robots/viperx/config_viperx.py
+    date: 2025-08-06
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.3.3"}
+    summary: "Last release with the viperx robot type (single ViperX arm, ALOHA safety defaults)."
+    quote: "@RobotConfig.register_subclass(\"viperx\")"
+  - id: ev-lerobot-viperx-motors
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.3.3/src/lerobot/robots/viperx/viperx.py
+    date: 2025-08-06
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.3.3"}
+    summary: "ViperX motor map: 9 Dynamixel motors incl. shoulder/elbow shadows and gripper."
+    quote: "\"wrist_rotate\": Motor(8, \"xm430-w350\", MotorNormMode.RANGE_M100_100), \"gripper\": Motor(9, \"xm430-w350\", MotorNormMode.RANGE_0_100),"
+  - id: ev-lerobot-viperx-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.3.3/src/lerobot/robots/viperx/README.md
+    date: 2025-08-06
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.3.3"}
+    summary: "The viperx README in 0.3.x documents ALOHA / ALOHA 2 stationary."
+    quote: "This tutorial explains how to use [Aloha and Aloha 2 stationary](https://www.trossenrobotics.com/aloha-stationary) with LeRobot."
+  - id: ev-lerobot-pre-refactor-aloha
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/b536f47e3ff8c3b340fc5efa52f0ece0a7212a57/lerobot/common/robot_devices/robots/configs.py
+    date: 2025-06-05
+    verified_on: 2026-10-24
+    summary: "Main just before the Hardware API redesign (parent of PR #777 merge) had an `aloha` robot type."
+    quote: "@RobotConfig.register_subclass(\"aloha\")"
+  - id: ev-lerobot-v032-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.3.2
+    date: 2025-08-01
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.3.2"}
+    summary: "v0.3.2 notes include native ALOHA control (PR #316), real-world ALOHA datasets (PR #133) and the Hardware API redesign (PR #777)."
+    quote: "Control aloha robot natively by @Cadene in https://github.com/huggingface/lerobot/pull/316"
+  - id: ev-hub-aloha-static
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/datasets/lerobot/aloha_static_coffee
+    verified_on: 2026-10-24
+    summary: "One of 15 lerobot/aloha_static_* real-robot datasets listed in the lerobot Hub org (Hub API search, 2026-10-24)."
+  - id: ev-hub-act-aloha
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/lerobot/act_aloha_sim_transfer_cube_human
+    verified_on: 2026-10-24
+    summary: "Official LeRobot ACT checkpoint trained on ALOHA sim transfer-cube data."
+  - id: ev-aloha-repo
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/tonyzhaozh/aloha/blob/06369f03cd8e0a47e16d3a90167853fd33af7557/README.md
+    verified_on: 2026-10-24
+    summary: "Original ALOHA repo: 4 robots, 4 cameras, ROS-based teleop and data collection (MIT)."
+    quote: "# ALOHA: A Low-cost Open-source Hardware System for Bimanual Teleoperation"

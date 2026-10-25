@@ -1,0 +1,102 @@
+id: diffusion
+name: Diffusion Policy
+aliases: [diffusion_policy]
+family: diffusion
+summary: >-
+  Visuomotor policy that represents the action distribution as a conditional denoising diffusion process, predicting
+  a sequence of future actions from recent observations and executing it with receding-horizon control. LeRobot's
+  implementation uses a ResNet-18 image encoder and a 1D convolutional U-Net denoiser.
+authors: Columbia University and Toyota Research Institute (Chi, Xu, Feng, Cousineau, Du, Burchfiel, Tedrake, Song)
+paper_url: https://arxiv.org/abs/2303.04137
+params_note: >-
+  The authors do not state a single parameter count. The LeRobot paper (Table 2) lists LeRobot's Diffusion Policy at
+  263M parameters.
+params_source_ref: ev-lerobot-paper-mem
+backbone: ResNet-18 image encoder (ImageNet-pretrained weights by default in LeRobot v0.6.1) + conditional 1D conv U-Net denoiser
+action_output: diffusion
+action_chunking: true
+arch_source_ref: ev-diffusion-paper-arch
+license: Apache-2.0 (LeRobot implementation)
+weights_license: Apache-2.0
+open_weights: true
+frameworks:
+  lerobot:
+    support: native
+    policy_type: diffusion
+    docs_url: https://huggingface.co/docs/lerobot/policy_diffusion_README
+    note: >-
+      Present at v0.3.2, the earliest tagged LeRobot release. `since` left blank: the only earlier PyPI release (0.1.0,
+      2024-03, a prototype whose README mentions diffusion_policy) was not inspected. Defaults: horizon 64,
+      n_action_steps 32, n_obs_steps 2.
+    source_ref: ev-lerobot-diffusion-config
+checkpoints:
+  - hub_id: lerobot/diffusion_pusht
+    note: "PushT simulation checkpoint (Apache-2.0 on the Hub)."
+requirements:
+  train:
+    vram_gb: {min: 8, max: 14}
+    batch_size: 8
+    condition: >-
+      Peak training VRAM at batch size 8 with AdamW (LeRobot default), "Diffusion" group (diffusion, multi_task_dit)
+      in the LeRobot compute hardware guide. The guide calls its figures indicative, order-of-magnitude numbers for
+      picking hardware, not exact predictions. Precision not stated.
+    reference_time: >-
+      5 epochs on a ~45k-frame dataset (640×480): ~2–4 h at batch 8 on a single RTX 4090/3090; ~30–60 min at batch 32
+      on a 4× H100 80 GB cluster (indicative, ±50%). Measured anchor in the same guide: 5000 steps, batch 32, 4× H100,
+      16m 17s.
+    source_ref: ev-lerobot-hw-guide
+  inference:
+    vram_gb: {measured: 1.12}
+    precision: fp32
+    condition: >-
+      Peak memory at inference measured by the LeRobot paper (Table 2): 1.12 GB on both RTX 4090 and A100, full fp32,
+      10 denoising steps. (Same table: 1.22GB CPU-only, 224MB on Apple MPS.)
+    source_ref: ev-lerobot-paper-mem
+observation_space:
+  state: robot state vector; code requires at least one image or an environment-state input, and all images must share one shape
+  source_ref: ev-lerobot-diffusion-config-features
+verified_on: 2026-10-24
+sources:
+  - id: ev-diffusion-paper-arch
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2303.04137
+    date: 2023-03-07
+    verified_on: 2026-10-24
+    summary: Diffusion Policy models the visuomotor policy as a conditional denoising diffusion process over action sequences.
+    quote: "This paper introduces Diffusion Policy, a new way of generating robot behavior by representing a robot’s visuomotor policy as a conditional denoising diffusion process."
+  - id: ev-lerobot-diffusion-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/diffusion/configuration_diffusion.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Policy type string is `diffusion`; defaults resnet18 backbone, horizon 64, n_action_steps 32."
+    quote: '@PreTrainedConfig.register_subclass("diffusion")'
+  - id: ev-lerobot-diffusion-config-features
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/diffusion/configuration_diffusion.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: Feature validation requires at least one image or an environment-state input.
+    quote: 'raise ValueError("You must provide at least one image or the environment state among the inputs.")'
+  - id: ev-lerobot-hw-guide
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hardware_guide.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Compute hardware guide: Diffusion group (`diffusion`, `multi_task_dit`) peak VRAM ~8–14GB at BS 8 with AdamW; figures are indicative."
+    quote: "| Diffusion  | `diffusion`, `multi_task_dit`               |                 ~8–14GB | RTX 4070+ / L4 / A10G             |"
+  - id: ev-lerobot-paper-mem
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2602.22818
+    date: 2026-02-26
+    verified_on: 2026-10-24
+    summary: "LeRobot paper Table 2: Diffusion Policy (263M) peak memory 1.22GB CPU, 224MB MPS, 1.12 GB RTX 4090, 1.12 GB A100, fp32."
+    quote: "Table 2: Peak memory consumption of policy models currently supported by lerobot . All models are run in full precision (fp32). Diffusion and Flow Models are run with 10 denoising steps at inference."

@@ -1,0 +1,10 @@
+id: act-plus-plus
+name: act-plus-plus (Mobile ALOHA)
+maintainer: Zipeng Fu, Tony Z. Zhao (Stanford)
+repo: MarkFzp/act-plus-plus
+docs_url: https://github.com/MarkFzp/act-plus-plus
+license: MIT
+current_version: main
+current_version_date: 2024-01-11
+versioning: none
+notes: "Mobile ALOHA authors' imitation-learning code (ACT, Diffusion Policy, VINN). No tagged releases; pin by commit (main at 26bab0789d05, 2024-01-11)."

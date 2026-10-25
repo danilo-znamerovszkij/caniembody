@@ -1,0 +1,38 @@
+robot: aloha
+policy: pi0
+state: works
+framework: openpi
+caveats:
+  - "openpi's ALOHA checkpoints were fine-tuned on Physical Intelligence's ALOHA data; upstream warns zero-shot use is experimental and recommends fine-tuning π0 on data from the target robot."
+capabilities:
+  train: {state: works, evidence: [ev-openpi-aloha-real]}
+  inference_real: {state: works, evidence: [ev-openpi-readme, ev-openpi-aloha-real]}
+evidence:
+  - id: ev-openpi-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/Physical-Intelligence/openpi/blob/215abfb217dbac7d5f1273282331b9b1866c0479/README.md
+    verified_on: 2026-10-24
+    summary: "openpi lists fine-tuned π0 'expert' checkpoints for the ALOHA platform (pi0_aloha_towel, pi0_aloha_tupperware, pi0_aloha_pen_uncap)."
+    quote: "$\\pi_0$ model fine-tuned on internal [ALOHA](https://tonyzhaozh.github.io/aloha/) data: can fold diverse towels 0-shot on ALOHA robot platforms"
+  - id: ev-openpi-aloha-real
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/Physical-Intelligence/openpi/blob/215abfb217dbac7d5f1273282331b9b1866c0479/examples/aloha_real/README.md
+    verified_on: 2026-10-24
+    summary: "openpi's real-ALOHA example: runs π0 checkpoints on an ALOHA setup (tonyzhaozh/aloha hardware, ROS) via a policy server, and documents fine-tuning on your own ALOHA dataset (pi0_aloha_pen_uncap config)."
+    quote: "This example demonstrates how to run with a real robot using an [ALOHA setup](https://github.com/tonyzhaozh/aloha)."
+  - id: ev-pi0-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2410.24164
+    date: 2024-10-31
+    verified_on: 2026-10-24
+    summary: "π0 paper: one of the training/evaluation platforms is a bimanual Trossen ViperX setup based on ALOHA."
+    quote: "Bimanual Trossen. This setup has two 6-DoF Trossen ViperX arms in a configuration based on the ALOHA setup [4, 57], with two wrist cameras and a base camera, and a 14-dimensional configuration and action space."
+  - id: ev-hub-trossen-pi0-tshirt
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/TrossenRoboticsCommunity/pi0-fold-tshirt-aloha
+    verified_on: 2026-10-24
+    summary: "LeRobot-format checkpoint: config.json type=pi0; trained on TrossenRoboticsCommunity/aloha_fold_tshirt whose meta/info.json robot_type=aloha (21 episodes). Card tags platform:aloha, robot:stationary, framework:lerobot-latest."

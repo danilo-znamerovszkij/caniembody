@@ -1,0 +1,27 @@
+name: Weekly maintenance
+on:
+  schedule: [{ cron: '0 7 * * 1' }]
+  workflow_dispatch:
+permissions: { issues: write, contents: read }
+jobs:
+  maintenance:
+    runs-on: ubuntu-latest
+    env: { GH_TOKEN: '${{ github.token }}' }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc, cache: npm }
+      - run: npm ci
+      - name: Link rot → evidence-rot issue
+        run: |
+          if ! node scripts/check-links.ts --json dead.json > links.txt; then
+            gh issue create --title "Evidence rot: $(date +%F)" --label evidence-rot --body "$(printf 'Dead evidence links. Fix the URL, add an archived_url, or downgrade the cell.\n\n```\n%s\n```' "$(cat links.txt)")"
+          fi
+      - name: Freshness digest
+        run: |
+          node scripts/freshness.ts > digest.md
+          if grep -q -- '- \[ \]' digest.md; then gh issue create --title "Freshness digest: $(date +%F)" --label freshness --body-file digest.md; fi
+      - name: Hub metadata drift
+        run: |
+          node scripts/hub-sync.ts > hub.md || true
+          if grep -q -- '- \[ \]' hub.md; then gh issue create --title "Hub metadata drift: $(date +%F)" --label hub-sync --body-file hub.md; fi

@@ -1,0 +1,3 @@
+id: force-torque
+name: "Force/torque sensor"
+description: "Wrist-mounted 6-axis force/torque sensing, typical on industrial arms (UR, Franka)."

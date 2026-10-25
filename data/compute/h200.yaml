@@ -1,0 +1,31 @@
+id: h200
+name: NVIDIA H200
+class: datacenter
+memory_gb: 141
+arch: Hopper
+ai_tops: FP8 Tensor Core² 3,958 TFLOPS (H200 SXM; ²with sparsity)
+power_w: Up to 700W (configurable) (SXM)
+notes: 141 GB HBM3e in both the SXM and NVL form factors. Available on Hugging Face Jobs (1x, 2x, 4x, 8x).
+verified_on: '2026-10-24'
+sources:
+- id: ev-nvidia-h200-specs
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/data-center/h200/
+  verified_on: '2026-10-24'
+  summary: 'H200 product page spec table (columns: H200 SXM, H200 NVL): FP8 3,958 TFLOPS sparse; 141GB memory.'
+  quote: FP8 Tensor Core² 3,958 TFLOPS 3,341 TFLOPS INT8 Tensor Core² 3,958 TFLOPS 3,341 TFLOPS GPU Memory 141GB 141GB
+- id: ev-nvidia-h200-tdp
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/data-center/h200/
+  verified_on: '2026-10-24'
+  summary: 'Same table: Max TDP up to 700W (SXM), up to 600W (NVL).'
+  quote: Max Thermal Design Power (TDP) Up to 700W (configurable) Up to 600W (configurable)
+- id: ev-hf-jobs-pricing
+  tier: upstream-documented
+  type: official-docs
+  url: https://huggingface.co/docs/hub/jobs-pricing
+  verified_on: '2026-10-24'
+  summary: Hugging Face Jobs pricing lists an H200 flavor (141 GB).
+  quote: Nvidia H200 23 vCPU 256 GB 141 GB 3000 GB $5.00

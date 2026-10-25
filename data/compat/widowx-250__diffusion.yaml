@@ -1,0 +1,17 @@
+robot: widowx-250
+policy: diffusion
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-catebros-diffusion]
+evidence:
+  - id: ev-hub-catebros-diffusion
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/catebros/lerobot-widowx-diffusion
+    date: 2026-01-10
+    verified_on: 2026-10-24
+    summary: "config.json type=diffusion. train_config dataset catebros/my_widowx_dataset, whose meta/info.json robot_type=w250_interbotix (31 episodes, two cameras, waist/shoulder/elbow/forearm_roll/wrist_angle/wrist_rotate/gripper joints). Auto-generated card, no rollout results."

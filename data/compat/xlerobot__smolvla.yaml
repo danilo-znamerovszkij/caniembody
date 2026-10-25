@@ -1,0 +1,35 @@
+robot: xlerobot
+policy: smolvla
+state: works-with-caveats
+framework: lerobot
+caveats:
+  - "The documented SmolVLA workflow drives XLeRobot's arms as robot.type=bi_so101_follower using a community LeRobot fork (kahowang/lerobot); XLeRobot is not a drop-in LeRobot plugin."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-xlerobot-smolvla-doc, ev-hub-zonglin-smolvla, ev-hub-monozu-smolvla]
+  inference_real:
+    state: works-with-caveats
+    evidence: [ev-xlerobot-smolvla-doc]
+evidence:
+  - id: ev-xlerobot-smolvla-doc
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/Vector-Wangel/XLeRobot/blob/b017b5e6354bd9f61f4247a920c72622ca0aade0/docs/en/source/software/getting_started/VLA_smol.md
+    verified_on: 2026-10-24
+    summary: "XLeRobot project docs: SmolVLA trained on ~20 episodes with a bimanual SO-101 three-camera setup, with real-robot demo GIFs (drawer pick-place, zipper opening)."
+    quote: "After training on **~20 episodes**, XLeRobot can:"
+  - id: ev-hub-zonglin-smolvla
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/zonglin11/smolvla-xlerobot-fold-towel
+    date: 2026-06-14
+    verified_on: 2026-10-24
+    summary: "config.json type=smolvla; trained on zonglin11/xlerobot_fold_towel whose meta/info.json robot_type=xlerobot_2wheels."
+  - id: ev-hub-monozu-smolvla
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/monozu-deving/Xlerobot-grap-post-index4-v1
+    date: 2026-03-25
+    verified_on: 2026-10-24
+    summary: "config.json type=smolvla; trained on monozu-deving/Xlerobot-grap-post-index4 whose meta/info.json robot_type=xlerobot_follower."

@@ -1,0 +1,98 @@
+id: vla-jepa
+name: VLA-JEPA
+aliases: [vla_jepa, VLAJEPA, ginwind/VLA-JEPA]
+family: vla
+summary: >-
+  Vision-language-action model that pairs a Qwen3-VL-2B backbone with a flow-matching DiT action head, and adds a
+  V-JEPA2 latent video world model as an auxiliary self-supervised loss during training only. At inference only Qwen
+  and the action head run, predicting 7-step action chunks.
+authors: Jingwen Sun et al. (University of Science and Technology of China and collaborators)
+paper_url: https://arxiv.org/abs/2602.10098
+backbone: Qwen3-VL-2B-Instruct + DiT-B flow-matching action head (V-JEPA2 world model, training only)
+action_output: flow-matching
+action_chunking: true
+arch_source_ref: ev-lerobot-vlajepa-docs
+license: Apache-2.0
+weights_license: Apache-2.0
+open_weights: true
+frameworks:
+  lerobot:
+    support: native
+    since: "0.6.0"
+    policy_type: vla_jepa
+    docs_url: https://huggingface.co/docs/lerobot/vla_jepa
+    note: "Added in v0.6.0 (\"feat(policies): add VLA-JEPA\"). Default chunk_size 7, 4 Euler denoising steps."
+    source_ref: ev-lerobot-vlajepa-config
+checkpoints:
+  - hub_id: lerobot/VLA-JEPA-Pretrain
+    note: "Converted from ginwind/VLA-JEPA; DROID 1.0.1, 2 exterior views, 7-dim actions."
+  - hub_id: lerobot/VLA-JEPA-LIBERO
+    note: "LIBERO-10; 2 cameras (agentview + wrist), 7-dim actions."
+  - hub_id: lerobot/VLA-JEPA-SimplerEnv
+    note: "OXE Bridge / RT-1; 1 view duplicated x2, 7-dim actions."
+  - hub_id: ginwind/VLA-JEPA
+    note: "Original upstream release (Apache-2.0)."
+observation_space:
+  state: proprioceptive state via the action head's state encoder
+  language: required
+  source_ref: ev-lerobot-vlajepa-docs
+notes: >-
+  Family vla rather than world-model: the LeRobot docs call it a Vision-Language-Action model, and the V-JEPA2 world
+  model is a training-time auxiliary loss that is not used at inference. Released checkpoints use 1–2 camera views;
+  datasets with more views pass all views to Qwen but only the first `jepa_tubelet_size` (default 2) to the world
+  model, so no hard camera max is stated. Params not stated as a total by the authors; not in the LeRobot compute
+  hardware guide (requirements unset); not named by the RTC or PEFT docs. The LeRobot docs' LIBERO results table at
+  v0.6.1 is internally inconsistent (e.g. libero_10 "96" successes of 100 shown as 93.0%).
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-vlajepa-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/vla_jepa.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot VLA-JEPA docs: Qwen3-VL backbone, V-JEPA2 video world model, flow-matching DiT action head; world model unused at inference."
+    quote: "a Vision-Language-Action model that combines a Qwen3-VL language backbone with a self-supervised video world model (V-JEPA2) and a flow-matching DiT action head."
+  - id: ev-lerobot-vlajepa-docs-inference
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/vla_jepa.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: Only the Qwen backbone and action head run at inference.
+    quote: "Only Qwen + the action head are used. The world model is not needed at inference time."
+  - id: ev-lerobot-vlajepa-docs-license
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/vla_jepa.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: Weights follow ginwind/VLA-JEPA (Apache 2.0); integration code Apache 2.0.
+    quote: "The LeRobot integration code follows the **Apache 2.0 License**."
+  - id: ev-lerobot-vlajepa-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/vla_jepa/configuration_vla_jepa.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Policy type string is `vla_jepa`; default chunk_size 7."
+    quote: '@PreTrainedConfig.register_subclass("vla_jepa")'
+  - id: ev-lerobot-v060-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.6.0
+    date: 2026-07-06
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.0"}
+    summary: VLA-JEPA was added in LeRobot v0.6.0.
+    quote: "* feat(policies): add VLA-JEPA by @Maximellerbach in https://github.com/huggingface/lerobot/pull/3568"
+  - id: ev-hub-vlajepa-checkpoints
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/lerobot/VLA-JEPA-Pretrain
+    verified_on: 2026-10-24
+    summary: "Hub API: lerobot/VLA-JEPA-{Pretrain,LIBERO,SimplerEnv} and ginwind/VLA-JEPA exist, all tagged license:apache-2.0."

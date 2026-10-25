@@ -1,0 +1,41 @@
+robot: so101
+policy: diffusion
+state: works-with-caveats
+framework: lerobot
+caveats:
+- Community-reported only; not documented upstream or maintainer-tested.
+- 'LeRobot''s Diffusion Policy defaults target simulation; real SO-101 deployment in #2506 only worked after changing crop_shape (None or matched to image size), vision backbone and inference steps.'
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-ymatari-diffusion-so101
+    - ev-hub-jliu-diffusion-so101
+  inference_real:
+    state: works-with-caveats
+    evidence:
+    - ev-gh-lerobot-2506
+evidence:
+- id: ev-hub-ymatari-diffusion-so101
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/ymatari/diffusion_so101_cleanup_table_2
+  date: '2025-08-27'
+  verified_on: '2026-10-24'
+  summary: config.json type=diffusion; train_config.json dataset.repo_id=ymatari/cleanup-table-2, whose meta/info.json robot_type=so101_follower (20 episodes).
+- id: ev-hub-jliu-diffusion-so101
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/jliu6718/diffusion-so101-place_brick
+  date: '2026-01-09'
+  verified_on: '2026-10-24'
+  summary: config.json type=diffusion; train_config.json dataset.repo_id=jliu6718/diffusion-so101-place_brick, whose meta/info.json robot_type=so101_follower (30 episodes).
+- id: ev-gh-lerobot-2506
+  tier: community-reported
+  type: github-issue
+  url: https://github.com/huggingface/lerobot/issues/2506
+  date: '2025-11-23'
+  verified_on: '2026-10-24'
+  summary: 'Issue #2506: a user deployed Diffusion Policy on the SO101 follower after changing the sim-oriented defaults (crop_shape, vision backbone, inference steps); maintainer pkooij confirmed and closed
+    it.'
+  quote: I have successfully deployed Diffusion Policy on the SO101 Follower using the 100+ episode dataset, following your guidance.

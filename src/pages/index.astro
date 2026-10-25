@@ -1,0 +1,82 @@
+---
+import Base from '../layouts/Base.astro';
+import Matrix, { type MData } from '../components/Matrix.tsx';
+import '../styles/matrix.css';
+import { loadAll, gridRobots, gridPolicies, stats, inferredPair } from '../lib/data.ts';
+import { needOf } from '../lib/fit.ts';
+import { SITE, GH } from '../site.ts';
+
+const all = loadAll();
+const R = gridRobots(), P = gridPolicies();
+const s = stats();
+
+const runs: MData['runs'] = {};
+for (const r of all.runs) {
+  ((runs[r.policy] ??= {})[r.compute] ??= []).push({
+    id: r.id, runtime: r.runtime, precision: r.precision, cameras: r.cameras, inference_hz: r.inference_hz,
+    control_rate_hz: r.control_rate_hz, p50: r.inference_latency_ms?.p50, vram_gb: r.vram_gb, outcome: r.outcome ?? 'runs',
+  });
+}
+const data: MData = {
+  robots: R.map((r) => ({
+    id: r.id, name: r.name, class: r.class, aliases: r.aliases ?? [], open_source: r.open_source,
+    price: r.price_usd?.low, frameworks: Object.keys(r.frameworks ?? {}),
+    sensors: [...(r.sensors_supported ?? []), ...(r.sensors_builtin ?? [])],
+  })),
+  policies: P.map((p) => ({
+    id: p.id, name: p.name, family: p.family, aliases: p.aliases ?? [], open_weights: p.open_weights,
+    frameworks: Object.keys(p.frameworks ?? {}),
+    need: needOf(p),
+  })),
+  cells: all.compat
+    .filter((c) => R.some((r) => r.id === c.robot) && P.some((p) => p.id === c.policy))
+    .map((c) => ({
+      r: c.robot, p: c.policy, s: c.state, t: c.tier, v: c.verified_on, age: c.age_days, n: c.evidence.length, stale: c.stale,
+      drift: c.version_drift, dispute: !!c.dispute, caveat: c.caveats?.[0] ?? c.partial_scope ?? c.reason,
+    }))
+    // T4 display-only: no evidence, but both sides are integrated in LeRobot
+    .concat(R.flatMap((r) => P.flatMap((p) => {
+      if (all.cell(r.id, p.id)) return [];
+      const inf = inferredPair(r, p);
+      return inf ? [{ r: r.id, p: p.id, s: 'untested', t: 'inferred', v: null, age: null, n: 0, stale: false, drift: false, dispute: false, caveat: inf.basis }] : [];
+    }))),
+  compute: all.compute.map((c) => ({ id: c.id, name: c.name, memory_gb: c.memory_gb, unified: c.unified, class: c.class })),
+  runs,
+  frameworks: all.frameworks.map((f) => ({ id: f.id, name: f.name })),
+  sensors: all.sensors.map((x) => ({ id: x.id, name: x.name })),
+};
+
+const title = `${SITE.title}: robot policy compatibility matrix`;
+const description = `Can this policy run on this robot, on this hardware? ${s.known} of ${s.total} robot×policy cells sourced, every one linked to evidence. ${SITE.scope}. Last full review ${s.last_full_review}.`;
+const jsonld = [{
+  '@context': 'https://schema.org', '@type': 'Dataset', name: `${SITE.title}: robot policy compatibility matrix`,
+  description, url: SITE.url, license: 'https://creativecommons.org/licenses/by/4.0/',
+  creator: { '@type': 'Organization', name: SITE.title, url: GH }, isAccessibleForFree: true,
+  version: s.dataset_version, dateModified: s.last_full_review,
+  distribution: [{ '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: `${SITE.url}/api/v1/matrix.json` }],
+  keywords: ['robot learning', 'LeRobot', 'VLA', 'imitation learning', 'compatibility', 'Jetson', 'embodied AI'],
+}];
+---
+<Base title={title} description={description} jsonld={jsonld} og="/og/index.png">
+  <div class="wrap wide">
+    <section class="hero">
+      <h1>Can this policy run on this robot?</h1>
+      <p class="hero-sub">Pick a robot, a policy and your hardware. Every answer links to its source.</p>
+      <p class="hero-meta">
+        <span>{s.known} of {s.total} pairs have evidence</span>
+        <span>{s.robots} robots · {s.policies} policies · {all.runs.length} measured runs</span>
+        <span>Reviewed {s.last_full_review}{s.stale ? ` · ${s.pctStale.toFixed(0)}% stale` : ''}</span>
+        <a href="/coverage">Scope and gaps</a>
+        <a href="/methodology">How cells are judged</a>
+      </p>
+    </section>
+    <Matrix client:load data={data} />
+  </div>
+  <script is:inline>
+    addEventListener('keydown', (e) => {
+      if (e.key === '/' && !/INPUT|SELECT|TEXTAREA/.test(document.activeElement?.tagName ?? '')) {
+        e.preventDefault(); document.querySelector('.mx-search input')?.focus();
+      }
+    });
+  </script>
+</Base>

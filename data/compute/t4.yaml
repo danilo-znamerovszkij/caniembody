@@ -1,0 +1,31 @@
+id: t4
+name: NVIDIA T4
+class: datacenter
+memory_gb: 16
+arch: Turing
+ai_tops: Mixed Precision (FP16/FP32) 65 FP16 TFLOPS; INT8 Precision 130 INT8 TOPS
+power_w: 70 watts
+notes: Turing has no BF16 support, so BF16 checkpoints must run in FP16 or FP32. Available on Hugging Face Jobs (t4-small, t4-medium).
+verified_on: '2026-10-24'
+sources:
+- id: ev-nvidia-t4-specs
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/data-center/tesla-t4/
+  verified_on: '2026-10-24'
+  summary: 'T4 spec table: 65 FP16 TFLOPS, 130 INT8 TOPS, 16 GB GDDR6, 70 W.'
+  quote: Mixed Precision (FP16/FP32) 65 FP16 TFLOPS INT8 Precision 130 INT8 TOPS INT4 Precision 260 INT4 TOPS Interconnect Gen3 x16 PCIe Memory Capacity 16 GB GDDR6 Bandwidth 320+ GB/s Power 70 watts
+- id: ev-nvidia-t4-arch
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/data-center/tesla-t4/
+  verified_on: '2026-10-24'
+  summary: 'T4 page: based on the Turing architecture.'
+  quote: Based on the new NVIDIA Turing ™ architecture
+- id: ev-hf-jobs-pricing
+  tier: upstream-documented
+  type: official-docs
+  url: https://huggingface.co/docs/hub/jobs-pricing
+  verified_on: '2026-10-24'
+  summary: Hugging Face Jobs pricing lists T4 small and medium flavors (16 GB).
+  quote: Nvidia T4 - small 4 vCPU 15 GB 16 GB 50 GB $0.40 Nvidia T4 - medium 8 vCPU 30 GB 16 GB 100 GB $0.60

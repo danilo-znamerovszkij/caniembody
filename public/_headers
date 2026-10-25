@@ -1,0 +1,8 @@
+/api/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=3600
+/badge/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=3600
+/embed/*
+  Content-Security-Policy: frame-ancestors *

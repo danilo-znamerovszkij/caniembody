@@ -1,0 +1,52 @@
+id: jetson-agx-orin-64gb
+name: NVIDIA Jetson AGX Orin 64GB
+aliases:
+- Jetson AGX Orin Developer Kit
+class: edge
+memory_gb: 64
+unified: true
+arch: Ampere (2048 CUDA cores, 64 Tensor Cores)
+ai_tops: 275 TOPS
+power_w: 15W - 60W (nvpmodel modes 15W / 30W / 50W / MAXN)
+notes: AGX Orin 64GB module / developer kit. Distinct from AGX Orin 32GB (fewer cores, 40W max mode) and AGX Orin Industrial. Of the Orin modules in NVIDIA's power-mode tables, only the AGX Orin 64GB has a 50W nvpmodel mode. Record power mode with every run. 64 GB is unified memory shared with the OS.
+verified_on: '2026-10-24'
+sources:
+- id: ev-nvidia-jetson-orin-tops
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-orin/
+  verified_on: '2026-10-24'
+  summary: 'NVIDIA Jetson Orin spec table AI Performance row. Column order on the page: AGX Orin Developer Kit / AGX Orin 64GB (275), AGX Orin Industrial (248), AGX Orin 32GB (241), Orin NX 16GB (157), Orin NX 8GB (117), Orin Nano Super Developer Kit (67), Orin Nano 8GB (67), Orin Nano 4GB (34).'
+  quote: AI Performance 275 TOPS 248 TOPs 241 TOPS 157 TOPS 117 TOPS 67 TOPS 67 TOPS 34 TOPS
+- id: ev-nvidia-jetson-agx-orin-memory
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-orin/
+  verified_on: '2026-10-24'
+  summary: 'Jetson Orin spec table Memory row starts with the AGX Orin 64GB column: 64GB 256-bit LPDDR5, 204.8 GB/s.'
+  quote: Memory 64GB 256-bit LPDDR5 204.8GB/s
+- id: ev-nvidia-jetson-orin-power
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-orin/
+  verified_on: '2026-10-24'
+  summary: Jetson Orin spec table Power row; first column (AGX Orin Developer Kit / 64GB) is 15W - 60W.
+  quote: Power 15W - 60W 15W-75W 15W - 60W 10W - 15W - 25W - 40W
+- id: ev-jetson-power-modes-agx64
+  tier: upstream-documented
+  type: official-docs
+  url: https://docs.nvidia.com/jetson/archives/r36.4.3/DeveloperGuide/SD/PlatformPowerAndPerformance/JetsonOrinNanoSeriesJetsonOrinNxSeriesAndJetsonAgxOrinSeries.html
+  verified_on: '2026-10-24'
+  versions:
+    jetson_linux: 36.4.3
+  summary: 'Jetson Linux r36.4.3 power-mode table for AGX Orin 64GB: MAXN, 15W, 30W (default), 50W.'
+  quote: for Jetson AGX Orin 64GB Property Mode MAXN 15W 30W* 50W Power budget n/a 15W 30W 50W
+- id: ev-jetson-power-modes-agx32
+  tier: upstream-documented
+  type: official-docs
+  url: https://docs.nvidia.com/jetson/archives/r36.4.3/DeveloperGuide/SD/PlatformPowerAndPerformance/JetsonOrinNanoSeriesJetsonOrinNxSeriesAndJetsonAgxOrinSeries.html
+  verified_on: '2026-10-24'
+  versions:
+    jetson_linux: 36.4.3
+  summary: 'Same guide: AGX Orin 32GB modes are MAXN, 15W, 30W, 40W (no 50W mode).'
+  quote: NVP Model Clock Configuration for Jetson AGX Orin 32GB Property Mode MAXN 15W 30W* 40W Power budget n/a 15W 30W 40W

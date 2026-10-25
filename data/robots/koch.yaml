@@ -1,0 +1,100 @@
+id: koch
+name: Koch v1.1
+maker: Alexander Koch (original design); v1.1 revision by Jess Moss
+aliases: [Koch arm, Koch v1.1, low_cost_robot, Low-Cost Robot Arm, koch_follower, koch_leader]
+class: arm
+summary: >-
+  Low-cost open-source arm with five joints plus a gripper, built from ROBOTIS Dynamixel XL430 and XL330 servos.
+  Koch v1.1 is Jess Moss's revision of Alexander Koch's original design to make assembly easier. LeRobot supports it
+  natively as a leader/follower pair.
+dof: 5
+dof_note: "Six motors per follower: shoulder_pan, shoulder_lift, elbow_flex, wrist_flex, wrist_roll + gripper."
+arms: 1
+actuators: >-
+  Follower: 2x Dynamixel XL430-W250 (shoulder) + 4x XL330-M288. Leader (v1.1 BOM): 6x Dynamixel XL330-M077-T.
+specs_source_ref: ev-lerobot-koch-motors
+open_source: true
+license: Apache-2.0 (Koch v1.1 repo); MIT (original low_cost_robot repo)
+bom_url: https://github.com/jess-moss/koch-v1-1
+homepage: https://github.com/jess-moss/koch-v1-1
+price_usd:
+  low: 278
+  high: 477
+  note: >-
+    Self-sourced parts cost from the Koch v1.1 README (US links): follower arm $278, leader arm $199, so $477 for the
+    pair. Excludes 3D printing.
+  source_ref: ev-koch-v11-bom
+frameworks:
+  lerobot:
+    support: native
+    since: "0.3.2"
+    robot_type: [koch_follower]
+    docs_url: https://huggingface.co/docs/lerobot/koch
+    note: "Leader: --teleop.type=koch_leader. Needs the Dynamixel extra (pip install -e \".[dynamixel]\")."
+    source_ref: ev-lerobot-koch-src
+sensors_supported: [rgb-mono, rgb-dual, rgb-multi, realsense-depth]
+teleop_options: ["Koch leader arm (koch_leader)"]
+notes: >-
+  LeRobot's Koch docs link to the v1.1 repo (jess-moss/koch-v1-1) for sourcing and assembly. Before the v0.3 hardware
+  API redesign, main also had a koch_bimanual type. Bimanual Koch is not registered in v0.6.1.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/README.md
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot README lists Koch among natively supported hardware."
+    quote: "SO100, LeKiwi, Koch, HopeJR, OMX, EarthRover, Reachy2, Gamepads, Keyboards, Phones, OpenARM, Unitree G1, reBot B601."
+  - id: ev-lerobot-koch-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/koch.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot Koch v1.1 guide; points to the jess-moss/koch-v1-1 README for sourcing."
+    quote: "Follow the sourcing and assembling instructions provided in this [README](https://github.com/jess-moss/koch-v1-1)."
+  - id: ev-lerobot-koch-src
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/robots/koch_follower/config_koch_follower.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Registers the koch_follower robot type."
+    quote: "@RobotConfig.register_subclass(\"koch_follower\")"
+  - id: ev-lerobot-koch-motors
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/robots/koch_follower/koch_follower.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Follower motor map: xl430-w250 for shoulder pan/lift, xl330-m288 for the rest including gripper."
+    quote: "\"shoulder_lift\": Motor(2, \"xl430-w250\", norm_mode_body), \"elbow_flex\": Motor(3, \"xl330-m288\", norm_mode_body),"
+  - id: ev-lerobot-v032-koch
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.3.2/src/lerobot/robots/koch_follower/config_koch_follower.py
+    date: 2025-08-01
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.3.2"}
+    summary: "koch_follower already registered at v0.3.2 (first tagged release)."
+    quote: "@RobotConfig.register_subclass(\"koch_follower\")"
+  - id: ev-koch-v11-bom
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/jess-moss/koch-v1-1/blob/1a553e1fa7d5404b51bbd83b99b0f7eba54888e0/README.md
+    verified_on: 2026-10-24
+    summary: "Koch v1.1 BOM: leader total $199 (6x XL330-M077-T), follower total $278."
+    quote: "| Total | | $278 |"
+  - id: ev-koch-original
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/AlexanderKoch-Koch/low_cost_robot/blob/0602b0c1e6a67d8f6ab96f81d1378639018d98af/README.md
+    verified_on: 2026-10-24
+    summary: "Original design uses XL430 for the first two joints and XL330 elsewhere."
+    quote: "This robot arm uses Dynamixel XL430 and Dynamixel XL330 servo motors. The XL430 motors are almost twice as strong and are used for the first two joints."

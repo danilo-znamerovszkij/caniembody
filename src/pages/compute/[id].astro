@@ -1,0 +1,82 @@
+---
+import Base from '../../layouts/Base.astro';
+import RunsTable from '../../components/RunsTable.astro';
+import Evidence from '../../components/Evidence.astro';
+import { loadAll, gridPolicies, gitDate, type Compute } from '../../lib/data.ts';
+import { COMPUTE_CLASS_LABEL, FAMILY_LABEL, RUNTIME_LABEL, fmtParams, fmtGB } from '../../lib/ui.ts';
+import { fitFor, fitText, needOf, type Fit } from '../../lib/fit.ts';
+import { crumbs, fitTitle, clip } from '../../lib/seo.ts';
+import { SITE } from '../../site.ts';
+
+export function getStaticPaths() {
+  return loadAll().compute.map((c) => ({ params: { id: c.id }, props: { c } }));
+}
+const { c } = Astro.props as { c: Compute };
+const all = loadAll();
+const runs = all.runs.filter((r) => r.compute === c.id);
+const rows = gridPolicies().map((p) => {
+  const pr = runs.filter((r) => r.policy === p.id).map((r) => ({ ...r, outcome: r.outcome ?? 'runs' }));
+  const v = p.requirements?.inference?.vram_gb;
+  return { p, v, fit: fitFor(needOf(p), c, pr as any) as Fit };
+});
+const rank = { measured: 0, fails: 1, exceeds: 2, none: 3 };
+rows.sort((a, b) => rank[a.fit.kind] - rank[b.fit.kind] || a.p.name.localeCompare(b.p.name));
+const measured = rows.filter((x) => x.fit.kind === 'measured');
+const short = c.name.replace(/^NVIDIA /, '');
+// FAQPage only where the Q&A is genuine: one question per policy with a measured answer.
+const faq = measured.length ? [{
+  '@context': 'https://schema.org', '@type': 'FAQPage',
+  mainEntity: measured.map(({ p, fit }) => ({
+    '@type': 'Question', name: `Can ${p.name} run on ${short}?`,
+    acceptedAnswer: { '@type': 'Answer', text: `${fitText(fit, c)}. Measured inference cost only, not task success. Sources: ${SITE.url}/compute/${c.id}` },
+  })),
+}] : [];
+const desc = `What runs on ${short}: ${measured.length ? `${measured.map((x) => x.p.name).join(', ')} measured` : 'no measured policy runs yet'}; ${rows.filter((x) => x.fit.kind === 'exceeds').length} policies exceed its ${c.memory_gb} GB by sourced requirements. Runtime, precision and camera count on every number.`;
+---
+<Base title={fitTitle(`What can I run on ${short}?`, [' Robot policies, measured inference rates', ' Robot policies and inference rates', ' Robot policies'])} description={clip(desc)}
+  og={`/og/compute/${c.id}.png`} modified={gitDate(`data/compute/${c.id}.yaml`)}
+  jsonld={[crumbs([['Matrix', '/'], ['Compute', '/compute'], [c.name, `/compute/${c.id}`]]), ...faq]}>
+  <div class="wrap">
+    <section class="ph">
+      <div class="eyebrow"><a href="/">Matrix</a><span>/</span><a href="/compute">Compute</a><span>/</span><span>{COMPUTE_CLASS_LABEL[c.class]}</span></div>
+      <h1>What can I run on {short}?</h1>
+      <p class="status-line">
+        <span class="pill">{c.memory_gb ? `${c.memory_gb} GB${c.unified ? ' unified memory' : ' VRAM'}` : 'system RAM'}</span>
+        {c.arch && <span class="pill">{c.arch}</span>}
+        {c.ai_tops && <span class="pill">{c.ai_tops}</span>}
+        {c.power_w && <span class="pill">{c.power_w}</span>}
+        <span><a href={`/?compute=${c.id}`}>View matrix for this target →</a></span>
+      </p>
+      {c.notes && <p class="lede small">{c.notes}</p>}
+    </section>
+
+    <h2>Policy by policy</h2>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>Policy</th><th>Params</th><th>Inference memory (sourced, with precision)</th><th>On {short}</th><th>Best measured</th></tr></thead>
+      <tbody>
+        {rows.map(({ p, v, fit }) => (
+          <tr>
+            <td><a href={`/policy/${p.id}`}><strong>{p.name}</strong></a> <span class="muted small">{FAMILY_LABEL[p.family]}</span></td>
+            <td class="mono">{fmtParams(p.params)}</td>
+            <td class="mono">{v?.min != null ? `≥${fmtGB(v.min)}` : v?.measured != null ? `${fmtGB(v.measured)} measured` : '—'}{v && p.requirements?.inference?.precision && <span class="muted"> {p.requirements.inference.precision}</span>}</td>
+            <td>
+              {fit.kind === 'measured' && <span class="flag ok">measured</span>}
+              {fit.kind === 'fails' && <span class="flag red">{fit.run.outcome}</span>}
+              {fit.kind === 'exceeds' && <span class="tier" data-t="inferred">T4 inferred · exceeds memory</span>}
+              {fit.kind === 'none' && <span class="muted small">no data</span>}
+            </td>
+            <td class="mono small">{fit.kind === 'measured' ? `${fit.run.inference_hz != null ? `${+fit.run.inference_hz.toFixed(2)} Hz` : 'runs'} · ${RUNTIME_LABEL[fit.run.runtime] ?? fit.run.runtime} · ${fit.run.precision} · ${fit.run.cameras} cam` : fit.kind === 'exceeds' ? `needs ≥${fit.needGb} GB` : ''}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table></div>
+    <p class="small muted" style="margin-top:10px">“Exceeds memory” compares a policy's upstream-stated <em>minimum</em> inference memory (never a measured peak, which is precision-specific) with this target's {c.unified ? 'unified (shared CPU/GPU) memory, so the real budget is lower' : 'VRAM'}. It is arithmetic, not observation, and is labelled inferred. Quantised or split runtimes can change the answer; a measured run always wins.</p>
+
+    <h2 id="runs">All measured runs on {short}</h2>
+    {runs.length ? <RunsTable runs={runs} showPolicy /> : <p class="empty">No measured runs on {short} yet. A run needs runtime, precision, camera count{c.class === 'edge' ? ', JetPack version and power mode' : ''}. <a href="/methodology#contribute">Contribute one</a>.</p>}
+
+    <h2 id="sources">Sources</h2>
+    <Evidence items={c.sources} />
+  </div>
+</Base>
+<style>.flag.ok { color: var(--works); background: var(--works-bg); }</style>

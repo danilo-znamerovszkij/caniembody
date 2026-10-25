@@ -1,0 +1,32 @@
+robot: agilex-piper
+policy: smolvla
+state: works-with-caveats
+framework: lerobot
+caveats:
+  - "Community-reported only; not documented upstream or maintainer-tested."
+  - "With async inference the arm swayed back and forth as the action queue refilled; the reporter fixed it by tuning the queue size (maintainer suggested RTC)."
+  - "LeRobot has no built-in Piper robot type; requires a third-party plugin."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-wego-smolvla]
+  inference_real:
+    state: works-with-caveats
+    evidence: [ev-issue-2938]
+evidence:
+  - id: ev-hub-wego-smolvla
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/wego-hansu/piper_smolvla
+    date: 2025-10-11
+    verified_on: 2026-10-24
+    summary: "config.json type=smolvla; trained on wego-hansu/piper_pick_cars_033 whose meta/info.json robot_type=piper_follower."
+  - id: ev-issue-2938
+    tier: community-reported
+    type: github-issue
+    url: https://github.com/huggingface/lerobot/issues/2938
+    date: 2026-02-09
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.3"}
+    summary: "User (Robot Arm: PiPER) ran a fine-tuned SmolVLA with async inference; motion swayed as the queue refilled, improved after adjusting queue size."
+    quote: "I fine-tuned the SmolVLA model to perform asynchronous inference."

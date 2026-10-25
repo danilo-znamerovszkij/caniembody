@@ -1,0 +1,84 @@
+id: topreward
+name: TOPReward
+aliases: [topreward, TOP-Reward]
+family: reward-model
+in_grid: false
+summary: >-
+  Zero-shot reward model that reads the token log-probability of "True" from a frozen vision-language model asked
+  whether a trajectory video completes a task instruction. No fine-tuned weights: the LeRobot port wraps
+  Qwen3-VL (default Qwen3-VL-8B-Instruct) and returns one scalar log-prob reward per sample.
+authors: Shirui Chen et al. (University of Washington, Allen Institute for AI)
+paper_url: https://arxiv.org/abs/2602.19313
+backbone: frozen Qwen3-VL (default Qwen/Qwen3-VL-8B-Instruct)
+action_output: scalar-reward
+arch_source_ref: ev-lerobot-topreward-docs
+license: Apache-2.0 (LeRobot integration); MIT (upstream TOPReward/TOPReward)
+frameworks:
+  lerobot:
+    support: native
+    since: "0.6.0"
+    policy_type: topreward
+    docs_url: https://huggingface.co/docs/lerobot/topreward
+    note: >-
+      A reward model, not a policy: lives in src/lerobot/rewards/topreward, registered with
+      RewardModelConfig.register_subclass("topreward") and selected as `reward_model.type=topreward` (not
+      --policy.type). Inference-only and zero-shot; only the Qwen3-VL client is ported. Includes an offline labelling
+      script that writes a SARM-compatible topreward_progress.parquet for RA-BC.
+    source_ref: ev-lerobot-topreward-config
+checkpoints:
+  - hub_id: Qwen/Qwen3-VL-8B-Instruct
+    note: "Default frozen VLM (vlm_name); TOPReward has no weights of its own — save_pretrained writes only config.json."
+observation_space:
+  cameras: {min: 1, max: 1}
+  state: not used (video + task instruction only)
+  language: required
+  source_ref: ev-lerobot-topreward-docs
+notes: >-
+  in_grid false: reward model, not a robot-control policy. open_weights left unset because there are no
+  TOPReward-specific weights (it uses an off-the-shelf open VLM). Docs note the first run downloads ~16 GB of
+  Qwen3-VL-8B-Instruct weights and strongly recommend a GPU, but give no VRAM requirement. Default 16 frames at
+  2 fps from one configured camera key (image_key, default observation.images.top).
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-topreward-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/topreward.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: TOPReward extracts token log-probabilities from an off-the-shelf VLM given a video and task instruction; zero-shot.
+    quote: "TOPReward is a **zero-shot reward model** that extracts token log-probabilities from an off-the-shelf vision-language model (VLM) as a robotic reward signal."
+  - id: ev-lerobot-topreward-docs-weights
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/topreward.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: No fine-tuned weights to host; LeRobot wraps Qwen3VLForConditionalGeneration.
+    quote: "Because the method only depends on a frozen VLM, TOPReward is **zero-shot**: there are no fine-tuned weights to host."
+  - id: ev-lerobot-topreward-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/rewards/topreward/configuration_topreward.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Registered as reward-model type `topreward`."
+    quote: '@RewardModelConfig.register_subclass("topreward")'
+  - id: ev-lerobot-v060-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.6.0
+    date: 2026-07-06
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.0"}
+    summary: TOPReward was added in LeRobot v0.6.0.
+    quote: "* feat(rewards): add TOPReward reward model by @s1lent4gnt in https://github.com/huggingface/lerobot/pull/3629"
+  - id: ev-topreward-upstream-repo
+    tier: community-reported
+    type: source-code
+    url: https://github.com/TOPReward/TOPReward
+    verified_on: 2026-10-24
+    summary: "GitHub API reports the upstream TOPReward/TOPReward repo license as MIT."

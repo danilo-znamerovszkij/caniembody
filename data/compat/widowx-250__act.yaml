@@ -1,0 +1,39 @@
+robot: widowx-250
+policy: act
+state: partial
+partial_scope: "LeRobot training is evidenced by a public checkpoint. Real-robot ACT results on the WidowX 250 come only from the BridgeData V2 paper's own implementation, which was not released, not from LeRobot."
+framework: lerobot
+caveats:
+  - "The BridgeData V2 evaluation used goal-image-conditioned ACT. bridge_data_v2 does not include the ACT implementation or a checkpoint."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-msnaga-act]
+  inference_real:
+    state: works-with-caveats
+    notes: "BridgeData V2 authors' real-robot evaluation (10 trials per task), outside LeRobot."
+    evidence: [ev-bridgev2-paper-act, ev-bridgev2-repo]
+evidence:
+  - id: ev-hub-msnaga-act
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/msnaga/widowx_250_pick_and_place_block_policy
+    date: 2025-10-12
+    verified_on: 2026-10-24
+    summary: "config.json type=act. train_config dataset msnaga/widowx_250_pick_and_place_block, whose meta/info.json robot_type=widowx_250s_end_effector (50 episodes, one front camera, waist/shoulder/elbow/forearm_roll/wrist_angle/wrist_rotate/gripper joints). No model card or rollout results."
+  - id: ev-bridgev2-paper-act
+    tier: community-reported
+    type: paper
+    url: https://arxiv.org/abs/2308.12952v3
+    date: 2024-01-17
+    verified_on: 2026-10-24
+    summary: "BridgeData V2 paper (dataset paper; ACT first author Tony Zhao is a co-author) trains goal-conditioned ACT on BridgeData V2 and evaluates it on the real WidowX 250, 10 trials per task (Table 2)."
+    quote: "Action chunking with transformers (ACT). Previous work has also noted that predicting action sequences instead of single actions can benefit imitation learning [17, 18]."
+  - id: ev-bridgev2-repo
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/rail-berkeley/bridge_data_v2/blob/bc60a35b701a12021c8c95e9d8601274d3acd928/README.md
+    date: 2024-03-17
+    verified_on: 2026-10-24
+    summary: "bridge_data_v2 implements GCBC, D-GCBC, GCIQL, CRL and LCBC only. ACT is linked to its upstream repo, and no ACT checkpoint is released."
+    quote: "We don't currently have a checkpoints for ACT or RT-1 available but may release them soon."

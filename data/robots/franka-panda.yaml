@@ -1,0 +1,85 @@
+id: franka-panda
+name: Franka Emika Panda
+maker: Franka Emika
+aliases: [Panda, FER, Franka Panda, Franka Emika Panda, Franka FER]
+class: arm
+summary: >-
+  Franka Emika's 7-DoF torque-sensing research arm, the robot behind the DROID dataset and many VLA papers. Franka's
+  current documentation calls it the older robot (FER or Panda) next to its successor, the Franka Research 3. LeRobot
+  has no native Panda support. The only LeRobot integration is LeFranX, a fork/extension built for a Panda (FER) with a
+  RobotEra XHand.
+dof: 7
+payload_g: {max: 3000}
+repeatability_mm: {max: 0.1}
+specs_source_ref: ev-panda-datasheet
+open_source: false
+frameworks:
+  lerobot:
+    support: community
+    repo_url: https://github.com/wengmister/LeFranX
+    docs_url: https://huggingface.co/docs/lerobot/third_party_robots
+    note: >-
+      LeFranX is a LeRobot fork/extension for the Franka FER (Panda) with a RobotEra XHand. Its files are copied over a
+      LeRobot checkout (tested at LeRobot commit ce3b9f627e55), and it has no Franka Hand gripper interface. LeRobot
+      itself registers no Panda robot type.
+    source_ref: ev-lefranx-readme
+notes: >-
+  Panda (FER) is not the Franka Research 3 (franka-fr3). Compatibility evidence for one does not transfer to the other.
+  Note that the DROID control stack accepts either arm (robot_type panda or fr3), although the DROID dataset was
+  collected on Pandas. Datasheet (April 2020): 7 DoF, 3 kg payload, 855 mm reach, pose repeatability <±0.1 mm (ISO 9283),
+  link-side torque sensors in all 7 axes.
+verified_on: 2026-10-24
+sources:
+  - id: ev-franka-fci-docs
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://frankarobotics.github.io/docs/
+    verified_on: 2026-10-24
+    summary: "Franka's FCI documentation covers two robots: the Franka Research 3 and the older FER/Panda."
+    quote: "The software and its documentation support two different robots, the Franka Research 3 (FR3) and an older Franka Robotics Robot (FER or Panda)."
+  - id: ev-panda-datasheet
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://web.archive.org/web/20220125184811/https://download.franka.de/Franka_Emika_Panda_Data_sheet_EN-2020_04.pdf
+    verified_on: 2026-10-24
+    summary: "Franka Emika Panda datasheet (Release Version April 2020, archived copy; the original download.franka.de link now returns 403): 7 DoF, 3 kg payload, 855 mm reach, pose repeatability <+/- 0.1 mm."
+    quote: "Degrees of freedom 7 Joint velocity limits A1, A2, A3, A4: 150°/s Payload 3 kg A5, A6, A7: 180°/s Workspace see backside Cartesian velocity limits up to 2 m/s end effector speed Maximum reach 855 mm Pose repeatabillity <+/- 0.1 mm (ISO 9283)"
+  - id: ev-droid-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2403.12945v2
+    date: 2025-04-22
+    verified_on: 2026-10-24
+    summary: "DROID paper: the DROID data-collection platform, shared by all 13 institutions, is built on the Franka Emika Panda."
+    quote: "We chose the Franka Emika Panda 7 DoF robot arm as the base of our setup since it is widely adopted in the robot research community, reliable, relatively affordable and was available at most participating institutions."
+  - id: ev-droid-host-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/droid-dataset/droid/blob/33ae6a67274f36d2e29525b86f23a56616ef43a7/docs/software-setup/host-installation.md
+    date: 2025-09-15
+    verified_on: 2026-10-24
+    summary: "The DROID control software is configured for either a Panda or an FR3, so a 'DROID setup' does not by itself identify the arm model."
+    quote: "Finally update the `robot_type` parameter to `panda` or `fr3` depending on which robot you are using."
+  - id: ev-lefranx-readme
+    tier: community-reported
+    type: source-code
+    url: https://github.com/wengmister/LeFranX/blob/a39906e6629f39490950fe8bd20f4f992ed74fd7/README.md
+    date: 2025-09-22
+    verified_on: 2026-10-24
+    summary: "LeFranX README: a LeRobot extension for the Franka FER (Panda) plus RobotEra XHand. It is installed by copying files over a LeRobot checkout (tested at commit ce3b9f627e55) and has no Franka Hand gripper interface."
+  - id: ev-lerobot-third-party
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/third_party_robots.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot's third-party page lists LeFranX with the ⚠️ fork/extension marker (not a drop-in plugin)."
+    quote: "LeRobot extension for the <a href=\"https://franka.de/\">Franka</a> research arm, paired with the <a href=\"https://www.robotera.com/\">RobotEra XHand</a> hand for VR teleoperation."
+  - id: ev-lerobot-issue-1567
+    tier: community-reported
+    type: github-issue
+    url: https://github.com/huggingface/lerobot/issues/1567
+    date: 2025-07-22
+    verified_on: 2026-10-24
+    summary: "A user asked for LeRobot support for a real Franka Emika Panda and found no robot.type for it. The issue was closed after other users pointed to their own FR3 tooling (CRISP), not to a Panda integration."

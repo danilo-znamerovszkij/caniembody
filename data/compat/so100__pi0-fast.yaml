@@ -1,0 +1,18 @@
+robot: so100
+policy: pi0-fast
+state: partial
+partial_scope: Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source.
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-maharishiva-pi0fast-so100
+evidence:
+- id: ev-hub-maharishiva-pi0fast-so100
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/maharishiva/pi0fast_tictactoe09
+  verified_on: '2026-10-24'
+  summary: config.json type=pi0fast; train_config.json dataset.repo_id=maharishiva/tictactoe-fixed-final, whose meta/info.json robot_type=so100_follower (40 episodes). Uses the earlier 'pi0fast' policy
+    type (pre-'pi0_fast' LeRobot implementation).

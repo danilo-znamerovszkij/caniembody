@@ -1,0 +1,17 @@
+robot: omx
+policy: lingbot-va
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-maximellerbach-lingbotva-omx
+evidence:
+- id: ev-hub-maximellerbach-lingbotva-omx
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/maximellerbach/omx_multicubes_lingbot_va
+  verified_on: '2026-10-24'
+  summary: "config.json type=lingbot_va; train_config.json dataset maximellerbach/omx_multicubes whose meta/info.json robot_type=omx_follower (176 episodes); pretrained from lerobot/lingbot_va_base."

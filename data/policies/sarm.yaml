@@ -1,0 +1,95 @@
+id: sarm
+name: SARM
+aliases: [Stage-Aware Reward Modeling, sarm_reward_model]
+family: reward-model
+in_grid: false
+summary: >-
+  Stage-Aware Reward Modeling: a video-based reward model for long-horizon manipulation that jointly predicts the
+  current task stage and within-stage progress, normalised to task progress in [0, 1]. In LeRobot it is trained on
+  your own dataset and its progress predictions can weight policy training via Reward-Aligned Behavior Cloning (RA-BC).
+authors: Qianzhong Chen et al. (Stanford University, UC Berkeley, xdof.ai)
+paper_url: https://arxiv.org/abs/2509.25358
+backbone: frozen CLIP ViT-B/32 image/text encoders + transformer stage/progress heads
+action_output: scalar-reward
+arch_source_ref: ev-lerobot-sarm-docs-inputs
+license: Apache-2.0 (LeRobot)
+frameworks:
+  lerobot:
+    support: native
+    since: "0.4.3"
+    policy_type: sarm
+    docs_url: https://huggingface.co/docs/lerobot/sarm
+    note: >-
+      A reward model, not a policy: at v0.6.1 it lives in src/lerobot/rewards/sarm and is registered with
+      RewardModelConfig.register_subclass("sarm") (the train config has a separate `reward_model` field). Added in
+      v0.4.3 under src/lerobot/policies/sarm; moved to src/lerobot/rewards in v0.6.0 ("Reward models refactor"). The
+      v0.6.1 sarm.mdx training examples still pass `--policy.type=sarm`. Used to compute RA-BC sample weights
+      (`--sample_weighting.type=rabc`), which the docs say currently supports PI0, PI0.5 and SmolVLA.
+    source_ref: ev-lerobot-sarm-config
+observation_space:
+  cameras: {min: 1, max: 1}
+  state: robot state padded/truncated to max_state_dim 32 (state_key, default observation.state)
+  language: required
+  source_ref: ev-lerobot-sarm-docs-inputs
+notes: >-
+  in_grid false: reward model, not a robot-control policy. Three annotation modes (single_stage needs no
+  annotations; dense_only and dual use VLM subtask annotations, default Qwen/Qwen3-VL-30B-A3B-Instruct). No official
+  pretrained SARM checkpoint was found on the Hub under the lerobot org; users train their own, so open_weights,
+  checkpoints and requirements are left unset. Camera count reflects the single configurable `image_key` (default
+  observation.images.top).
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-sarm-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/sarm.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: SARM is a video-based reward modeling framework, optionally used with RA-BC.
+    quote: "SARM (Stage-Aware Reward Modeling) is a video-based reward modeling framework for long-horizon robot manipulation tasks."
+  - id: ev-lerobot-sarm-docs-inputs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/sarm.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: SARM processor encodes images and task text with CLIP ViT-B/32 and pads robot state.
+    quote: "- **Encodes** images and task text with CLIP (ViT-B/32) into `video_features` and `text_features`"
+  - id: ev-lerobot-sarm-docs-rabc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/sarm.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: RA-BC weighting currently supports PI0, PI0.5 and SmolVLA.
+    quote: "Currently PI0, PI0.5 and SmolVLA are supported with RA-BC:"
+  - id: ev-lerobot-sarm-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/rewards/sarm/configuration_sarm.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "SARM is registered as reward-model type `sarm` (RewardModelConfig, not PreTrainedConfig)."
+    quote: '@RewardModelConfig.register_subclass("sarm")'
+  - id: ev-lerobot-v043-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.4.3
+    date: 2026-01-22
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.3"}
+    summary: SARM was first added in LeRobot v0.4.3.
+    quote: "* Add sarm by @pkooij in https://github.com/huggingface/lerobot/pull/2639"
+  - id: ev-lerobot-v060-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.6.0
+    date: 2026-07-06
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.0"}
+    summary: v0.6.0 refactored reward models into src/lerobot/rewards.
+    quote: "* Reward models refactor by @s1lent4gnt in https://github.com/huggingface/lerobot/pull/3142"

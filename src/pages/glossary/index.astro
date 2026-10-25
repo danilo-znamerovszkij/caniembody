@@ -1,0 +1,29 @@
+---
+import Base from '../../layouts/Base.astro';
+import { loadAll } from '../../lib/data.ts';
+import { pageTitle, crumbs } from '../../lib/seo.ts';
+const g = [...loadAll().glossary].sort((a, b) => a.term.localeCompare(b.term));
+---
+<Base title={pageTitle('Robot learning glossary: action chunking, flow matching, VLA, RTC')}
+  description="Precise definitions of the terms you meet in robot learning papers: action chunking, flow matching, Real-Time Chunking, VLA, sim-to-real, teleoperation, PEFT, control rate vs inference latency. Each with its original source."
+  jsonld={[crumbs([['Matrix', '/'], ['Glossary', '/glossary']]), { '@context': 'https://schema.org', '@type': 'DefinedTermSet', name: 'Robot learning glossary', hasDefinedTerm: g.map((x) => ({ '@type': 'DefinedTerm', name: x.term, description: x.short, url: `/glossary/${x.id}` })) }]}>
+  <div class="wrap narrow">
+    <section class="ph">
+      <div class="eyebrow"><a href="/">Matrix</a><span>/</span><span>Glossary</span></div>
+      <h1>Glossary</h1>
+      <p class="lede">The terms that decide whether a policy runs on your robot. Every entry cites where the idea comes from.</p>
+    </section>
+    {g.length ? (
+      <dl class="gl">
+        {g.map((x) => <div><dt><a href={`/glossary/${x.id}`}>{x.term}</a>{x.aka?.length ? <span class="muted small"> · {x.aka.join(', ')}</span> : null}</dt><dd>{x.short}</dd></div>)}
+      </dl>
+    ) : <p class="empty">Glossary entries are being written.</p>}
+  </div>
+</Base>
+<style>
+  .gl { margin: 0; display: grid; }
+  .gl > div { padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .gl dt { font-weight: 600; font-size: 15px; }
+  .gl dt a { text-decoration: none; }
+  .gl dd { margin: 4px 0 0; color: var(--fg-2); font-size: 14px; }
+</style>

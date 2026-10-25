@@ -1,0 +1,62 @@
+id: agilex-piper
+name: AgileX PiPER
+maker: AgileX Robotics
+aliases: [PiPER, Piper, AgileX Piper, piper_follower]
+class: arm
+summary: >-
+  AgileX's lightweight 6-DoF desktop arm: 4.2 kg arm body, 1.5 kg payload, ±0.1 mm repeatability, CAN bus. LeRobot
+  reaches it through third-party plugins. The listed drop-ins are from WeGo Robotics (PyPI lerobot_robot_wego_piper)
+  and AgRobotics Research.
+dof: 6
+dof_note: "6 arm joints; the WeGo plugin describes it as 7-DOF counting the gripper."
+payload_g: {max: 1500}
+repeatability_mm: {max: 0.1}
+specs_source_ref: ev-agilex-piper
+open_source: false
+homepage: https://global.agilex.ai/products/piper
+frameworks:
+  lerobot:
+    support: plugin
+    robot_type: [piper_follower]
+    package: lerobot_robot_wego_piper
+    repo_url: https://github.com/WeGo-Robotics/lerobot_robot_piper
+    docs_url: https://huggingface.co/docs/lerobot/third_party_robots
+    note: >-
+      WeGo Robotics plugin: follower type piper_follower, leader teleop piper_leader, uses piper_sdk over CAN. Its PyPI
+      name is lerobot_robot_wego_piper, and the import name is lerobot_robot_piper. The second listed plugin
+      (AgRoboticsResearch/lerobot_robot_piper) registers type `piper`. Its README says `pip install
+      lerobot_robot_piper`, but WeGo states that the PyPI package of that name is an unrelated third-party project.
+      A separate pipermate teleoperator plugin (FashionStar servos) also exists.
+    source_ref: ev-wego-piper-readme
+teleop_options: ["Piper leader arm (piper_leader, WeGo plugin)", "PiperMate (lerobot-teleoperator-pipermate plugin)"]
+notes: "AgileX also sells PiPER on the SCOUT MINI mobile base (SCOUT MINI COBOT). That combination is not covered by the plugins here."
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-third-party
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/third_party_robots.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot third-party page lists two lerobot_robot_piper plugins (AgRobotics Research, WeGo Robotics)."
+    quote: "lerobot_robot_piper (WeGo Robotics)"
+  - id: ev-wego-piper-readme
+    tier: community-reported
+    type: source-code
+    url: https://github.com/WeGo-Robotics/lerobot_robot_piper/blob/ed387ed9502d4fb0451488bfc9c763c8d60a1e07/README.md
+    verified_on: 2026-10-24
+    summary: "WeGo README: pip install lerobot_robot_wego_piper; PyPI lerobot_robot_piper is unrelated; config registers piper_follower / piper_leader."
+  - id: ev-agrobotics-piper
+    tier: community-reported
+    type: source-code
+    url: https://github.com/AgRoboticsResearch/lerobot_robot_piper/blob/abf721d9e88ac822b18cb3413a75bb8cc0e3b34f/lerobot_robot_piper/config_piper.py
+    verified_on: 2026-10-24
+    summary: "AgRobotics Research plugin registers robot type piper."
+  - id: ev-agilex-piper
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://global.agilex.ai/products/piper
+    verified_on: 2026-10-24
+    summary: "AgileX: 6-DoF, 1.5 kg payload, 626 mm reach, ±0.1 mm repeatability, 4.2 kg arm."
+    quote: "The standard PiPER provides a 1.5kg payload, a 626mm working reach, ±0.1mm repeatability, and a 4.2kg arm body."

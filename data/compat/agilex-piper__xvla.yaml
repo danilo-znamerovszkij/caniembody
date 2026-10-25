@@ -1,0 +1,57 @@
+robot: agilex-piper
+policy: xvla
+state: works-with-caveats
+framework: x-vla
+caveats:
+  - "Upstream evidence is the bimanual AgileX Aloha platform (two PiPER arms driven through AgileX's Piper ROS 1 Noetic driver) using X-VLA's own server-client deployment, not a single PiPER arm and not LeRobot."
+  - "Through LeRobot, open issue #2942 (two users): X-VLA on a Piper moves intermittently with pauses because action outputs change step-wise; ACT on the same data runs smoothly."
+capabilities:
+  train:
+    state: works
+    notes: "Upstream: X-VLA-0.9B fine-tuned on Soft-Fold, 1,200 bimanual AgileX cloth-folding trajectories (released as 2toINF/X-VLA-SoftFold). Community: LeRobot X-VLA checkpoint on single-arm piper_follower data."
+    evidence: [ev-xvla-paper-softfold, ev-hub-vis22-xvla]
+  inference_real:
+    state: works-with-caveats
+    notes: "Upstream: real-world cloth folding on the bimanual AgileX Aloha (about one cloth folded in under two minutes). Through LeRobot on a single Piper: runs but stutters (issue #2942, unresolved)."
+    evidence: [ev-xvla-paper-softfold-result, ev-xvla-softfold-agilex-readme, ev-issue-2942]
+evidence:
+  - id: ev-hub-vis22-xvla
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/vis22/xvla-piper-robot
+    date: 2026-10-11
+    verified_on: 2026-10-24
+    summary: "config.json type=xvla (base_model lerobot/xvla-base); trained on vis22/green_yellow_plates whose meta/info.json robot_type=piper_follower."
+  - id: ev-issue-2942
+    tier: community-reported
+    type: github-issue
+    url: https://github.com/huggingface/lerobot/issues/2942
+    date: 2026-02-10
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.3"}
+    summary: "Bug report: X-VLA controlling a Piper arm produces stuttering motion; a second user reports the same; open, no fix."
+    quote: "When using the XVLA model to control the Piper robotic arm, the arm's movement exhibits noticeable stuttering (i.e., moving intermittently with pauses)."
+  - id: ev-xvla-paper-softfold
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2510.10274
+    date: 2025-10-11
+    verified_on: 2026-10-25
+    summary: "X-VLA paper, Sec. 5: the Soft-Fold cloth-folding dataset is collected on the bimanual AgileX platform and X-VLA-0.9B is fine-tuned on it (Appendix F)."
+    quote: "we build a high-quality cloth-folding dataset on the bi-manual Agilex platform, termed Soft-Fold, which consists of 1,200 trajectories collected through a carefully designed pipeline."
+  - id: ev-xvla-paper-softfold-result
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2510.10274
+    date: 2025-10-11
+    verified_on: 2026-10-25
+    summary: "X-VLA paper abstract: with the 1,200 Soft-Fold demonstrations X-VLA performs real-world dexterous cloth folding; Appendix J lists AgileX among its three real-world embodiments."
+    quote: "with only 1,200 demonstrations, it excels at a dexterous cloth-folding manipulation task in the real world, achieving an average throughput of folding 1 cloth under two minutes."
+  - id: ev-xvla-softfold-agilex-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/2toinf/X-VLA/blob/6c4ecfb8be458ae7c0c96094e4b0add4174f4fe2/evaluation/SoftFold-Agilex/readme.md
+    date: 2025-11-06
+    verified_on: 2026-10-25
+    summary: "X-VLA repo evaluation/SoftFold-Agilex: serve 2toINF/X-VLA-SoftFold with deploy.py and run the client deploy/client_eef6d_xvla.py against the AgileX Aloha, whose arms are launched with the bundled Piper ROS driver (roslaunch piper start_ms_piper.launch, piper_description URDF)."
+    quote: "We evaluate **X-VLA** on the **Agilex Aloha platform** to perform long-horizon cloth-folding tasks."

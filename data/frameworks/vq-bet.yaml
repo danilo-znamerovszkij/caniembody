@@ -1,0 +1,10 @@
+id: vq-bet
+name: VQ-BeT (jayLEE0301/vq_bet_official)
+maintainer: Seungjae Lee et al. (VQ-BeT authors)
+repo: jayLEE0301/vq_bet_official
+docs_url: https://github.com/jayLEE0301/vq_bet_official
+license: MIT
+current_version: main
+current_version_date: 2024-02-28
+versioning: none
+notes: "Official code for Behavior Generation with Latent Actions (VQ-BeT). Ships configs for the simulated Kitchen and PushT environments. No tagged releases; main at 09d4851288ca (2024-02-28)."

@@ -1,0 +1,33 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { loadAll, pagePairs, inferredPair, type Robot, type Policy } from '../../../lib/data.ts';
+import { STATE_META, TIER_META } from '../../../lib/ui.ts';
+import { SITE } from '../../../site.ts';
+export function getStaticPaths() {
+  return pagePairs().map(({ r, p }) => ({ params: { robot: r.id, policy: p.id }, props: { r, p } }));
+}
+const { r, p } = Astro.props as { r: Robot; p: Policy };
+const c = loadAll().cell(r.id, p.id);
+const s = c?.state ?? (inferredPair(r, p) ? 'untested' : 'unknown');
+const href = `${SITE.url}/compat/${r.id}/${p.id}`;
+---
+<Base title={`${p.name} on ${r.name}: ${STATE_META[s].label}`} description={`${p.name} on ${r.name}`} bare noindex>
+  <a class="em" href={href} target="_blank" rel="noopener">
+    <span class="st" data-s={s} aria-hidden="true">{STATE_META[s].glyph}</span>
+    <span class="body">
+      <span class="q">Does {p.name} run on {r.name}?</span>
+      <span class="a">{STATE_META[s].label}{c?.tier && <span class="tier" data-t={c.tier}>{TIER_META[c.tier].short} · {TIER_META[c.tier].label}</span>}</span>
+      <span class="m">{c ? `verified ${c.verified_on} · ${c.evidence.length} source${c.evidence.length === 1 ? '' : 's'}` : s === 'untested' ? 'no published run · both in LeRobot (inferred)' : 'no evidence yet'} · {SITE.name}</span>
+    </span>
+  </a>
+</Base>
+<style is:global>
+  body { background: transparent; }
+  .em { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; margin: 4px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg-elev); text-decoration: none; color: var(--fg); max-width: 372px; }
+  .em:hover { border-color: var(--line-2); }
+  .em .st { width: 32px; height: 30px; font-size: 15px; }
+  .em .body { display: grid; gap: 3px; min-width: 0; }
+  .em .q { font-weight: 600; font-size: 14px; }
+  .em .a { font: 500 13px var(--mono); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .em .m { font: 11px var(--mono); color: var(--fg-3); }
+</style>

@@ -1,0 +1,80 @@
+id: vqbet
+name: VQ-BeT
+aliases: [Vector-Quantized Behavior Transformer]
+family: bc
+summary: >-
+  Vector-Quantized Behavior Transformer: a GPT-style behavior transformer that tokenizes continuous action chunks with a
+  hierarchical (residual) vector-quantization module, predicts the discrete codes plus a continuous offset, and so
+  captures multimodal action distributions.
+authors: New York University and Seoul National University (Lee, Wang, Etukuru, Kim, Shafiullah, Pinto)
+paper_url: https://arxiv.org/abs/2403.03181
+backbone: ResNet-18 image encoder (ImageNet-pretrained weights by default in LeRobot v0.6.1) + GPT transformer over residual-VQ action tokens
+action_output: vq-tokens
+action_chunking: true
+arch_source_ref: ev-vqbet-paper-arch
+license: Apache-2.0 (LeRobot implementation)
+weights_license: Apache-2.0
+open_weights: true
+frameworks:
+  lerobot:
+    support: native
+    policy_type: vqbet
+    docs_url: https://huggingface.co/docs/lerobot/policy_vqbet_README
+    note: >-
+      Present at v0.3.2, the earliest tagged LeRobot release. `since` left blank: the only earlier PyPI release (0.1.0,
+      2024-03-09, a prototype) was not inspected. Training first fits the VQ-VAE (n_vqvae_training_steps 20000 by
+      default), then the transformer. Defaults: n_obs_steps 5, action_chunk_size 5.
+    source_ref: ev-lerobot-vqbet-config
+checkpoints:
+  - hub_id: lerobot/vqbet_pusht
+    note: "PushT simulation checkpoint (Apache-2.0 on the Hub)."
+requirements:
+  train:
+    vram_gb: {min: 2, max: 6}
+    batch_size: 8
+    condition: >-
+      Peak training VRAM at batch size 8 with AdamW (LeRobot default), "Light BC" group (act, vqbet, tdmpc) in the
+      LeRobot compute hardware guide. The guide calls its figures indicative, order-of-magnitude numbers for picking
+      hardware, not exact predictions. Precision not stated.
+    source_ref: ev-lerobot-hw-guide
+observation_space:
+  cameras: {min: 1, max: 1}
+  state: robot state vector
+  source_ref: ev-lerobot-vqbet-config-features
+verified_on: 2026-10-24
+sources:
+  - id: ev-vqbet-paper-arch
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2403.03181
+    date: 2024-03-05
+    verified_on: 2026-10-24
+    summary: VQ-BeT tokenizes continuous actions with a hierarchical vector quantization module.
+    quote: "VQ-BeT augments BeT by tokenizing continuous actions with a hierarchical vector quantization module."
+  - id: ev-lerobot-vqbet-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/vqbet/configuration_vqbet.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Policy type string is `vqbet` (same registration at tag v0.3.2)."
+    quote: '@PreTrainedConfig.register_subclass("vqbet")'
+  - id: ev-lerobot-vqbet-config-features
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/vqbet/configuration_vqbet.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: Feature validation requires exactly one image input.
+    quote: 'raise ValueError("You must provide only one image among the inputs.")'
+  - id: ev-lerobot-hw-guide
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hardware_guide.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Compute hardware guide: Light BC (`act`, `vqbet`, `tdmpc`) peak VRAM ~2–6GB at BS 8 with AdamW; figures are indicative."
+    quote: "| Light BC   | `act`, `vqbet`, `tdmpc`                     |                  ~2–6GB | Laptop GPU (RTX 3060), L4, A10G   |"

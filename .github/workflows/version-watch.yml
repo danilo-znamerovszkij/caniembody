@@ -1,0 +1,21 @@
+name: Upstream version watch
+on:
+  schedule: [{ cron: '0 6 * * *' }]
+  workflow_dispatch:
+permissions: { issues: write, contents: read }
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    env: { GH_TOKEN: '${{ github.token }}', GITHUB_TOKEN: '${{ github.token }}' }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc, cache: npm }
+      - run: npm ci
+      - run: |
+          set +e; node scripts/version-watch.ts > body.md; code=$?; set -e
+          if [ $code -eq 2 ]; then
+            title="Upstream release: $(grep -m1 '^### ' body.md | sed 's/^### //')"
+            gh issue list --label upstream-release --state open --search "$title in:title" --json number --jq length | grep -q '^0$' && \
+              gh issue create --title "$title" --label upstream-release --body-file body.md || echo "already filed"
+          fi

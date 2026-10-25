@@ -1,0 +1,16 @@
+id: l40
+name: NVIDIA L40
+class: datacenter
+memory_gb: 48
+arch: Ada Lovelace
+power_w: 300W
+notes: Not the L40S (different SKU, lower power). NVIDIA's L40 page does not show a Tensor TFLOPS headline in its spec table. Not listed as a Hugging Face Jobs flavor.
+verified_on: '2026-10-24'
+sources:
+- id: ev-nvidia-l40-specs
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/data-center/l40/
+  verified_on: '2026-10-24'
+  summary: 'L40 spec table: Ada Lovelace, 48 GB GDDR6 with ECC, 300W max power.'
+  quote: GPU Architecture NVIDIA Ada Lovelace Architecture GPU Memory Bandwidth 864GB/s GPU Memory 48 GB GDDR6 with ECC Display Connectors 4 x DP 1.4a Max Power Consumption 300W

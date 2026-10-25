@@ -1,0 +1,38 @@
+robot: omx
+policy: act
+state: works
+framework: lerobot
+framework_version_tested: "0.6.1"
+capabilities:
+  train:
+    state: works
+    evidence: [ev-lerobot-omx-example, ev-hub-maximellerbach-omx-act, ev-hub-imsubin-omx-act]
+  inference_real:
+    state: works
+    notes: "Rolled out with lerobot-rollout --robot.type=omx_follower (base or sentry strategy) using two OpenCV cameras (wrist + top-down). Upstream describes the example as WIP and specific to its own setup."
+    evidence: [ev-lerobot-omx-example]
+  teleop_record:
+    state: works
+    evidence: [ev-lerobot-omx-example]
+evidence:
+  - id: ev-lerobot-omx-example
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/examples/omx/README.md
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot's OMX Follower example records a cube pick-and-place dataset, trains ACT with lerobot-train and deploys it with lerobot-rollout on omx_follower."
+    quote: "To train a simple `ACT` policy on the collected dataset, you can use the `lerobot-train` CLI:"
+  - id: ev-hub-maximellerbach-omx-act
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/maximellerbach/omx_pickandplace_act
+    verified_on: 2026-10-24
+    summary: "Checkpoint linked from the upstream OMX example. config.json type=act; train_config.json dataset maximellerbach/omx_autocollect whose meta/info.json robot_type=omx_follower (50 episodes)."
+  - id: ev-hub-imsubin-omx-act
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/IMsubin/pick_doll_put_pot_omx_act2
+    verified_on: 2026-10-24
+    summary: "config.json type=act; train_config.json dataset IMsubin/pick_doll_put_pot_omx whose meta/info.json robot_type=omx_follower (100 episodes)."

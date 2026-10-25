@@ -1,0 +1,42 @@
+robot: reachy2
+policy: act
+state: partial
+partial_scope: "Training ACT on a Reachy 2 dataset recorded with lerobot-record is documented upstream. The page's evaluation step runs lerobot-eval with --robot.* flags, but lerobot-eval in v0.6.1 evaluates in a simulation env (its config has an env field and no robot field), so on-robot inference is not validly documented."
+framework: lerobot
+framework_version_tested: "0.6.1"
+capabilities:
+  train:
+    state: works
+    evidence: [ev-lerobot-reachy2-train]
+  teleop_record:
+    state: works
+    notes: "Recording uses --robot.type=reachy2 with --teleop.type=reachy2_teleoperator; the page also documents Pollen's own VR data-acquisition app."
+    evidence: [ev-lerobot-reachy2-record]
+evidence:
+  - id: ev-lerobot-reachy2-train
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/reachy2.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "The Reachy 2 page's 'Step 3: Train' runs lerobot-train with --policy.type=act on the recorded Reachy 2 dataset."
+    quote: "--policy.type=act \\\n  --output_dir=outputs/train/reachy2_test"
+  - id: ev-lerobot-reachy2-record
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/reachy2.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Upstream states Reachy 2 is supported by LeRobot's recording features."
+    quote: "Reachy 2 is fully supported by LeRobot’s recording features."
+  - id: ev-lerobot-eval-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/configs/eval.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "In v0.6.1, EvalPipelineConfig (the lerobot-eval CLI config) has a required env field and no robot field."
+    quote: "env: envs.EnvConfig\n    eval: EvalConfig = field(default_factory=EvalConfig)\n    policy: PreTrainedConfig | None = None"

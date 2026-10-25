@@ -1,0 +1,22 @@
+robot: so100
+policy: eo1
+state: works
+framework: eo1
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-eo1-paper-so100
+  inference_real:
+    state: works
+    evidence:
+    - ev-eo1-paper-so100
+evidence:
+- id: ev-eo1-paper-so100
+  tier: upstream-documented
+  type: paper
+  url: https://arxiv.org/html/2508.21112v5
+  date: '2026-02-25'
+  verified_on: '2026-10-24'
+  summary: 'EO-1 paper (v5): EO-1 is evaluated in the real world on a LeRobot SO100 among other robots (EO-1''s own codebase); SO100-Community data is also in its pretraining mix.'
+  quote: We evaluate its performance on both short-horizon and long-horizon tasks using different robots, including Franka Panda, WidowX 250 S, Agibot G-1, and Lerobot SO100.

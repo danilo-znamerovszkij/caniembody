@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import { pageTitle, crumbs, clip } from '../lib/seo.ts';
+---
+<Base title={pageTitle('Why Optimus, Figure and NEO are not in the matrix')}
+  description="Closed commercial humanoids publish no policy interface or configuration, so no compatibility claim about them can be sourced. What would change that."
+  jsonld={[crumbs([['Coverage', '/coverage'], ['Closed humanoids', '/closed-humanoids']])]}>
+  <div class="wrap narrow">
+    <section class="ph">
+      <div class="eyebrow"><a href="/coverage">Coverage</a><span>/</span><span>Out of scope</span></div>
+      <h1>Why Optimus, Figure and NEO are not in the matrix</h1>
+      <p class="lede">Every cell here must link to a public source that someone else can check. For closed commercial humanoids, that source does not exist.</p>
+    </section>
+    <article class="prose">
+      <p>Tesla Optimus, Figure's humanoids and 1X NEO run proprietary policies on proprietary software stacks. Their makers publish demonstrations, but not a robot interface, joint/action specification, SDK or configuration that an outside policy can be trained against or deployed through. A compatibility cell for “SmolVLA on Optimus” could only ever be a guess, and this reference does not publish guesses.</p>
+      <p>Adding empty rows would make the grid look larger and less honest. They get this page instead.</p>
+      <h2>What would change it</h2>
+      <ul>
+        <li>A public SDK or robot interface that accepts external policies (as <a href="/robot/unitree-g1">Unitree G1</a> and <a href="/robot/reachy2">Reachy 2</a> have through LeRobot).</li>
+        <li>A public dataset recorded on the robot in an open format such as LeRobotDataset.</li>
+        <li>An upstream statement, model card or paper documenting a named open policy running on it.</li>
+      </ul>
+      <p>If any of these appears, <a href="/methodology#contribute">open an issue</a> with the link and the robot gets a row.</p>
+    </article>
+  </div>
+</Base>

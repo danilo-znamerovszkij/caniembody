@@ -1,0 +1,49 @@
+robot: franka-fr3
+policy: smolvla
+state: works-with-caveats
+framework: lerobot
+caveats:
+  - "Community-reported only (CRISP paper authors); not documented upstream or maintainer-tested."
+  - "Runs through the third-party CRISP ROS 2 controllers and crisp_gym interface; LeRobot v0.6.1 has no native FR3 robot type."
+  - "SmolVLA ran at approximately 10 Hz and outputs end-effector target poses tracked by CRISP's Cartesian impedance controllers; the paper reports no task success rates."
+capabilities:
+  train:
+    state: works
+    notes: "Data recorded on the FR3 in LeRobotDataset format and trained with LeRobot's training scripts."
+    evidence: [ev-lerobot-issue-1567-crisp, ev-crisp-paper-deploy, ev-phail-card-smolvla]
+  inference_real:
+    state: works-with-caveats
+    evidence: [ev-crisp-paper-deploy, ev-crisp-paper-fr3, ev-phail-card-smolvla]
+evidence:
+  - id: ev-crisp-paper-deploy
+    tier: community-reported
+    type: paper
+    url: https://arxiv.org/abs/2509.06819v2
+    date: 2026-02-06
+    verified_on: 2026-10-25
+    summary: "CRISP paper, Fig. 5: Diffusion Policy and SmolVLA trained on CRISP_GYM-recorded data are deployed on hardware; SmolVLA at ~10 Hz."
+    quote: "Using the same recorded data in the CRISP_GYM interface, different learned policies can be successfully deployed in hardware. Left: Diffusion Policy [4] operating at approximately 30 Hz. Right: SmolVLA [27] operating at approximately 10 Hz."
+  - id: ev-crisp-paper-fr3
+    tier: community-reported
+    type: paper
+    url: https://arxiv.org/abs/2509.06819v2
+    date: 2026-02-06
+    verified_on: 2026-10-25
+    summary: "CRISP paper, Sec. IV: the only hardware platform is the Franka Robotics FR3 (other arms are simulation only)."
+    quote: "The controllers have been validated on hardware using the Franka Robotics FR3 and in simulation with the Kuka IIWA14 and Kinova Gen3, as shown in Figure 3."
+  - id: ev-lerobot-issue-1567-crisp
+    tier: community-reported
+    type: github-issue
+    url: https://github.com/huggingface/lerobot/issues/1567#issuecomment-3188267089
+    date: 2025-08-14
+    verified_on: 2026-10-25
+    summary: "CRISP author (LeRobot contributor) reports training VLAs including SmolVLA with LeRobot on a Franka Robotics FR3, recording LeRobotDataset data and deploying with their own script."
+    quote: "At our lab we have been training VLAs (also tried smolVLA) using lerobot and a Franka Robotics FR3."
+  - id: ev-phail-card-smolvla
+    tier: community-reported
+    type: community-post
+    url: https://huggingface.co/datasets/phail-anon/phail-v1.0/blob/5bc590213c5d2615eefeb47bc23a700f8c57022a/README.md
+    date: 2026-05-06
+    verified_on: 2026-10-25
+    summary: "PhAIL v1.0 (anonymous benchmark under double-blind review): ~115 SmolVLA evaluation rollouts on a Franka Research 3 with Robotiq 2F-85 (bin-to-bin pick-and-place), SmolVLA fine-tuned on the 449-episode FR3 corpus with its default recipe; no per-policy success rates on the card."
+    quote: "Hugging Face SmolVLA    | `inference` |    ~115  | Default fine-tuning recipe"

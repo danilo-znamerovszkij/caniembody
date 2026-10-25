@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import { pageTitle, crumbs } from '../lib/seo.ts';
+import { SITE, GH } from '../site.ts';
+import { stats } from '../lib/data.ts';
+const s = stats();
+const eps = [
+  ['matrix.json', 'The whole grid: robot ids, policy ids, and one object per non-unknown cell (state, highest tier, capabilities, measurements, evidence). Absent pairs are unknown.'],
+  ['robots.json', 'Every robot record, including out-of-grid ones.'],
+  ['policies.json', 'Every policy record, including reward models.'],
+  ['compute.json', 'Compute targets.'],
+  ['runs.json', 'Robot-independent measured inference runs (policy × compute), each with runtime, precision, cameras and source.'],
+  ['glossary.json', 'Glossary entries.'],
+  ['meta.json', 'Build date, coverage counts, framework versions tracked.'],
+  ['compat/<robot>__<policy>.json', 'A single non-unknown cell, e.g. compat/so101__smolvla.json.'],
+];
+---
+<Base title={pageTitle('Public API: static JSON, CC BY 4.0')} description={`Static JSON for every robot, policy, compute target and compatibility cell. Permissive CORS, no key, CC BY 4.0. Schema ${SITE.schemaVersion}.`}
+  jsonld={[crumbs([['Matrix', '/'], ['API', '/api']]), { '@context': 'https://schema.org', '@type': 'Dataset', name: `${SITE.title} API`, url: `${SITE.url}/api`, license: 'https://creativecommons.org/licenses/by/4.0/', version: s.dataset_version, distribution: [{ '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: `${SITE.url}/api/v1/matrix.json` }] }]}>
+  <div class="wrap narrow">
+    <section class="ph">
+      <div class="eyebrow"><a href="/">Matrix</a><span>/</span><span>API</span></div>
+      <h1>Public API</h1>
+      <p class="lede">Static JSON, generated at build time from the same files the site renders. No key, no rate limit beyond the CDN, <span class="mono">Access-Control-Allow-Origin: *</span>. Licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>: use it anywhere, with attribution and a link.</p>
+    </section>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>Endpoint</th><th>Contents</th></tr></thead>
+      <tbody>{eps.map(([e, d]) => <tr><td class="mono"><a href={`/api/v1/${e.includes('<') ? 'compat/so101__smolvla' : e.replace('.json', '')}.json`}>/api/v1/{e}</a></td><td class="small">{d}</td></tr>)}</tbody>
+    </table></div>
+    <article class="prose" style="margin-top:24px">
+      <h2>Envelope</h2>
+      <p>Every list endpoint returns <span class="mono">{'{ schema_version, license, attribution, dataset_version, generated, data }'}</span>. Records follow the JSON Schemas in <a href={`${GH}/tree/main/schema`}><span class="mono">/schema</span></a>. Cells add computed fields: <span class="mono">tier</span> (highest evidence tier), <span class="mono">verified_on</span>, <span class="mono">age_days</span>, <span class="mono">stale</span>, <span class="mono">version_drift</span>.</p>
+      <h2>Stability</h2>
+      <p><span class="mono">/api/v1/</span> is a contract: fields are only added, never renamed or removed, within v1. IDs are permanent; renames keep the old id in <span class="mono">aliases</span>.</p>
+      <h2>Badges</h2>
+      <p><span class="mono">{SITE.url}/badge/&lt;robot&gt;/&lt;policy&gt;.svg</span>: a live status badge for READMEs and model cards. Copy one from any cell page.</p>
+    </article>
+  </div>
+</Base>

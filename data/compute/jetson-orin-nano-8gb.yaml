@@ -1,0 +1,61 @@
+id: jetson-orin-nano-8gb
+name: NVIDIA Jetson Orin Nano 8GB (Super)
+aliases:
+- Jetson Orin Nano Super
+- Orin Nano Super Developer Kit
+- Jetson Orin Nano 8GB
+class: edge
+memory_gb: 8
+unified: true
+arch: Ampere (1024 CUDA cores, 32 Tensor Cores)
+ai_tops: 67 INT8 TOPS (Super Developer Kit; up from 40 TOPS before the JetPack 6.2 Super update)
+power_w: 7W–25W (MAXN_SUPER mode has no fixed power budget)
+notes: 'One entry for the Orin Nano 8GB module and its developer kit. The ''Super'' developer kit is the same hardware: JetPack 6.2+ adds the 25W and MAXN_SUPER power modes (MAXN_SUPER only when flashed with the jetson-orin-nano-devkit-super configuration), raising the headline from 40 to 67 TOPS and memory bandwidth from 68 to 102 GB/s. Power mode and clock pinning (jetson_clocks) change inference latency materially, so runs on this target must record platform.power_mode and the JetPack version. 8 GB is unified memory shared with the OS and CPU.'
+verified_on: '2026-10-24'
+sources:
+- id: ev-nvidia-orin-nano-super-specs
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-orin/nano-super-developer-kit/
+  verified_on: '2026-10-24'
+  summary: 'NVIDIA Jetson Orin Nano Super Developer Kit spec table: 67 INT8 TOPS, Ampere GPU with 1024 CUDA cores and 32 Tensor Cores.'
+  quote: Specifications Jetson Orin Nano Super Developer Kit AI Performance 67 INT8 TOPS GPU NVIDIA Ampere architecture with 1024 CUDA cores and 32 tensor cores
+- id: ev-nvidia-orin-nano-super-mem-power
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-orin/nano-super-developer-kit/
+  verified_on: '2026-10-24'
+  summary: 'Same spec table: 8 GB 128-bit LPDDR5 at 102 GB/s; 7W–25W.'
+  quote: Memory 8GB 128-bit LPDDR5 102 GB/s Storage Supports SD card slot and external NVMe Power 7W–25W
+- id: ev-nvidia-orin-nano-super-update
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-orin/nano-super-developer-kit/
+  verified_on: '2026-10-24'
+  summary: The Super uplift is a software update to the existing Orin Nano developer kit (40 to 67 TOPS, 68 to 102 GB/s).
+  quote: NVIDIA's latest software update enhances Jetson Orin Nano's AI performance from 40 to 67 AI TOPs and memory bandwidth from 68 to 102 GB/s
+- id: ev-jetpack-6-2-super
+  tier: upstream-documented
+  type: release-notes
+  url: https://developer.nvidia.com/embedded/jetpack-sdk-62
+  verified_on: '2026-10-24'
+  summary: 'NVIDIA JetPack 6.2 page: JetPack 6.2 (Jetson Linux 36.4.3) introduces the high-power Super modes for Orin Nano and Orin NX production modules.'
+  quote: JetPack 6.2 supports new high-power Super Mode for NVIDIA Jetson Orin Nano and Jetson Orin NX production modules.
+- id: ev-jetson-power-modes-nano
+  tier: upstream-documented
+  type: official-docs
+  url: https://docs.nvidia.com/jetson/archives/r36.4.3/DeveloperGuide/SD/PlatformPowerAndPerformance/JetsonOrinNanoSeriesJetsonOrinNxSeriesAndJetsonAgxOrinSeries.html
+  verified_on: '2026-10-24'
+  versions:
+    jetson_linux: 36.4.3
+  summary: 'Jetson Linux r36.4.3 power-mode table for Orin Nano 8GB / 8GB Super: 15W, 7W (non-Super); 15W, 25W, MAXN_SUPER (Super).'
+  quote: Jetson Orin Nano 8GB Jetson Orin Nano 8GB Super Property Mode Mode 15W* 7W 15W 25W* MAXN_SUPER** Power budget 15W 7W 15W 25W n/a
+- id: ev-jetson-maxn-super-flash
+  tier: upstream-documented
+  type: official-docs
+  url: https://docs.nvidia.com/jetson/archives/r36.4.3/DeveloperGuide/SD/PlatformPowerAndPerformance/JetsonOrinNanoSeriesJetsonOrinNxSeriesAndJetsonAgxOrinSeries.html
+  verified_on: '2026-10-24'
+  versions:
+    jetson_linux: 36.4.3
+  summary: MAXN_SUPER requires flashing with the devkit-super configuration.
+  quote: MAXN_SUPER mode is available only when flashing with the jetson-orin-nano-devkit-super configurations.

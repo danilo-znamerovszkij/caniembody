@@ -1,0 +1,35 @@
+name: Compat report → draft PR
+on:
+  issues: { types: [opened, edited] }
+permissions: { contents: write, pull-requests: write, issues: write }
+jobs:
+  draft:
+    if: contains(github.event.issue.labels.*.name, 'compat')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc, cache: npm }
+      - run: npm ci
+      - name: Parse form into YAML
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+          ISSUE_USER: ${{ github.event.issue.user.login }}
+        run: node scripts/issue-to-yaml.ts
+      - name: Validate (result is posted on the PR)
+        id: v
+        run: npm run validate 2>&1 | tee validate.txt; echo "ok=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+        continue-on-error: true
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          branch: compat/issue-${{ github.event.issue.number }}
+          draft: true
+          title: "${{ github.event.issue.title }}"
+          commit-message: "data: ${{ github.event.issue.title }} (closes #${{ github.event.issue.number }})"
+          body: |
+            Generated from #${{ github.event.issue.number }} by @${{ github.event.issue.user.login }}. Closes #${{ github.event.issue.number }}.
+
+            Reviewer checklist: open the evidence URL · confirm it shows what the summary says · confirm versions · tier stays `community-reported` unless upstream docs or a maintainer run back it.
+          labels: compat

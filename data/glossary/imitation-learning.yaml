@@ -1,0 +1,31 @@
+id: imitation-learning
+term: "Imitation learning"
+aka: ["IL", "learning from demonstration", "LfD"]
+short: "Learning a policy from demonstrations of the desired behavior rather than from a hand-written controller or a reward signal."
+body: |
+  Imitation learning (IL), also called learning from demonstration, trains a policy from examples of an expert performing the task. Osa et al.'s survey "An Algorithmic Perspective on Imitation Learning" (2018) defines it directly: "This process of learning from demonstrations, and the study of algorithms to do so, is called imitation learning." The alternatives are hand-engineering a controller and reinforcement learning, which optimizes a reward signal through trial and error.
+
+  IL methods fall into three broad groups. [Behavioral cloning](/glossary/behavioral-cloning) treats the problem as supervised learning on recorded observation–action pairs. Interactive methods such as [DAgger](/glossary/dagger) query the expert on states the learner itself visits. Inverse reinforcement learning infers a reward function from demonstrations and then optimizes it.
+
+  Nearly every manipulation policy in this matrix, including [ACT](/policy/act), [Diffusion Policy](/policy/diffusion), [SmolVLA](/policy/smolvla) and the fine-tuning stage of [π0](/policy/pi0), is trained by behavioral cloning on demonstrations collected through [teleoperation](/glossary/teleoperation), typically with a [leader arm](/glossary/leader-follower-arm), and stored as a [LeRobotDataset](/glossary/lerobot-dataset). The data requirement can be small: the ACT paper's ALOHA tasks used 50 demonstrations each for most tasks, "around 10-20 minutes of data for each task".
+
+  A common misconception is that IL is limited only by the demonstrator's skill. The deeper limit is distribution shift: a cloned policy fails in states its demonstrations never covered, and its own errors lead it there. Pure IL also has no mechanism to improve on the demonstrations. Methods such as [HIL-SERL](/policy/hil-serl) add reinforcement learning with a [reward model](/glossary/reward-model) and report higher success and faster execution than imitation-only baselines (see [human-in-the-loop RL](/glossary/human-in-the-loop-rl)).
+related: [behavioral-cloning, dagger, teleoperation, human-in-the-loop-rl, reward-model]
+policies: [act, diffusion, smolvla, pi0, hil-serl]
+sources:
+  - id: ev-osa-2018
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/1811.06711
+    date: 2018-11-16
+    verified_on: 2026-10-24
+    summary: "Osa et al. define imitation learning."
+    quote: "This process of learning from demonstrations, and the study of algorithms to do so, is called imitation learning."
+  - id: ev-act-paper-full
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/html/2304.13705
+    date: 2023-04-23
+    verified_on: 2026-10-24
+    summary: "ACT: about 10-20 minutes of demonstrations per task."
+    quote: "The total amount for demonstrations is thus around 10-20 minutes of data for each task"

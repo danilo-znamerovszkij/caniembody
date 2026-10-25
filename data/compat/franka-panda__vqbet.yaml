@@ -1,0 +1,27 @@
+robot: franka-panda
+policy: vqbet
+state: partial
+partial_scope: "Simulation only: Franka Kitchen (MuJoCo); no real-robot training or inference documented."
+framework: vq-bet
+capabilities:
+  inference_sim:
+    state: works
+    notes: "VQ-BeT paper benchmarks on Franka Kitchen (state and image variants, goal- and non-goal-conditioned) with 566 human demonstrations. The paper's real-robot experiments used a Hello Robot Stretch, not a Panda."
+    evidence: [ev-vqbet-paper-kitchen, ev-vqbet-repo-kitchen]
+evidence:
+  - id: ev-vqbet-paper-kitchen
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2403.03181v2
+    date: 2024-06-28
+    verified_on: 2026-10-25
+    summary: "VQ-BeT paper (App. environments): Franka Kitchen is a simulated environment with a Franka Panda arm, used for VQ-BeT's simulation benchmarks."
+    quote: "with a Franka Panda arm with a 7 dimensional action space and 566 human collected demonstrations."
+  - id: ev-vqbet-repo-kitchen
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/jayLEE0301/vq_bet_official/blob/09d4851288ca5deaaa1ab367a208e520f8ee9a84/README.md
+    date: 2024-02-28
+    verified_on: 2026-10-25
+    summary: "The official VQ-BeT repo ships training configs and pretrained weights for the simulated Kitchen environment."
+    quote: "If you want to quickly see the performance of VQ-BeT on goal-cond Kitchen env without training it from scratch, please check the description below."

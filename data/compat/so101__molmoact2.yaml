@@ -1,0 +1,43 @@
+robot: so101
+policy: molmoact2
+state: works-with-caveats
+framework: lerobot
+framework_version_tested: 0.6.1
+caveats:
+- 'The MolmoAct2-SO100_101 weights expect the pre-LeRobot-0.5.0 joint calibration convention: lerobot/MolmoAct2-SO100_101-LeRobot includes the frame correction, but self-converted or fine-tuned checkpoints
+  must set joint_signs/joint_offsets or the arm may move in the wrong direction.'
+- LeRobot's rollout example is written for so100_follower; SO-101 coverage rests on the official model card's SO-100/101 scope.
+capabilities:
+  inference_real:
+    state: works-with-caveats
+    evidence:
+    - ev-molmoact2-so100-101-card
+    - ev-lerobot-molmoact2-calib
+  train:
+    state: works-with-caveats
+    evidence:
+    - ev-molmoact2-so100-101-card
+    - ev-lerobot-molmoact2-calib
+evidence:
+- id: ev-molmoact2-so100-101-card
+  tier: upstream-documented
+  type: model-card
+  url: https://huggingface.co/allenai/MolmoAct2-SO100_101/blob/152569fe57914d97be91055800035f54e250d009/README.md
+  date: '2026-05-23'
+  verified_on: '2026-10-24'
+  summary: 'Ai2''s official MolmoAct2-SO100_101 model card: fine-tuned on an SO-100/101 data mixture, intended for SO-100/101 inference and further fine-tuning.'
+  quote: This checkpoint is fine-tuned on the SO-100/101 mixture with absolute joint-pose control and annotated language instructions. It is intended for both further fine-tuning and SO-100/101 policy inference.
+- id: ev-lerobot-molmoact2-calib
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/molmoact2.mdx
+  date: '2026-08-03'
+  verified_on: '2026-10-24'
+  versions:
+    lerobot: 0.6.1
+  summary: LeRobot v0.6.1 MolmoAct2 guide warns that the SO-100/101 checkpoint uses the pre-0.5.0 joint calibration convention; the converted LeRobot checkpoint includes the frame correction, self-converted/fine-tuned
+    ones need joint_signs/joint_offsets.
+  quote: |-
+    The MolmoAct2-SO100_101 checkpoint was trained on data that uses a different
+    joint calibration convention than LeRobot >= 0.5.0. Without a frame
+    correction, the arm may move in the wrong direction.

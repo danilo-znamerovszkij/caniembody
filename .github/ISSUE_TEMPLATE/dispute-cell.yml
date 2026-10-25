@@ -1,0 +1,26 @@
+name: Dispute a cell
+description: A cell is wrong, outdated or over-claims. The cell shows a "disputed" marker while this is open.
+title: "[dispute] <policy> on <robot>"
+labels: [dispute]
+body:
+  - type: input
+    id: robot
+    attributes: { label: Robot id }
+    validations: { required: true }
+  - type: input
+    id: policy
+    attributes: { label: Policy id }
+    validations: { required: true }
+  - type: input
+    id: current_state
+    attributes: { label: Current state on the site }
+  - type: dropdown
+    id: proposed
+    attributes:
+      label: What should it be?
+      options: [works, works-with-caveats, partial, not-supported, planned, unknown]
+    validations: { required: true }
+  - type: textarea
+    id: why
+    attributes: { label: Why — with links, description: "Disputes are settled by evidence. Link the source that contradicts the cell." }
+    validations: { required: true }

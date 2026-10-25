@@ -1,0 +1,52 @@
+id: groot-n1-7-jetson-orin-nano-8gb-tensorrt-fp16-3cam-eetmie
+policy: groot-n1-7
+compute: jetson-orin-nano-8gb
+checkpoint: nvidia/GR00T-N1.7-3B
+date: '2026-10-13'
+runtime: tensorrt
+runtime_note: 'Split ONNX export, each graph built into its own TensorRT 10.16.2 engine on the board, engines chained and replayed as one CUDA graph, plus ahead-of-time-compiled Triton kernels (eetmie/jetson-orin-nano-vla). Precision as recorded: mixed fp16 (strongly typed); FP32 accumulation by default.'
+precision: fp16
+cameras: 3
+resolution: 640x480
+inference_latency_ms:
+  p50: 273.7
+  p95: 275.4
+  mean: 273.58
+inference_hz: 3.66
+action_chunk: 40
+outcome: runs
+platform:
+  board: Jetson Orin Nano Engineering Reference Developer Kit Super (8 GB)
+  jetpack: 7.2.1
+  l4t: R39.2.1
+  power_mode: MAXN_SUPER, clocks pinned with jetson_clocks (GPU 1020 MHz, CPU 1728 MHz)
+  tensorrt: 10.16.2.10
+  os: Ubuntu 24.04.4 LTS
+  python: 3.12.3
+  desktop: running
+note: Inference cost only; not task success. 300 s run on synthetic 640x480 observations resized by the exported policy to 256x256; 4 denoising steps; latency is runtime-only over a pre-materialized observation ring. Whole-board RAM in use 5.78 GB (unified memory, desktop running). Actions were gated against the stock policy (cosine >= 0.99999) before timing. Three camera views, each with two frames (GR00T N1.7 temporal input).
+source_ref: ev-eetmie-readme
+evidence:
+- id: ev-eetmie-readme
+  tier: community-reported
+  type: community-post
+  url: https://github.com/eetmie/jetson-orin-nano-vla/blob/6e2d857ca5e3342fb2e29afd0cb60e295c10cdf5/README.md
+  date: '2026-10-13'
+  verified_on: '2026-10-24'
+  summary: eetmie/jetson-orin-nano-vla README results table and benchmark conditions (Orin Nano 8 GB Super, TensorRT).
+  quote: '| [GR00T N1.7 3B](results/groot-n17-base.json) | [`nvidia/GR00T-N1.7-3B`](https://huggingface.co/nvidia/GR00T-N1.7-3B) | 3 (×2 frames) | 273.70 ms | 3.66 Hz | 5.78 GB |'
+- id: ev-eetmie-conditions
+  tier: community-reported
+  type: community-post
+  url: https://github.com/eetmie/jetson-orin-nano-vla/blob/6e2d857ca5e3342fb2e29afd0cb60e295c10cdf5/README.md
+  date: '2026-10-13'
+  verified_on: '2026-10-24'
+  summary: Benchmark conditions stated under the table.
+  quote: JetPack 7.2.1, MAXN_SUPER with pinned clocks, desktop running (though headless recommended!). 300-second runs, synthetic observations with default denoising steps and views. RAM is whole-board usage during inference.
+- id: ev-eetmie-results-json
+  tier: community-reported
+  type: source-code
+  url: https://github.com/eetmie/jetson-orin-nano-vla/blob/6e2d857ca5e3342fb2e29afd0cb60e295c10cdf5/results/groot-n17-base.json
+  date: '2026-10-13'
+  verified_on: '2026-10-24'
+  summary: 'Raw run JSON: latency distribution (p50/p95/mean), board state (L4T R39.2.1, MAXN_SUPER, pinned clocks), TensorRT 10.16.2.10, chunk size, steps.'

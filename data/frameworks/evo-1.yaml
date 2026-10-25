@@ -1,0 +1,10 @@
+id: evo-1
+name: Evo-1 (MINT-SJTU/Evo-1)
+maintainer: MINT Lab, Shanghai Jiao Tong University
+repo: MINT-SJTU/Evo-1
+docs_url: https://github.com/MINT-SJTU/Evo-1
+license: MIT
+current_version: evo1-flash
+current_version_date: 2026-08-18
+versioning: none
+notes: "Evo-1 authors' official code, including real-robot inference clients. No tagged releases; default branch evo1-flash at 5fd14b015013 (2026-08-18)."

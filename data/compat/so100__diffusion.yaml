@@ -1,0 +1,26 @@
+robot: so100
+policy: diffusion
+state: partial
+partial_scope: Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source.
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-hcltech-diffusion-so100
+    - ev-hub-neilkim-diffusion-so100
+evidence:
+- id: ev-hub-hcltech-diffusion-so100
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/hcltech-robotics/diffusion_so100_ducktape_3cam
+  date: '2025-08-12'
+  verified_on: '2026-10-24'
+  summary: config.json type=diffusion; train_config.json dataset.repo_id=targabor/so100_ducktape_3cam, whose meta/info.json robot_type=so100_follower (50 episodes).
+- id: ev-hub-neilkim-diffusion-so100
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/NeilKim/diffusion-so100-policy-2
+  date: '2025-07-02'
+  verified_on: '2026-10-24'
+  summary: config.json type=diffusion; train_config.json dataset.repo_id=NeilKim/so100-teleop-record-2, whose meta/info.json robot_type=so100_follower (61 episodes).

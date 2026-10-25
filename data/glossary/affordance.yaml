@@ -1,0 +1,23 @@
+id: affordance
+term: "Affordance"
+aka: ["action possibility", "affordance map"]
+short: "What actions an object or scene makes possible for a particular agent; in robot learning, a learned estimate of which actions are feasible and useful in the current state."
+body: |
+  An affordance is a possibility for action that the environment offers to a particular agent: a handle affords pulling, a mug affords grasping by its handle or rim. The concept comes from the psychologist James J. Gibson, who set it out in *The Ecological Approach to Visual Perception* (1979). The point most often lost is that affordances are relational. They depend on the agent's body as well as on the object: a shelf at shoulder height affords reaching to a humanoid but not to a tabletop arm whose workspace ends below it.
+
+  Robot learning uses the word in two concrete senses. The first is a learned function that scores whether a skill will succeed from the current state. SayCan (Ahn et al., "Do As I Can, Not As I Say: Grounding Language in Robotic Affordances", 2022) combined a language model's proposed steps with value functions of pretrained skills, which "provide the grounding necessary to connect this knowledge to a particular physical environment". The second is a spatial prediction, such as grasp points, contact regions or keypoints in an image, used as an intermediate representation between perception and control.
+
+  End-to-end [VLAs](/glossary/vla) such as [SmolVLA](/policy/smolvla) and [π0](/policy/pi0) do not output an explicit affordance map. Whatever they encode about affordances is implicit in the action distribution learned from demonstrations on specific robots.
+
+  A common misconception is that recognizing an object implies knowing how to act on it. Because affordances depend on kinematics, reach and gripper geometry, a policy can identify an object correctly and still fail to manipulate it on a different robot. That is one face of the [embodiment gap](/glossary/embodiment-gap), and it is why compatibility in this matrix is recorded per robot rather than per policy.
+related: [embodiment-gap, vla, reward-model, degrees-of-freedom]
+policies: []
+sources:
+  - id: ev-saycan-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2204.01691
+    date: 2022-04-04
+    verified_on: 2026-10-24
+    summary: "SayCan grounds language-model plans in the affordances (value functions) of robot skills."
+    quote: "while value functions associated with these skills provide the grounding necessary to connect this knowledge to a particular physical environment."

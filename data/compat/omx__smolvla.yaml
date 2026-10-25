@@ -1,0 +1,24 @@
+robot: omx
+policy: smolvla
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-adarshkorde-smolvla-omx
+    - ev-hub-imsubin-smolvla-omx
+evidence:
+- id: ev-hub-adarshkorde-smolvla-omx
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/AdarshKorde/omx_smolvla_green_cube_20000
+  verified_on: '2026-10-24'
+  summary: "config.json type=smolvla; train_config.json dataset AdarshKorde/omx_pick_green_cube whose meta/info.json robot_type=omx_follower (50 episodes); fine-tuned from lerobot/smolvla_base."
+- id: ev-hub-imsubin-smolvla-omx
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/IMsubin/pick_doll_put_pot_omx_smolvla5
+  verified_on: '2026-10-24'
+  summary: "config.json type=smolvla; train_config.json dataset IMsubin/pick_doll_put_pot_omx whose meta/info.json robot_type=omx_follower (100 episodes)."

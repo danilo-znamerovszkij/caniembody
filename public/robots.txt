@@ -1,0 +1,5 @@
+# Reference data, CC BY 4.0. All crawlers welcome, including AI crawlers.
+User-agent: *
+Allow: /
+
+Sitemap: https://caniembody.pages.dev/sitemap-index.xml

@@ -1,0 +1,171 @@
+id: molmoact2
+name: MolmoAct2
+aliases: [molmoact2, MolmoAct 2, allenai/MolmoAct2]
+family: vla
+summary: >-
+  Ai2's action reasoning model: the Molmo2-ER embodied-reasoning VLM grafted onto a DiT-style flow-matching
+  continuous action expert via per-layer key-value conditioning. Pre-training uses discrete MolmoAct2-FAST action
+  tokens, so the policy can emit either continuous (flow-matching) or discrete-token actions.
+authors: Allen Institute for AI (Ai2), with University of Washington and others
+paper_url: https://arxiv.org/abs/2605.02881
+backbone: Molmo2-ER VLM (from the Molmo2-4B mid-training checkpoint; SigLIP2 ViT) + flow-matching DiT action expert
+action_output: hybrid
+action_chunking: true
+peft_supported: true
+arch_source_ref: ev-molmoact2-paper-arch
+license: Apache-2.0
+weights_license: Apache-2.0
+open_weights: true
+frameworks:
+  lerobot:
+    support: native
+    since: "0.6.0"
+    policy_type: molmoact2
+    docs_url: https://huggingface.co/docs/lerobot/molmoact2
+    note: >-
+      Covers the regular MolmoAct2 model; MolmoAct2-Think is not included yet (docs). Training target is chosen with
+      `policy.action_mode` (continuous | discrete | both) and rollout requires `policy.inference_action_mode`. LoRA
+      is a policy-specific flag (`policy.enable_lora_vlm`, uses the peft package), not the generic `--peft.*` path.
+    source_ref: ev-lerobot-v060-notes-molmo
+  molmoact2:
+    support: upstream-repo
+    repo_url: https://github.com/allenai/molmoact2
+    note: "Original training code used for the paper's experiments (no tagged releases; pin by commit)."
+    source_ref: ev-lerobot-molmoact2-docs
+checkpoints:
+  - hub_id: allenai/MolmoAct2
+    note: "Post-trained multi-embodiment base for fine-tuning (original HF format; load via policy.checkpoint_path)."
+  - hub_id: allenai/MolmoAct2-LIBERO
+  - hub_id: allenai/MolmoAct2-LIBERO-LeRobot
+    note: "LeRobot fine-tuned LIBERO checkpoint (98.25% avg in LeRobot docs)."
+  - hub_id: lerobot/MolmoAct2-SO100_101-LeRobot
+    note: "LeRobot-format SO-100/101 checkpoint with the joint-frame correction for LeRobot >= 0.5.0 calibration."
+  - hub_id: lerobot/MolmoAct2-LIBERO-LeRobot
+  - hub_id: lerobot/MolmoAct2-DROID-LeRobot
+  - hub_id: lerobot/MolmoAct2-BimanualYAM-LeRobot
+requirements:
+  train:
+    vram_gb: {measured: 48.3}
+    precision: bf16
+    batch_size: 8
+    condition: >-
+      LeRobot MolmoAct2 docs: full-model fine-tuning, both action modes, batch 8, peak 48.3 GiB (GiB as reported; about
+      51.9 GB), single H100 80GB, bf16 model loading, LIBERO with two RGB cameras, chunk_size 10, 8 flow timesteps,
+      gradient_checkpointing on, includes optimizer state. Peak GPU memory sampled with nvidia-smi. Other rows in the
+      same table: action-expert-only 16.5 GiB, LoRA VLM 20.2 GiB (bs 8); full model 49.8 GiB (bs 16), 60.1 GiB (bs 32).
+    source_ref: ev-lerobot-molmoact2-mem
+  inference:
+    vram_gb: {measured: 12.1}
+    precision: bf16
+    batch_size: 1
+    condition: >-
+      LeRobot MolmoAct2 docs: inference, continuous action mode, CUDA graph enabled, batch 1, peak 12.1 GiB (GiB as
+      reported), single H100 80GB, bf16 model loading, LIBERO with two RGB cameras, peak sampled with nvidia-smi.
+    source_ref: ev-lerobot-molmoact2-mem-inf
+observation_space:
+  state: robot state vector, quantile-normalised by default
+  source_ref: ev-lerobot-molmoact2-docs-lang
+notes: >-
+  RTC: v0.6.1 code returns supports_rtc() true only when inference_action_mode == "continuous", but the LeRobot docs
+  (rtc.mdx, molmoact2.mdx) do not mention RTC for MolmoAct2, so rtc_compatible is left unset. Parameter count: the
+  paper does not state a total, so params is left out. For exact paper replication the docs point to the v0.5.1-pinned
+  allenai/lerobot `molmoact2-hf-inference` branch. The LeRobot port loads bf16 by default; the original stack loads
+  fp32 with mixed-precision training.
+verified_on: 2026-10-24
+sources:
+  - id: ev-molmoact2-paper-arch
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2605.02881
+    date: 2026-05-04
+    verified_on: 2026-10-24
+    summary: MolmoAct2 grafts a discrete-token VLM onto a flow-matching continuous action expert via per-layer KV conditioning.
+    quote: "We design a new VLA architecture to graft the discrete-token VLM into the flow-matching continuous-action expert via per-layer key-value (KV) conditioning."
+  - id: ev-molmoact2-paper-backbone
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2605.02881
+    date: 2026-05-04
+    verified_on: 2026-10-24
+    summary: Molmo2-ER is built from the Molmo2-4B mid-training checkpoint.
+    quote: "Starting from the Molmo2 –4B mid-training checkpoint"
+  - id: ev-lerobot-molmoact2-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/molmoact2.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: LeRobot docs point to allenai/molmoact2 as the original training code.
+    quote: "For the original MolmoAct2 training code used for the experiments reported in"
+  - id: ev-lerobot-molmoact2-docs-lang
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/molmoact2.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: State and action use quantile normalisation by default.
+    quote: "MolmoAct2 defaults to quantile normalization for state and action features."
+  - id: ev-lerobot-molmoact2-lora
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/molmoact2.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: LeRobot MolmoAct2 exposes LoRA on the VLM (and optionally the action expert).
+    quote: "- `policy.enable_lora_vlm`: enables LoRA on VLM linear layers."
+  - id: ev-lerobot-molmoact2-mem
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/molmoact2.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Peak memory table (H100 80GB, bf16, LIBERO, 2 cameras): inference 12.1 GiB (bs 1); full fine-tune 48.3 GiB (bs 8)."
+    quote: "| Fine-tuning, full model, both action modes       |          48.3 GiB |           49.8 GiB |           60.1 GiB |"
+  - id: ev-lerobot-molmoact2-mem-inf
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/molmoact2.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: Inference peak memory row and measurement setup.
+    quote: "| Inference, continuous, CUDA graph enabled (bs=1) |          12.1 GiB |                  - |                  - |"
+  - id: ev-lerobot-molmoact2-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/molmoact2/configuration_molmoact2.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Policy type string is `molmoact2`."
+    quote: '@PreTrainedConfig.register_subclass("molmoact2")'
+  - id: ev-lerobot-molmoact2-rtc-code
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/molmoact2/modeling_molmoact2.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: supports_rtc() is conditional on continuous inference mode.
+    quote: 'return self.config.inference_action_mode == "continuous"'
+  - id: ev-lerobot-v060-notes-molmo
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.6.0
+    date: 2026-07-06
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.0"}
+    summary: MolmoAct2 was added in LeRobot v0.6.0 (PR #3604).
+    quote: "Add MolmoAct2 policy by @hq-fang"
+  - id: ev-molmoact2-readme-license
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/allenai/molmoact2/blob/6070080a20321b4f498ab30f28e1d09ac465edb7/README.md
+    date: 2026-10-02
+    verified_on: 2026-10-24
+    summary: Upstream README licenses the model under Apache 2.0 (research and educational use per Ai2 guidelines).
+    quote: "This model is licensed under Apache 2.0."

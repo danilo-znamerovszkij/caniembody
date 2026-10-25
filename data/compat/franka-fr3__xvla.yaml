@@ -1,0 +1,19 @@
+robot: franka-fr3
+policy: xvla
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+caveats:
+  - "The FR3 variant comes from the dataset name only; its meta/info.json robot_type is the generic \"franka\"."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-binsabit-xvla]
+evidence:
+  - id: ev-hub-binsabit-xvla
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/binsabit/xvla-franka-fr3
+    date: 2026-04-07
+    verified_on: 2026-10-24
+    summary: "config.json type=xvla (pretrained_path lerobot/xvla-base); train_config dataset binsabit/franka-fr3-manipulation (101 episodes, stationary + wrist cameras), whose meta/info.json robot_type=franka. Auto-generated card; repo includes two .mp4 files that are not described as policy rollouts."

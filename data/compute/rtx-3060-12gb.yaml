@@ -1,0 +1,30 @@
+id: rtx-3060-12gb
+name: NVIDIA GeForce RTX 3060 12GB
+class: consumer-gpu
+memory_gb: 12
+arch: Ampere
+power_w: 170 W (graphics card power)
+notes: The RTX 3060 also exists in an 8 GB variant; this entry is the 12 GB GDDR6 card only. NVIDIA's page does not list an AI TOPS figure for the RTX 3060.
+verified_on: '2026-10-24'
+sources:
+- id: ev-nvidia-rtx3060-memory
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/geforce/graphics-cards/30-series/rtx-3060-3060ti/
+  verified_on: '2026-10-24'
+  summary: 'RTX 3060 family spec table (columns: RTX 3060 Ti, RTX 3060): RTX 3060 is 12 GB GDDR6 or 8 GB GDDR6.'
+  quote: 'Memory Specs: Standard Memory Config 8 GB GDDR6 / 8 GB GDDR6X 12 GB GDDR6 / 8 GB GDDR6'
+- id: ev-nvidia-rtx3060-power
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/geforce/graphics-cards/30-series/rtx-3060-3060ti/
+  verified_on: '2026-10-24'
+  summary: 'Same table: graphics card power 200 W (3060 Ti) and 170 W (3060).'
+  quote: Graphics Card Power (W) 200 170
+- id: ev-nvidia-rtx3060-arch
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/geforce/graphics-cards/30-series/rtx-3060-3060ti/
+  verified_on: '2026-10-24'
+  summary: 'Same table: NVIDIA architecture Ampere for both columns.'
+  quote: NVIDIA Architecture Ampere Ampere

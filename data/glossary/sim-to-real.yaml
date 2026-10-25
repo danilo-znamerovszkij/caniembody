@@ -1,0 +1,39 @@
+id: sim-to-real
+term: "Sim-to-real transfer"
+aka: ["sim2real", "reality gap"]
+short: "Training or validating a policy in simulation and deploying it on physical hardware; the gap between simulated and real physics and sensing is the central obstacle."
+body: |
+  Sim-to-real transfer means training or pretraining a policy in a physics simulator and then running it on a real robot. Simulation offers abundant, safe, automatically labeled data. The cost is the *reality gap*: differences in rendering, contact dynamics, actuator response, timing and sensor noise between simulator and hardware.
+
+  Two 2017 papers define the standard toolkit. Tobin et al., "Domain Randomization for Transferring Deep Neural Networks from Simulation to the Real World", randomized rendering so that "the real world may appear to the model as just another variation". Peng et al., "Sim-to-Real Transfer of Robotic Control with Dynamics Randomization", randomized the simulator's dynamics during training so that policies adapt to dynamics they were not trained on.
+
+  For the imitation-learning policies in this matrix the pattern is usually different. Models are trained on real teleoperated data and *evaluated* in simulated benchmarks such as LIBERO and Meta-World, which LeRobot provides as environments. A high LIBERO success rate for [OpenVLA-OFT](/policy/openvla-oft) or [SmolVLA](/policy/smolvla) is a simulation result; it says nothing directly about an [SO-101](/robot/so101) on a desk. Compatibility cells therefore keep `inference_sim` and `inference_real` as separate capabilities.
+
+  A common misconception is that a policy which works in simulation will transfer once the images look realistic. Appearance is only one part of the gap. Unmodeled dynamics, actuator delay and a mismatched [control rate](/glossary/control-rate) break transfer just as reliably, which is why Peng et al. randomized dynamics rather than visuals. The [embodiment gap](/glossary/embodiment-gap) is a separate problem: it concerns differences between robots, not between a robot and its simulation.
+related: [embodiment-gap, control-rate, world-model, teleoperation]
+policies: [openvla-oft, smolvla]
+sources:
+  - id: ev-tobin-2017
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/1703.06907
+    date: 2017-03-20
+    verified_on: 2026-10-24
+    summary: "Tobin et al. introduce domain randomization for sim-to-real transfer."
+    quote: "With enough variability in the simulator, the real world may appear to the model as just another variation."
+  - id: ev-peng-2017
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/html/1710.06537
+    date: 2017-10-18
+    verified_on: 2026-10-24
+    summary: "Peng et al. introduce dynamics randomization for sim-to-real transfer."
+    quote: "By randomizing the dynamics of the simulator during training, we are able to develop policies that are capable of adapting to very different dynamics"
+  - id: ev-oft-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2502.19645
+    date: 2025-02-27
+    verified_on: 2026-10-24
+    summary: "OpenVLA-OFT reports results on the LIBERO simulation benchmark."
+    quote: "We propose OpenVLA-OFT, an instantiation of this recipe, which sets a new state of the art on the LIBERO simulation benchmark"

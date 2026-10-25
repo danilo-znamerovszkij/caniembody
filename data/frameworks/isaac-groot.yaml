@@ -1,0 +1,10 @@
+id: isaac-groot
+name: Isaac GR00T
+maintainer: NVIDIA
+repo: NVIDIA/Isaac-GR00T
+docs_url: https://github.com/NVIDIA/Isaac-GR00T
+license: Apache-2.0
+current_version: n1.6.1-release
+current_version_date: 2026-04-23
+versioning: releases
+notes: "Release tags are per model generation (n1.7-release published 2026-04-18, n1.6.1-release 2026-04-23)."

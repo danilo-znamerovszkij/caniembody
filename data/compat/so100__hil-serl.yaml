@@ -1,0 +1,60 @@
+robot: so100
+policy: hil-serl
+state: works-with-caveats
+framework: lerobot
+framework_version_tested: 0.6.1
+caveats:
+- 'The guide''s documented intervention path is a gamepad or keyboard in end-effector space (needs a URDF); using an SO leader arm as the intervention device is reported broken in open issue #2952, not
+  yet confirmed or fixed by maintainers.'
+- src/lerobot/configs/train_config_hilserl_so100.json is referenced by the guide but is not in the v0.6.1 source tree; the example configs are hosted in the aractingi/lerobot-example-config-files dataset,
+  and its env_config_so100.json still names the removed so100_follower_end_effector robot type.
+capabilities:
+  train:
+    state: works
+    notes: Online RL on the physical robot (actor/learner).
+    evidence:
+    - ev-lerobot-hilserl-learner
+  inference_real:
+    state: works
+    evidence:
+    - ev-lerobot-hilserl-learner
+  teleop_record:
+    state: works-with-caveats
+    notes: Gamepad/keyboard documented; SO leader as intervention device reported broken (#2952).
+    evidence:
+    - ev-lerobot-hilserl-doc
+    - ev-gh-lerobot-2952
+evidence:
+- id: ev-lerobot-hilserl-doc
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hilserl.mdx
+  date: '2026-08-03'
+  verified_on: '2026-10-24'
+  versions:
+    lerobot: 0.6.1
+  summary: 'LeRobot v0.6.1 HIL-SERL real-robot guide: find EE bounds and collect demos on so100_follower/so100_leader, then run the actor/learner with train_config_hilserl_so100.json.'
+  quote: |-
+    lerobot-find-joint-limits \
+      --robot.type=so100_follower \
+- id: ev-lerobot-hilserl-learner
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hilserl.mdx
+  date: '2026-08-03'
+  verified_on: '2026-10-24'
+  versions:
+    lerobot: 0.6.1
+  summary: LeRobot v0.6.1 HIL-SERL guide launches the learner and actor with an SO100 HIL-SERL training config (on-robot RL).
+  quote: python -m lerobot.rl.learner --config_path src/lerobot/configs/train_config_hilserl_so100.json
+- id: ev-gh-lerobot-2952
+  tier: community-reported
+  type: github-issue
+  url: https://github.com/huggingface/lerobot/issues/2952
+  date: '2026-02-10'
+  verified_on: '2026-10-24'
+  versions:
+    lerobot: 0.4.4
+  summary: 'Open issue (LeRobot 0.4.4, labelled bug): the SO leader arm cannot be used as the HIL-SERL intervention device; a 2026-08-02 comment against main reports control_mode is never read by the RL
+    pipeline.'
+  quote: 'TypeError: Teleoperator SOLeader must implement get_teleop_events() method. Compatible teleoperators: GamepadTeleop, KeyboardEndEffectorTeleop'

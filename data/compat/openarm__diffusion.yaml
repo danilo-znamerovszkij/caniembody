@@ -1,0 +1,29 @@
+robot: openarm
+policy: diffusion
+state: works
+framework: lerobot
+framework_version_tested: "0.6.1"
+capabilities:
+  inference_real:
+    state: works
+    notes: "Documented on the bimanual OpenArm (--robot.type=bi_openarm_follower, three OpenCV cameras) with OpenArm Mini leaders, running the policy under lerobot-rollout --strategy.type=dagger with standard synchronous inference; human interventions are recorded for fine-tuning."
+    evidence: [ev-lerobot-hil-openarm-default, ev-lerobot-hil-openarm-mode]
+evidence:
+  - id: ev-lerobot-hil-openarm-default
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hil_data_collection.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot's human-in-the-loop data collection guide runs trained policies on the bimanual OpenArm follower by default."
+    quote: "> The provided commands default to `bi_openarm_follower` + `bi_openarm_mini`."
+  - id: ev-lerobot-hil-openarm-mode
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hil_data_collection.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "The guide names this policy for the lerobot-rollout dagger command on bi_openarm_follower (standard synchronous inference)."
+    quote: "**Standard inference (ACT, Diffusion Policy):**"

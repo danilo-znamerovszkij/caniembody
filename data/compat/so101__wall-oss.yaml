@@ -1,0 +1,26 @@
+robot: so101
+policy: wall-oss
+state: partial
+partial_scope: Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source.
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-aractingi-wallx-so101
+    - ev-hub-pepijn-wallx-so101
+evidence:
+- id: ev-hub-aractingi-wallx-so101
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/aractingi/wall_x_3
+  date: '2025-12-15'
+  verified_on: '2026-10-24'
+  summary: config.json type=wall_x; train_config.json dataset.repo_id=imstevenpmwork/thanos_picking_power_gem_1749731584242992, whose meta/info.json robot_type=so101_follower (51 episodes).
+- id: ev-hub-pepijn-wallx-so101
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/pepijn223/wall_x
+  date: '2025-12-09'
+  verified_on: '2026-10-24'
+  summary: config.json type=wall_x; train_config.json dataset.repo_id=imstevenpmwork/thanos_picking_power_gem_1749731584242992, whose meta/info.json robot_type=so101_follower (51 episodes).

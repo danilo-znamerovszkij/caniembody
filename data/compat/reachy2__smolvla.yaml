@@ -1,0 +1,17 @@
+robot: reachy2
+policy: smolvla
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-erlhub-smolvla-reachy2
+evidence:
+- id: ev-hub-erlhub-smolvla-reachy2
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/erl-hub/reachy-smolvla
+  verified_on: '2026-10-24'
+  summary: "Checkpoint at 2026-04-25_05-03-29-smolvla-basic-run-erl-hub-reachy-pick-and-place-images_s2226/checkpoints/020000/pretrained_model: config.json type=smolvla; train_config.json dataset erl-hub/reachy-pick-and-place-images whose meta/info.json robot_type=reachy2 (25 episodes)."

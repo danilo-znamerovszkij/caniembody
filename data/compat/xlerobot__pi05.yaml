@@ -1,0 +1,31 @@
+robot: xlerobot
+policy: pi05
+state: works-with-caveats
+framework: openpi
+caveats:
+  - "Community-reported only; not documented upstream by Physical Intelligence or maintainer-tested."
+  - "Requires unmerged community forks: xuweiwu/XLeRobot (branch 'pi05 dual arm') and xuweiwu/openpi (branch 'biso101 training_support')."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-xlerobot-pi05-doc]
+  inference_real:
+    state: works-with-caveats
+    evidence: [ev-xlerobot-pi05-doc]
+  teleop_record:
+    state: works
+    evidence: [ev-xlerobot-pi05-dataset]
+evidence:
+  - id: ev-xlerobot-pi05-doc
+    tier: community-reported
+    type: community-post
+    url: https://github.com/Vector-Wangel/XLeRobot/blob/b017b5e6354bd9f61f4247a920c72622ca0aade0/docs/en/source/software/getting_started/VLA_pi05.md
+    verified_on: 2026-10-24
+    summary: "XLeRobot docs page describing a community dual-arm pi0.5 implementation (openpi fork for fine-tuning, XLeRobot fork for teleop/recording/inference) with a demo video."
+    quote: "This document provides information about the **pi0.5** VLA (Vision-Language-Action) implementation for XLeRobot with dual-arm support."
+  - id: ev-xlerobot-pi05-dataset
+    tier: community-reported
+    type: community-post
+    url: https://huggingface.co/datasets/xuweiwu/bimanual-toy-box-cleanup
+    verified_on: 2026-10-24
+    summary: "The pi0.5 training dataset linked from the docs; meta/info.json robot_type=xlerobot, 43 episodes, LeRobot v3.0 format."

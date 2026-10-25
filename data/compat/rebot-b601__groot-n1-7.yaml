@@ -1,0 +1,34 @@
+robot: rebot-b601
+policy: groot-n1-7
+state: works-with-caveats
+caveats:
+  - "Documented in NVIDIA's Isaac-GR00T repository, not through LeRobot's groot policy: the real-robot client uses Seeed's LeRobot fork plus the lerobot-robot-seeed-b601 plugin (--robot.type=seeed_b601_dm_follower), not LeRobot's native rebot_b601_follower."
+  - "Covers the reBot Arm B601-DM (Damiao-motor variant); datasets must be converted from LeRobot v3 to v2 before Isaac-GR00T fine-tuning."
+  - "The example landed on Isaac-GR00T main (2026-07-30) after the n1.7-release tag; it is not part of a tagged release."
+framework: isaac-groot
+capabilities:
+  train:
+    state: works
+    notes: "Fine-tuned from nvidia/GR00T-N1.7-3B with --embodiment-tag NEW_EMBODIMENT; six arm joints as relative actions, gripper absolute."
+    evidence: [ev-gr00t-rebot]
+  inference_real:
+    state: works
+    notes: "Closed-loop deployment via run_gr00t_server.py plus the eval_rebot_arm_dm.py client; the README shows only open-loop plots, no closed-loop success rates."
+    evidence: [ev-gr00t-rebot, ev-gr00t-rebot-client]
+evidence:
+  - id: ev-gr00t-rebot
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/NVIDIA/Isaac-GR00T/blob/b9955401d50c92a29258732e3ad6ccd579f1bdc0/examples/rebot-arm-dm/README.md
+    date: 2026-07-30
+    verified_on: 2026-10-24
+    summary: "NVIDIA's Isaac-GR00T example fine-tunes GR00T N1.7 on reBot Arm B601-DM data and evaluates it on the real robot."
+    quote: "This guide shows how to finetune dataset collected from [rebot arm b601 dm](https://www.seeedstudio.com/reBot-Arm-B601-DM-Bundle.html) robot, and evaluate the model on the real robot."
+  - id: ev-gr00t-rebot-client
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/NVIDIA/Isaac-GR00T/blob/b9955401d50c92a29258732e3ad6ccd579f1bdc0/examples/rebot-arm-dm/pyproject.toml
+    date: 2026-07-30
+    verified_on: 2026-10-24
+    summary: "The deployment client depends on Seeed's LeRobot fork and the lerobot-robot-seeed-b601 robot plugin at pinned commits."
+    quote: "\"lerobot-robot-seeed-b601 @ git+https://github.com/Seeed-Projects/lerobot-robot-seeed-b601.git@5d36bef6e352ddfc4cefc40a16db02772e25655c\","

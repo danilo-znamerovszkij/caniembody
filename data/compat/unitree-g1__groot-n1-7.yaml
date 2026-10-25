@@ -1,0 +1,37 @@
+robot: unitree-g1
+policy: groot-n1-7
+state: works-with-caveats
+caveats:
+  - "Documented in NVIDIA's Isaac-GR00T repository (embodiment tag UNITREE_G1_SONIC), not through LeRobot: whole-body motion is executed by the GR00T Whole-Body Control / GEAR-SONIC robot-side controller, with GR00T N1.7 served from the GR00T policy server."
+  - "For the pickup task NVIDIA used an in-house UMI gripper design instead of a stock G1 hand, and notes that similar tasks may need task-appropriate grippers."
+  - "The example landed on Isaac-GR00T main after the n1.7-release tag; it is not part of a tagged release."
+framework: isaac-groot
+capabilities:
+  train:
+    state: works
+    notes: "Fine-tuned from nvidia/GR00T-N1.7-3B with examples/finetune.sh on G1 demonstrations collected with SONIC teleoperation (LeRobot v2 data format)."
+    evidence: [ev-gr00t-wbc-g1, ev-gr00t-wbc-workflow]
+  inference_real:
+    state: works
+    notes: "Closed-loop real-robot evaluation: 159/216 (73.6%) on walk-to-table-and-pick-up across 8 objects, 3 table heights and 9 placements; 8/12 (66.7%) on a soda-can-to-trash-can task. Autonomous retries were counted as success."
+    evidence: [ev-gr00t-wbc-g1, ev-gr00t-wbc-workflow]
+  teleop_record:
+    state: works
+    evidence: [ev-gr00t-wbc-workflow]
+evidence:
+  - id: ev-gr00t-wbc-g1
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/NVIDIA/Isaac-GR00T/blob/1a1837f20538b7d7e21f977a11a5aee14f99803c/examples/GR00TWholeBodyControl/README.md
+    date: 2026-07-07
+    verified_on: 2026-10-24
+    summary: "NVIDIA reports a real-world Unitree G1 mobile-manipulation evaluation of GR00T N1.7 combined with GR00T Whole-Body Control / GEAR-SONIC."
+    quote: "This example reports a real-world Unitree G1 evaluation using **Isaac GR00T N1.7** together with **GR00T Whole-Body Control / GEAR-SONIC**."
+  - id: ev-gr00t-wbc-workflow
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/NVIDIA/Isaac-GR00T/blob/1a1837f20538b7d7e21f977a11a5aee14f99803c/examples/GR00TWholeBodyControl/README.md
+    date: 2026-07-07
+    verified_on: 2026-10-24
+    summary: "The documented data-train-eval workflow: SONIC teleoperation for data, GR00T N1.7 fine-tuning with the UNITREE_G1_SONIC tag, closed-loop evaluation on the real robot."
+    quote: "1. Collect G1 demonstrations with SONIC teleoperation.\n2. Fine-tune GR00T N1.7 with `UNITREE_G1_SONIC`.\n3. Run the GR00T policy server and the SONIC robot-side controller.\n4. Evaluate in closed loop on the real robot with video recording."

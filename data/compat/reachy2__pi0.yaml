@@ -1,0 +1,33 @@
+robot: reachy2
+policy: pi0
+state: partial
+partial_scope: "Simulation only: a π0 checkpoint fine-tuned on simulated Reachy 2 teleoperation data (TAVIS benchmark) with a simulation eval script. No real-robot training or inference is documented."
+framework: lerobot
+caveats:
+  - "Community-reported only (TAVIS benchmark, anonymous submission under double-blind review); no Reachy 2 success rates are published yet."
+capabilities:
+  train:
+    state: works
+    notes: "Simulated (VR-teleoperated) TAVIS-Hands Reachy 2 data, not real-robot data."
+    evidence: [ev-tavis-pi0-reachy2-checkpoint, ev-tavis-org-card]
+  inference_sim:
+    state: partial
+    notes: "The benchmark ships an eval script that rolls out its π0 checkpoints in simulation; no Reachy 2 results are published."
+    evidence: [ev-tavis-org-card]
+evidence:
+  - id: ev-tavis-pi0-reachy2-checkpoint
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/tavis-benchmark/pi0-tavis-hands-reachy2/blob/db7ee5cadd2eda28a2582bfb382032847a4272bb/README.md
+    date: 2026-05-04
+    verified_on: 2026-10-25
+    summary: "config.json type=pi0 (head + two wrist cameras, 36-dim state, 19-dim action), base_model lerobot/pi0_base, card dataset tavis-benchmark/tavis-hands-reachy2 (LeRobotDataset v3.0, robot_type null; robot identified by the card and org page)."
+    quote: "π₀ multi-task checkpoint, fine-tuned on the TAVIS-Hands suite for the Reachy2 humanoid with head + bimanual wrist cameras."
+  - id: ev-tavis-org-card
+    tier: community-reported
+    type: community-post
+    url: https://huggingface.co/spaces/tavis-benchmark/README/blob/0674f64be968791a6d75fc237c0d77621369b99c/README.md
+    date: 2026-05-31
+    verified_on: 2026-10-25
+    summary: "TAVIS org card: eight simulated manipulation tasks on Fourier GR1T2 and Pollen Reachy 2, VR-teleoperated demos, π0 baselines; tavis-hands-reachy2 (300 episodes) and pi0-tavis-hands-reachy2 listed as Reachy2."
+    quote: "TAVIS ships eight simulated manipulation tasks across two robots (**Fourier GR1T2** and **Pollen Reachy 2**)"

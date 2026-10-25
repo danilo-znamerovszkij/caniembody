@@ -1,0 +1,41 @@
+id: human-in-the-loop-rl
+term: "Human-in-the-loop reinforcement learning"
+aka: ["HIL-RL", "HIL-SERL", "human-in-the-loop RL"]
+short: "Real-robot reinforcement learning in which a human supplies demonstrations and takes over during training to correct the policy, making on-hardware RL practical."
+body: |
+  Human-in-the-loop reinforcement learning (HIL-RL) is reinforcement learning on a physical robot in which a person takes part during training: providing initial demonstrations, intervening to correct or stop the policy, and sometimes labeling success. Pure RL on hardware is usually impractical because random exploration is slow and unsafe; human input shapes exploration so that a policy can be learned in hours.
+
+  The reference system is HIL-SERL, from Luo, Xu, Wu and Levine, "Precise and Dexterous Robotic Manipulation via Human-in-the-Loop Reinforcement Learning" (2024). It "integrates demonstrations and human corrections, efficient RL algorithms, and other system-level design choices", and reports near-perfect success rates within 1 to 2.5 hours of training, with an average 2x improvement in success rate and 1.8x faster execution over imitation-learning baselines.
+
+  LeRobot v0.6.1 implements it as [HIL-SERL](/policy/hil-serl). The workflow starts from a few teleoperated demonstrations, trains a vision-based [reward model](/glossary/reward-model) (a success classifier) on them, then runs an actor on the robot and a Soft Actor-Critic learner in parallel. The operator can take over at any time with a gamepad, keyboard or [leader arm](/glossary/leader-follower-arm), and those interventions are recorded. Joint or end-effector bounds and image cropping keep the hardware safe and the data useful.
+
+  A common misconception is that HIL-RL is [DAgger](/glossary/dagger) with extra steps. DAgger uses expert labels as supervised targets, so the result imitates the expert. HIL-SERL optimizes a reward, so the final policy can be faster and more reliable than [behavioral cloning](/glossary/behavioral-cloning) on the same demonstrations. It is also task-specific: each run trains one policy for one task on one setup, unlike a pretrained [VLA](/glossary/vla).
+related: [reward-model, dagger, imitation-learning, leader-follower-arm, teleoperation]
+policies: [hil-serl]
+sources:
+  - id: ev-hilserl-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2410.21845
+    date: 2024-10-29
+    verified_on: 2026-10-24
+    summary: "Luo et al. introduce HIL-SERL."
+    quote: "Our approach integrates demonstrations and human corrections, efficient RL algorithms, and other system-level design choices to learn policies that achieve near-perfect success rates and fast cycle times within just 1 to 2.5 hours of training."
+  - id: ev-lerobot-hilserl-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hilserl.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot v0.6.1 HIL-SERL workflow."
+    quote: "HIL-SERL is a sample-efficient reinforcement learning algorithm that combines human demonstrations with online learning and human interventions."
+  - id: ev-lerobot-hilserl-teleop
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hilserl.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot HIL-SERL supports gamepad, keyboard or leader arm interventions."
+    quote: "We support using a gamepad or a keyboard or the leader arm of the robot."

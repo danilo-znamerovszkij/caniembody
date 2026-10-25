@@ -1,0 +1,10 @@
+id: ros2
+name: ROS 2
+maintainer: Open Robotics / ROS 2 community
+repo: ros2/ros2
+docs_url: https://docs.ros.org/
+license: Apache-2.0
+current_version: humble (patch 2026-09-14)
+current_version_date: 2026-09-14
+versioning: releases
+notes: "Distribution-based; record the distro (humble, jazzy, kilted, lyrical) in versions."

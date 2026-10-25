@@ -1,0 +1,109 @@
+---
+import Base from '../../layouts/Base.astro';
+import State from '../../components/State.astro';
+import Tier from '../../components/Tier.astro';
+import Src from '../../components/Src.astro';
+import Evidence from '../../components/Evidence.astro';
+import FwTable from '../../components/FwTable.astro';
+import { loadAll, gridPolicies, gitDate, inferredPair, type Robot } from '../../lib/data.ts';
+import { CLASS_LABEL, FAMILY_LABEL, fmtAge } from '../../lib/ui.ts';
+import { crumbs, pageTitle, clip } from '../../lib/seo.ts';
+
+export function getStaticPaths() {
+  return loadAll().robots.map((r) => ({ params: { id: r.id }, props: { r } }));
+}
+const { r } = Astro.props as { r: Robot };
+const all = loadAll();
+const inGrid = r.in_grid !== false;
+const rows = (inGrid ? gridPolicies() : all.policies).map((p) => ({ p, c: all.cell(r.id, p.id) })).filter((x) => inGrid || x.c);
+const known = rows.filter((x) => x.c);
+const untested = rows.filter((x) => !x.c && inferredPair(r, x.p));
+const unknown = rows.filter((x) => !x.c && !inferredPair(r, x.p));
+const sensors = (ids?: string[]) => (ids ?? []).map((s) => all.byId.sensor[s]?.name ?? s);
+const lr = r.frameworks?.lerobot;
+const range = (x?: { min?: number; max?: number }, u = '') => x ? (x.min === x.max || x.max == null ? `${x.min}${u}` : `${x.min ?? '?'}–${x.max}${u}`) : undefined;
+const desc = inGrid
+  ? `${r.name} policy compatibility: ${known.length} of ${rows.length} policies with sourced evidence${known.length ? ` (${known.filter((x) => /^works/.test(x.c!.state)).map((x) => x.p.name).slice(0, 5).join(', ')}${known.length > 5 ? '…' : ''})` : ''}. Specs, framework support and sources. Verified ${r.verified_on}.`
+  : `${r.name}: ${r.out_of_grid_reason}`;
+---
+<Base title={pageTitle(`${r.name}: supported policies, specs, sources`)} description={clip(desc)}
+  og={`/og/robot/${r.id}.png`} modified={gitDate(`data/robots/${r.id}.yaml`)}
+  jsonld={[crumbs([['Matrix', '/'], [r.name, `/robot/${r.id}`]])]}>
+  <div class="wrap">
+    <section class="ph">
+      <div class="eyebrow"><a href="/">Matrix</a><span>/</span><span>Robot</span><span>·</span><span>{CLASS_LABEL[r.class]}</span>{r.maker && <><span>·</span><span>{r.maker}</span></>}</div>
+      <h1>{r.name}</h1>
+      {r.summary && <p class="lede">{r.summary}</p>}
+      <p class="status-line">
+        {r.open_source && <span class="pill accent">open hardware{r.license && ` · ${r.license}`}</span>}
+        {lr && <span class="pill">LeRobot {lr.support}{lr.since && ` since ${lr.since}`}</span>}
+        <span>verified <b>{r.verified_on}</b></span>
+        {r.aliases?.length ? <span>aka {r.aliases.join(', ')}</span> : null}
+      </p>
+    </section>
+
+    {!inGrid && (
+      <div class="card callout">
+        <strong>Not in the main matrix.</strong> {r.out_of_grid_reason}
+      </div>
+    )}
+
+    {(inGrid || known.length > 0) && (
+      <>
+        <h2 id="policies">Policies on {r.name} <span class="muted small">{known.length} with evidence · {unknown.length} unknown</span></h2>
+        {known.length ? (
+          <div class="tbl-wrap"><table class="tbl">
+            <thead><tr><th>Policy</th><th>State</th><th>Tier</th><th>Verified</th><th>Detail</th></tr></thead>
+            <tbody>
+              {known.map(({ p, c }) => (
+                <tr>
+                  <td><a href={`/compat/${r.id}/${p.id}`}><strong>{p.name}</strong></a> <span class="muted small">{FAMILY_LABEL[p.family]}</span></td>
+                  <td><State s={c!.state} /></td>
+                  <td><Tier t={c!.tier} /></td>
+                  <td class="mono">{c!.verified_on} <span class="muted">{fmtAge(c!.age_days)}</span>{c!.stale && <span class="flag">stale</span>}</td>
+                  <td class="small">{c!.caveats?.[0] ?? c!.partial_scope ?? c!.reason ?? ''}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table></div>
+        ) : <p class="empty">No policy has sourced evidence on {r.name} yet, so every cell is unknown.</p>}
+        {inGrid && untested.length > 0 && (
+          <p class="small muted" style="margin-top:12px"><span class="st" data-s="untested" aria-hidden="true">○</span> Untested, but both sides are in LeRobot (inferred): {untested.map(({ p }, i) => <>{i ? ', ' : ''}<a href={`/compat/${r.id}/${p.id}`}>{p.name}</a></>)}.</p>
+        )}
+        {inGrid && unknown.length > 0 && (
+          <p class="small muted" style="margin-top:12px">Not yet verified: {unknown.map(({ p }, i) => <>{i ? ', ' : ''}<a href={`/compat/${r.id}/${p.id}`}>{p.name}</a></>)}. <a href="/methodology#contribute">Have evidence?</a></p>
+        )}
+      </>
+    )}
+
+    <div class="grid-2" style="margin-top:8px">
+      <section>
+        <h2>Specifications</h2>
+        <dl class="kv">
+          {r.dof != null && <><dt>Degrees of freedom</dt><dd>{r.dof}{r.dof_note && <span class="muted"> ({r.dof_note})</span>}<Src r={r.specs_source_ref} /></dd></>}
+          {r.arms != null && <><dt>Arms</dt><dd>{r.arms}</dd></>}
+          {r.actuators && <><dt>Actuators</dt><dd>{r.actuators}<Src r={r.specs_source_ref} /></dd></>}
+          {r.payload_g && <><dt>Payload</dt><dd>{range(r.payload_g, ' g')}<Src r={r.specs_source_ref} /></dd></>}
+          {r.repeatability_mm && <><dt>Repeatability</dt><dd>{range(r.repeatability_mm, ' mm')}<Src r={r.specs_source_ref} /></dd></>}
+          {r.price_usd && <><dt>Price (USD)</dt><dd>{r.price_usd.low != null && `$${r.price_usd.low}`}{r.price_usd.high != null && r.price_usd.high !== r.price_usd.low && `–$${r.price_usd.high}`}{r.price_usd.note && <span class="muted"> ({r.price_usd.note})</span>}<Src r={r.price_usd.source_ref} /></dd></>}
+          {r.bom_url && <><dt>BOM / build</dt><dd><a href={r.bom_url}>{r.bom_url.replace('https://', '')}</a></dd></>}
+          {r.homepage && <><dt>Homepage</dt><dd><a href={r.homepage}>{r.homepage.replace('https://', '')}</a></dd></>}
+          {r.sensors_builtin?.length ? <><dt>Built-in sensors</dt><dd>{sensors(r.sensors_builtin).join(', ')}</dd></> : null}
+          {r.sensors_supported?.length ? <><dt>Supported sensors</dt><dd>{sensors(r.sensors_supported).join(', ')}</dd></> : null}
+          {r.teleop_options?.length ? <><dt>Teleoperation</dt><dd>{r.teleop_options.join(', ')}</dd></> : null}
+        </dl>
+        {r.notes && <p class="small muted" style="margin-top:12px">{r.notes}</p>}
+      </section>
+      <section>
+        <h2>Framework support</h2>
+        {Object.keys(r.frameworks ?? {}).length ? <FwTable fw={r.frameworks} /> : <p class="empty">No framework support recorded.</p>}
+      </section>
+    </div>
+
+    <h2 id="sources">Sources</h2>
+    <Evidence items={r.sources} />
+  </div>
+</Base>
+<style>
+  .callout { padding: 14px 16px; margin: 4px 0 8px; border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); background: var(--accent-soft); font-size: 14px; }
+</style>

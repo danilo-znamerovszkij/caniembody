@@ -1,0 +1,116 @@
+id: xvla
+name: X-VLA
+aliases: [xvla, X-VLA-0.9B, lerobot/xvla-base, 2toINF/X-VLA]
+family: vla
+summary: >-
+  Soft-prompted, flow-matching VLA: a Florence-Large vision-language encoder plus a 24-layer transformer action
+  generator, with small sets of learnable per-embodiment "soft prompt" embeddings that absorb differences between
+  robots, cameras and datasets. The released X-VLA-0.9B was pretrained on 290K episodes from seven platforms.
+authors: Institute for AI Industry Research (AIR), Tsinghua University, et al.
+paper_url: https://arxiv.org/abs/2510.10274
+params: 900000000
+params_note: "Authors state 0.9B (rounded; model is named X-VLA-0.9B)."
+params_source_ref: ev-xvla-paper-params
+backbone: Florence-Large vision-language encoder + 24-layer transformer (hidden size 1024) with soft prompts
+action_output: flow-matching
+action_chunking: true
+arch_source_ref: ev-xvla-paper-arch
+license: Apache-2.0
+weights_license: Apache-2.0
+open_weights: true
+frameworks:
+  lerobot:
+    support: native
+    since: "0.4.3"
+    policy_type: xvla
+    docs_url: https://huggingface.co/docs/lerobot/xvla
+    note: "Default chunk_size 32 (docs). Docs recommend --policy.dtype=bfloat16 when fine-tuning to avoid OOM."
+    source_ref: ev-lerobot-v043-notes
+checkpoints:
+  - hub_id: lerobot/xvla-base
+    note: "0.9B base model (Apache-2.0 on the Hub)."
+  - hub_id: lerobot/xvla-libero
+  - hub_id: lerobot/xvla-widowx
+  - hub_id: lerobot/xvla-folding
+  - hub_id: lerobot/xvla-agibot-world
+  - hub_id: lerobot/xvla-google-robot
+  - hub_id: 2toINF/X-VLA-Pt
+    note: "Authors' own pretrained checkpoint (upstream repo 2toINF/X-VLA)."
+requirements:
+  train:
+    vram_gb: {min: 24, max: 40}
+    batch_size: 8
+    condition: >-
+      Peak training VRAM at batch size 8 with AdamW (LeRobot default), "Large VLA" group (`pi0`, `pi0_fast`, `pi05`,
+      `xvla`, `wall_x`) in the LeRobot compute hardware guide; "A100 40 GB+ (24 GB tight at BS 1)". The guide calls its
+      figures indicative, order-of-magnitude numbers for picking hardware, not exact predictions. Precision not stated.
+    source_ref: ev-lerobot-hw-guide
+observation_space:
+  state: proprioceptive state (use_proprio, padded to max_state_dim 32)
+  language: optional
+  source_ref: ev-xvla-base-card
+notes: >-
+  Upstream code: github.com/2toINF/X-VLA (Apache-2.0); no framework record exists for it here, so only the LeRobot
+  integration is listed. Action spaces are handled by an action registry (`--policy.action_mode`, `auto` recommended)
+  and embodiments by domain IDs. Inference memory: no primary figure found.
+verified_on: 2026-10-24
+sources:
+  - id: ev-xvla-paper-params
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2510.10274
+    date: 2025-10-11
+    verified_on: 2026-10-24
+    summary: X-VLA paper names its released instantiation X-VLA-0.9B.
+    quote: "We implement X-VLA-0.9B , a 0.9B instantiation of X-VLA , trained with a carefully designed data processing and learning recipe."
+  - id: ev-xvla-paper-arch
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2510.10274
+    date: 2025-10-11
+    verified_on: 2026-10-24
+    summary: Architecture is Florence-Large encoder + 24-layer transformer (hidden 1024) for action generation.
+    quote: "we adopt Florence-Large ( Xiao et al., 2024 ) as the vision–language encoder and employ a standard Transformer backbone with 24 layers and a hidden size of 1024 for action generation."
+  - id: ev-lerobot-xvla-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/xvla.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: LeRobot docs describe X-VLA as a soft-prompted flow-matching VLA.
+    quote: '**X-VLA** is a soft-prompted, flow-matching VLA framework that treats each hardware setup as a "task" and encodes it using a small set of learnable embeddings.'
+  - id: ev-lerobot-xvla-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/xvla/configuration_xvla.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Policy type string is `xvla`."
+    quote: '@PreTrainedConfig.register_subclass("xvla")'
+  - id: ev-lerobot-v043-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.4.3
+    date: 2026-01-22
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.3"}
+    summary: X-VLA was added in LeRobot v0.4.3 (PR #2405); the xvla directory is absent at v0.4.2.
+    quote: "feat(policies): Add X-VLA by @jadechoghari"
+  - id: ev-xvla-base-card
+    tier: upstream-documented
+    type: model-card
+    url: https://huggingface.co/lerobot/xvla-base
+    verified_on: 2026-10-24
+    summary: Model card lists inputs (multi-view images, state, optional language) and flow-matching objective.
+    quote: "- **Inputs:** images (multi-view), proprio/state, optional language instruction"
+  - id: ev-lerobot-hw-guide
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hardware_guide.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Compute hardware guide: Large VLA group peak VRAM ~24–40GB at BS 8 with AdamW; figures are indicative."
+    quote: "| Large VLA  | `pi0`, `pi0_fast`, `pi05`, `xvla`, `wall_x` |                ~24–40GB | A100 40 GB+ (24 GB tight at BS 1) |"

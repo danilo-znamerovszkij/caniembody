@@ -1,0 +1,34 @@
+robot: so101
+policy: pi05
+state: partial
+partial_scope: Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source.
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-00ri-pi05-so101
+    - ev-hub-tinkhireeva-pi05-so101
+    - ev-hub-zz4321-pi05-so101
+evidence:
+- id: ev-hub-00ri-pi05-so101
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/00ri/so101_megamix_v1_pi05
+  date: '2026-01-04'
+  verified_on: '2026-10-24'
+  summary: config.json type=pi05; train_config.json dataset.repo_id=whosricky/so101-megamix-v1, whose meta/info.json robot_type=so101_follower (400 episodes).
+- id: ev-hub-tinkhireeva-pi05-so101
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/tinkhireeva/pi05_so101_pick_place_yellow_objects_10_locations
+  date: '2025-10-31'
+  verified_on: '2026-10-24'
+  summary: config.json type=pi05; train_config.json dataset.repo_id=tinkhireeva/so101_pick_place_yellow_objects_10_locations, whose meta/info.json robot_type=so101_follower (150 episodes).
+- id: ev-hub-zz4321-pi05-so101
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/zz4321/so101_pi05
+  date: '2025-10-12'
+  verified_on: '2026-10-24'
+  summary: config.json type=pi05; train_config.json dataset.repo_id=zz4321/so101_cube, whose meta/info.json robot_type=so101_follower (50 episodes).

@@ -1,0 +1,47 @@
+robot: franka-panda
+policy: pi0
+state: works-with-caveats
+framework: openpi
+caveats:
+  - "openpi lists pi0_droid as a fine-tuning starting point and says it may not follow language commands as well as π0-FAST-DROID. On real DROID tasks PI reports a lower score for π0 (0.49) than for its knowledge-insulated model (0.55)."
+  - "Documented for the DROID platform (Panda + ZED cameras + DROID control stack) through a remote policy server, not for an arbitrary Panda setup."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-openpi-readme-pi0-droid]
+  inference_real:
+    state: works
+    evidence: [ev-ki-paper-droid, ev-openpi-droid-example, ev-droid-paper]
+evidence:
+  - id: ev-ki-paper-droid
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2505.23705
+    date: 2025-05-29
+    verified_on: 2026-10-24
+    summary: "Physical Intelligence's knowledge-insulation paper evaluates π0 (and its own method) on the real-world DROID benchmark in unseen scenes. π0 scored 0.49 ± 0.09 task progress."
+    quote: "We also evaluate our generalist on the open source benchmark DROID [23] for the same set of tabletop manipulation tasks as in [37]. Our method received a score of 0.55 ± 0.09, π0 received 0.49 ± 0.09"
+  - id: ev-openpi-readme-pi0-droid
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/Physical-Intelligence/openpi/blob/215abfb217dbac7d5f1273282331b9b1866c0479/README.md
+    date: 2026-08-24
+    verified_on: 2026-10-24
+    summary: "openpi lists the pi0_droid checkpoint (usage: Fine-Tuning)."
+    quote: '$\pi_0$ model fine-tuned on the [DROID dataset](https://droid-dataset.github.io/): faster inference than $\pi_0$-FAST-DROID, but may not follow language commands as well'
+  - id: ev-openpi-droid-example
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/Physical-Intelligence/openpi/blob/215abfb217dbac7d5f1273282331b9b1866c0479/examples/droid/README.md
+    date: 2026-08-24
+    verified_on: 2026-10-24
+    summary: "openpi DROID example gives a server config for pi0_droid, then the same DROID robot client as for π0.5."
+    quote: "uv run scripts/serve_policy.py policy:checkpoint --policy.config=pi0_droid --policy.dir=gs://openpi-assets/checkpoints/pi0_droid"
+  - id: ev-droid-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2403.12945v2
+    date: 2025-04-22
+    verified_on: 2026-10-24
+    summary: "The DROID platform and dataset are built on the Franka Emika Panda."
+    quote: "We chose the Franka Emika Panda 7 DoF robot arm as the base of our setup since it is widely adopted in the robot research community, reliable, relatively affordable and was available at most participating institutions."

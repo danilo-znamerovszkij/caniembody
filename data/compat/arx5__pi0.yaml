@@ -1,0 +1,32 @@
+robot: arx5
+policy: pi0
+state: works-with-caveats
+framework: openpi
+caveats:
+  - "Community-reported only (RoboChallenge benchmark by Dexmal/Hugging Face); not documented by Physical Intelligence or maintainer-tested."
+  - "The paper does not name the codebase; openpi is recorded because RoboChallenge maintains an openpi fork and π0 is open-sourced there."
+  - "Per-task fine-tuned π0 succeeded unevenly on ARX5 tasks, e.g. 80% on place shoes on rack but 0% on open the drawer and fold dishcloth."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-robochallenge-hw, ev-robochallenge-methods]
+  inference_real:
+    state: works-with-caveats
+    evidence: [ev-robochallenge-hw, ev-robochallenge-methods]
+evidence:
+  - id: ev-robochallenge-hw
+    tier: community-reported
+    type: paper
+    url: https://arxiv.org/abs/2510.17950
+    date: 2025-10-20
+    verified_on: 2026-10-24
+    summary: "RoboChallenge (Table30) real-robot benchmark fleet includes a table-mounted ARX-5 arm; 10 of the 30 tasks run on ARX5."
+    quote: "ARX-5 arm. A 6-DOF ARX-5 arm, mounted on a table."
+  - id: ev-robochallenge-methods
+    tier: community-reported
+    type: paper
+    url: https://arxiv.org/abs/2510.17950
+    date: 2025-10-20
+    verified_on: 2026-10-24
+    summary: "π0 is one of the baselines fine-tuned and evaluated on all 30 Table30 tasks, including the ARX5 tasks (results table: Pi0 column)."
+    quote: "As our initial survey, we tested four popular open source VLA algorithms:"

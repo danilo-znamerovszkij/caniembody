@@ -1,0 +1,22 @@
+name: Deploy
+on:
+  push: { branches: [main] }
+  workflow_dispatch:
+concurrency: { group: deploy, cancel-in-progress: false }
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 } # page dates and the changelog come from git history
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc, cache: npm }
+      - run: npm ci
+      - run: npm run build
+      - run: node scripts/seo-audit.ts
+      # Needs repo secrets CLOUDFLARE_API_TOKEN (Account > Cloudflare Pages: Edit) and CLOUDFLARE_ACCOUNT_ID.
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=caniembody --branch=main

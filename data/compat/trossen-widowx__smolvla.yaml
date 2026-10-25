@@ -1,0 +1,37 @@
+robot: trossen-widowx
+policy: smolvla
+state: works-with-caveats
+framework: lerobot
+caveats:
+  - "Trossen documents the SmolVLA evaluation path but has published no on-robot SmolVLA results; its SmolVLA checkpoints carry auto-generated cards only."
+  - "Needs the lerobot[smolvla] extra, which the plugin's base install omits; Trossen recommends async inference for VLA policies."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-trossen-smolvla-ckpt]
+  inference_real:
+    state: works
+    evidence: [ev-trossen-plugin-readme, ev-trossen-docs-async]
+evidence:
+  - id: ev-trossen-plugin-readme
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/TrossenRobotics/lerobot_trossen/blob/337ed74df1ee617ddfb5987a9f7464cf3089c4a2/README.md
+    date: 2026-09-16
+    verified_on: 2026-10-24
+    summary: "Official Trossen plugin README names SmolVLA among the VLA policies that run on WidowX AI robots via lerobot-record or async inference, given the extra dependencies."
+    quote: "**VLA policies (π₀, π₀.₅, SmolVLA) need extra dependencies** (transformers/peft) that the base install omits"
+  - id: ev-trossen-docs-async
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://docs.trossenrobotics.com/trossen_arm/main/tutorials/lerobot_plugin/async_inference.html
+    verified_on: 2026-10-24
+    summary: "Trossen async-inference tutorial for Trossen AI kits covers serving SmolVLA (swap the pi extra for smolvla)."
+    quote: "smolvla: required for SmolVLA policies."
+  - id: ev-trossen-smolvla-ckpt
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/TrossenRoboticsCommunity/smolvla-handover-cube-widowxai
+    date: 2025-07-31
+    verified_on: 2026-10-24
+    summary: "config.json type=smolvla (base lerobot/smolvla_base); train_config dataset TrossenRoboticsCommunity/bimanual-widowxai-handover-cube_01, whose meta/info.json robot_type=bi_widowxai_follower. Trossen also publishes SmolVLA checkpoints on trossen_ai_stationary datasets."

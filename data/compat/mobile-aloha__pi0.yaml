@@ -1,0 +1,35 @@
+robot: mobile-aloha
+policy: pi0
+state: partial
+partial_scope: "Only a misconfigured zero-shot pi0_base run is documented: it executed on Mobile ALOHA hardware but produced no task behavior. No fine-tuned or correctly configured Mobile ALOHA run is publicly documented."
+framework: openpi
+capabilities:
+  inference_real:
+    state: partial
+    notes: "Issue #332: pi0_base served through openpi's static ALOHA runtime (--env ALOHA) with the static 'trossen' norm stats; the robot only moved slightly in place. A Physical Intelligence contributor said the 'trossen_mobile' stats should be used, zero-shot success is not expected, and fine-tuning is recommended."
+    evidence: [ev-openpi-issue-332, ev-openpi-issue-332-reply, ev-openpi-norm-stats-mobile-aloha]
+evidence:
+  - id: ev-openpi-issue-332
+    tier: community-reported
+    type: github-issue
+    url: https://github.com/Physical-Intelligence/openpi/issues/332
+    date: 2025-02-26
+    verified_on: 2026-10-25
+    summary: "User ran pi0_base zero-shot on Mobile ALOHA via examples/aloha_real (--env ALOHA, 'pick a cup'); checkpoint and 'trossen' norm stats loaded, but the robot only moved slightly and never approached the cup."
+    quote: "The robot moves slightly in place but does not go towards the cup."
+  - id: ev-openpi-issue-332-reply
+    tier: community-reported
+    type: github-issue
+    url: https://github.com/Physical-Intelligence/openpi/issues/332#issuecomment-2702822480
+    date: 2025-03-06
+    verified_on: 2026-10-25
+    summary: "Physical Intelligence contributor: zero-shot on a new task is not expected to work, Mobile ALOHA is untested outside their office, fine-tune on task data, and load 'trossen_mobile' rather than 'trossen' norm stats."
+    quote: "I do not expect pi0 to work zero-shot on a new task and we have not tested performance on mobile aloha's outside of our office."
+  - id: ev-openpi-norm-stats-mobile-aloha
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/Physical-Intelligence/openpi/blob/070759fae105d05e958efe78fe6fb08631f23da5/docs/norm_stats.md
+    date: 2025-06-20
+    verified_on: 2026-10-25
+    summary: "Supporting only (not deployment evidence): openpi publishes pi0_base pre-training normalization statistics for Mobile ALOHA (asset 'trossen_mobile')."
+    quote: "Mobile ALOHA | Mobile version of ALOHA mounted on a Slate base | trossen_mobile"

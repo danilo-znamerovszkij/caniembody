@@ -1,0 +1,32 @@
+robot: franka-fr3
+policy: hil-serl
+state: works-with-caveats
+framework: hil-serl
+caveats:
+  - "Upstream names an FR3 only as one arm of its bimanual Panda + FR3 setup. It does not say whether any single-arm task ran on the FR3."
+  - "Uses the authors' JAX codebase with ROS 1 franka_ros + serl_franka_controllers (impedance control), not LeRobot's hil-serl, whose real-robot docs do not cover Franka."
+capabilities:
+  train:
+    state: works
+    notes: "Online RL with human interventions on the physical robot (dual-arm tasks such as handover, car-dashboard and timing-belt assembly)."
+    evidence: [ev-hilserl-infra, ev-hilserl-paper-dual-arm]
+  inference_real:
+    state: works
+    evidence: [ev-hilserl-infra, ev-hilserl-paper-dual-arm]
+evidence:
+  - id: ev-hilserl-infra
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/rail-berkeley/hil-serl/blob/c32939bccb65f3b8c43a9f9add3d322d4ab0264a/serl_robot_infra/README.md
+    date: 2025-10-27
+    verified_on: 2026-10-25
+    summary: "serl_robot_infra README: the authors' bimanual setup pairs a Panda and an FR3, each run by an independent robot server."
+    quote: "For bimmanual setup, you can run completely independent servers for each arm even if they have different firmware version (we have a Panda and a FR3) by using different catkin_ws, ROS_MASTER_URI, and flask_url."
+  - id: ev-hilserl-paper-dual-arm
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2410.21845v3
+    date: 2025-03-20
+    verified_on: 2026-10-25
+    summary: "HIL-SERL paper: the real-world tasks are solved with a single arm or a dual-arm setup; the dual-arm tasks are object handover, car-dashboard assembly and timing-belt assembly. The paper itself does not name the arm models."
+    quote: "We solve these tasks by utilizing either a single robot arm or a dual-arm setup, together with various combinations of observations and actions."

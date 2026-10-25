@@ -1,0 +1,53 @@
+id: pi05-jetson-agx-orin-64gb-llama-cpp-fp16-2cam-eaglevla
+policy: pi05
+compute: jetson-agx-orin-64gb
+checkpoint: π0.5 LIBERO (openpi pi05_libero) converted to GGUF
+date: '2026-10-08'
+runtime: llama-cpp
+runtime_note: 'EagleVLA-Edge: llama.cpp-based VLA engine (GGUF FP16 weights) with CUDA graph reuse, GPU-resident intermediate buffers / KV and unrolled flow-matching denoising.'
+precision: fp16
+cameras: 2
+resolution: 224x224
+inference_latency_ms:
+  p50: 374.5
+inference_hz: 2.67
+outcome: runs
+platform:
+  board: Jetson Orin, 'Orin-50W' power mode (AGX Orin 64GB inferred, see ev-orin-board-inferred)
+  power_mode: 50W (paper label "Orin-50W")
+note: 'Inference cost only; not task success. Full VLM + action-expert pass (ViT + LLM + 10-step action expert), LIBERO inputs (agent-view + wrist at 224x224). Paper''s ''control frequency'' (6.93 Hz) is 1/reaction time with confidence-based scheduling that skips the VLM; it is not executed actions/s and is not recorded as control_rate_hz. Naive PyTorch π0.5 on the same board per the paper: 1420.8 ms (0.70 Hz) (not filed as a separate run: the baseline precision is not stated).'
+source_ref: ev-eaglevla-paper
+evidence:
+- id: ev-eaglevla-paper
+  tier: community-reported
+  type: paper
+  url: https://arxiv.org/abs/2607.12659v6
+  date: '2026-10-08'
+  verified_on: '2026-10-24'
+  versions:
+    arxiv: 2607.12659v6
+  summary: 'EagleVLA (formerly Jetson-PI) v6 Table 4: π0.5 latency on Jetson Orin, LIBERO, with graph reuse + intermediate buffer & unroll; total 374.5 ms.'
+  quote: +Intermediate Buffer & Unroll 71.9 194.8 107.8 374.5 144.3 6.93
+- id: ev-eaglevla-edge-readme
+  tier: community-reported
+  type: source-code
+  url: https://github.com/PKU-SEC-Lab/EagleVLA-Edge/blob/619e92e878a25df3e9cc0ce87b8f3a61283146e7/README.md
+  date: '2026-10-23'
+  verified_on: '2026-10-24'
+  summary: EagleVLA-Edge README reports the same configuration as P50 latency (ms).
+  quote: '| + Intermediate buffer, GPU KV, and unroll | 71.9 | 194.8 | 107.8 | 374.5 |'
+- id: ev-orin-board-inferred
+  tier: inferred
+  type: spec-derivation
+  url: https://docs.nvidia.com/jetson/archives/r36.4.3/DeveloperGuide/SD/PlatformPowerAndPerformance/JetsonOrinNanoSeriesJetsonOrinNxSeriesAndJetsonAgxOrinSeries.html
+  verified_on: '2026-10-24'
+  summary: 'INFERRED board identity: the paper names the device only as ''Jetson Orin'' and labels this power setting ''Orin-50W'' (Table 1). In NVIDIA''s Orin power-mode tables only the AGX Orin 64GB has a 50W mode (AGX Orin 32GB: 15/30/40W; Orin NX/Nano: up to 40W/25W). The paper''s own hardware table lists both ''Orin 32GB'' and ''Orin 64GB'', so this mapping is a deduction, not a statement by the authors.'
+  quote: for Jetson AGX Orin 64GB Property Mode MAXN 15W 30W* 50W
+- id: ev-openpi-libero-inputs
+  tier: community-reported
+  type: source-code
+  url: https://github.com/Physical-Intelligence/openpi/blob/215abfb217dbac7d5f1273282331b9b1866c0479/src/openpi/policies/libero_policy.py
+  date: '2026-08-24'
+  verified_on: '2026-10-24'
+  summary: 'openpi LIBERO input mapping: one third-person image and one wrist image; the third π slot is zero-padded.'
+  quote: '"right_wrist_0_rgb": np.zeros_like(base_image),'

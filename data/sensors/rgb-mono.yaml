@@ -1,0 +1,3 @@
+id: rgb-mono
+name: "RGB, single camera"
+description: "One RGB camera, usually a fixed overview/scene view. LeRobot reads USB cameras through its OpenCV camera class."

@@ -1,0 +1,39 @@
+id: async-inference
+term: "Asynchronous inference"
+aka: ["async inference", "PolicyServer / RobotClient"]
+short: "Running policy inference in parallel with action execution, so the robot keeps acting from an action queue while the next chunk is computed."
+body: |
+  Asynchronous inference decouples computing [action chunks](/glossary/action-chunking) from executing them. Under synchronous inference the robot executes a chunk, stops, sends an observation, waits for the model and resumes, idling for the full [inference latency](/glossary/inference-latency) at every chunk boundary. Under asynchronous inference the robot keeps executing from an action queue and sends a new observation before the queue runs out, so the next chunk is ready when needed.
+
+  LeRobot's implementation was introduced with [SmolVLA](/policy/smolvla) (Shukor et al., 2025) as "an asynchronous inference stack decoupling perception and action prediction from action execution, allowing higher control rates with chunked action generation". It is split into a `PolicyServer`, which can run on a remote GPU such as an [RTX 4090](/compute/rtx-4090), and a `RobotClient` on the computer attached to the robot, for example an [SO-101](/robot/so101). Two parameters govern it: `actions_per_chunk`, and `chunk_size_threshold` (*g* in the paper), the queue fraction at which the client sends a fresh observation. The paper shows that the queue does not run dry when g ≥ (E[ℓ_S]/Δt)/n, where ℓ_S is server latency, Δt the control period and n the chunk length. The LeRobot docs report values around 0.5–0.6 working well; values near 0 collapse to synchronous behavior.
+
+  Two misconceptions recur. Async inference does not reduce latency; it hides it. Each chunk is still computed from an observation that is at least ℓ_S old by the time its actions execute. And async inference alone does not make chunk transitions smooth. LeRobot aggregates overlapping actions, whereas [real-time chunking](/glossary/real-time-chunking) conditions the new chunk on actions already committed, and the two can be combined.
+related: [real-time-chunking, action-chunking, inference-latency, control-rate]
+policies: [smolvla, pi0, act]
+sources:
+  - id: ev-smolvla-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2506.01844
+    date: 2025-06-02
+    verified_on: 2026-10-24
+    summary: "SmolVLA introduces an asynchronous inference stack."
+    quote: "we introduce an asynchronous inference stack decoupling perception and action prediction from action execution, allowing higher control rates with chunked action generation."
+  - id: ev-lerobot-async-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/async.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot v0.6.1 async inference guide."
+    quote: "This is fundamentally different from synchronous inference (sync), where the robot stays idle while the policy computes the next chunk of actions."
+  - id: ev-lerobot-async-threshold
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/async.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot: chunk_size_threshold of about 0.5-0.6 works well."
+    quote: "We found values around 0.5-0.6 to work well."

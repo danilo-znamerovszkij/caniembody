@@ -1,0 +1,58 @@
+id: moss-v1
+name: Moss v1
+maker: Jess Moss
+aliases: [Moss, Moss arm, moss-robot-arms, moss]
+class: arm
+in_grid: false
+out_of_grid_reason: >-
+  It was never in a LeRobot release. The `moss` type existed only on main, from Oct 2024 until the Hardware API
+  redesign of June 2025. There are no Moss datasets or checkpoints in the lerobot Hub org, and the maker recommends
+  the SO-100 instead.
+summary: >-
+  Early low-cost leader/follower arm pair built from Feetech STS3215 servos, with five joints plus a gripper. It
+  preceded the SO-100. Its maker now recommends the SO-100 for LeRobot, and its LeRobot support existed only on the
+  main branch.
+dof: 5
+dof_note: "Six STS3215 per arm: shoulder_pan, shoulder_lift, elbow_flex, wrist_flex, wrist_roll + gripper."
+arms: 1
+actuators: Feetech STS3215 (6 per arm)
+specs_source_ref: ev-lerobot-pre-refactor-moss
+open_source: true
+license: Apache-2.0
+bom_url: https://github.com/jess-moss/moss-robot-arms
+homepage: https://github.com/jess-moss/moss-robot-arms
+frameworks:
+  lerobot:
+    support: removed
+    robot_type: [moss]
+    note: >-
+      main-only: added with SO-100 in PR #419 (merged 2024-10-25) and dropped in the Hardware API redesign (PR #777,
+      merged 2025-06-05). No PyPI release fell between 0.1.0 (2024-03-09) and 0.3.2 (2025-08-01), and v0.3.2 has no
+      moss module, so `since`/`until` are left blank because no released version ever contained it.
+    source_ref: ev-lerobot-pre-refactor-moss
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-pre-refactor-moss
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/b536f47e3ff8c3b340fc5efa52f0ece0a7212a57/lerobot/common/robot_devices/robots/configs.py
+    date: 2025-06-05
+    verified_on: 2026-10-24
+    summary: "main just before the Hardware API redesign registered a `moss` robot type with six sts3215 motors per arm."
+    quote: "@RobotConfig.register_subclass(\"moss\") @dataclass class MossRobotConfig(ManipulatorRobotConfig): calibration_dir: str = \".cache/calibration/moss\""
+  - id: ev-lerobot-v032-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.3.2
+    date: 2025-08-01
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.3.2"}
+    summary: "First tagged release notes list both the PR that added Moss and the redesign that removed it."
+    quote: "Hardware API redesign by @aliberts in https://github.com/huggingface/lerobot/pull/777"
+  - id: ev-moss-readme
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/jess-moss/moss-robot-arms/blob/da15b56f01e94e62ca08d14f42e14b8627a240dc/README.md
+    verified_on: 2026-10-24
+    summary: "Maker recommends SO100 for LeRobot; Moss v1 'will be deprecated'."
+    quote: "While the Moss v1 robot is still supported, it will be deprecated."

@@ -1,0 +1,40 @@
+id: molmoact2-h100-80gb-pytorch-eager-bf16-2cam-lerobot-docs
+policy: molmoact2
+compute: h100-80gb
+checkpoint: MolmoAct2 (LeRobot port; docs do not name the checkpoint)
+date: '2026-08-03'
+runtime: pytorch-eager
+runtime_note: LeRobot MolmoAct2 policy, continuous action mode, CUDA graph enabled.
+precision: bf16
+cameras: 2
+batch_size: 1
+action_chunk: 10
+vram_gb: 13.0
+outcome: runs
+platform:
+  os: Ubuntu 22.04 (repo tested with)
+  memory_sampling: nvidia-smi peak
+  lerobot: 0.6.1
+note: Inference memory only (12.1 GiB peak GPU memory = 13.0 GB); no latency reported. LIBERO with two RGB cameras, chunk_size=10, 8 flow timesteps. Not task success.
+source_ref: ev-lerobot-molmoact2-mem
+evidence:
+- id: ev-lerobot-molmoact2-mem
+  tier: community-reported
+  type: source-code
+  url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/molmoact2.mdx
+  date: '2026-08-03'
+  verified_on: '2026-10-24'
+  versions:
+    lerobot: 0.6.1
+  summary: 'LeRobot v0.6.1 MolmoAct2 docs: peak GPU memory 12.1 GiB for continuous inference with CUDA graphs at batch 1 on one H100 80GB.'
+  quote: '| Inference, continuous, CUDA graph enabled (bs=1) | 12.1 GiB |'
+- id: ev-lerobot-molmoact2-conditions
+  tier: community-reported
+  type: source-code
+  url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/molmoact2.mdx
+  date: '2026-08-03'
+  verified_on: '2026-10-24'
+  versions:
+    lerobot: 0.6.1
+  summary: Measurement conditions for the table.
+  quote: below were taken on a single NVIDIA H100 80GB with bf16 model loading, LIBERO with two RGB cameras. MolmoAct2 rows use `chunk_size=10`

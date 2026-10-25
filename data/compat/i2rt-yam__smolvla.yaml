@@ -1,0 +1,17 @@
+robot: i2rt-yam
+policy: smolvla
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-hcisbmm-smolvla]
+evidence:
+  - id: ev-hub-hcisbmm-smolvla
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/hcisbmm/smolvla_yam_pink
+    date: 2026-07-07
+    verified_on: 2026-10-24
+    summary: "config.json type=smolvla (base_model lerobot/smolvla_base); trained on hcisbmm/yam-pink-utensil-into-cup_20260707_180338 whose meta/info.json robot_type=bi_yam_follower (bimanual YAM)."

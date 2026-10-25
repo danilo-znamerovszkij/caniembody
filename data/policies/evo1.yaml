@@ -1,0 +1,113 @@
+id: evo1
+name: Evo-1
+aliases: [EVO1, Evo1, evo-1, MINT-SJTU/Evo-1]
+family: vla
+summary: >-
+  Lightweight vision-language-action model from MINT-SJTU: an InternVL3-1B backbone (14 language layers kept) with a
+  continuous flow-matching action head predicting 50-step action chunks from one to three camera views, state and a
+  language task. Trained in two stages (action head only, then VLM fine-tuning).
+authors: MINT-SJTU (School of AI, Shanghai Jiao Tong University) et al.
+paper_url: https://arxiv.org/abs/2511.04555
+params: 770000000
+params_note: "Authors state 0.77B parameters (rounded)."
+params_source_ref: ev-evo1-paper-params
+backbone: InternVL3-1B (OpenGVLab/InternVL3-1B-hf), 14 language layers
+action_output: flow-matching
+action_chunking: true
+rtc_compatible: true
+arch_source_ref: ev-lerobot-evo1-docs
+license: MIT (upstream MINT-SJTU/Evo-1); LeRobot integration Apache-2.0
+open_weights: true
+frameworks:
+  lerobot:
+    support: native
+    since: "0.6.0"
+    policy_type: evo1
+    docs_url: https://huggingface.co/docs/lerobot/evo1
+    note: "Added in v0.6.0 (\"feat(policies): add EVO1 policy\"). Docs show optional `lerobot-rollout --inference.type=rtc`; EVO1Policy.supports_rtc() returns True at v0.6.1."
+    source_ref: ev-lerobot-evo1-config
+checkpoints:
+  - hub_id: zuoxingdong/evo1_libero
+    note: "LeRobot-format Stage-2 LIBERO checkpoint referenced by the LeRobot docs (96.65% LIBERO average at step 70k, single run)."
+  - hub_id: MINT-SJTU/Evo1_LIBERO
+    note: "Upstream (non-LeRobot-format) LIBERO weights from the Evo-1 repo."
+  - hub_id: MINT-SJTU/Evo1_MetaWorld
+    note: "Upstream (non-LeRobot-format) Meta-World weights from the Evo-1 repo."
+observation_space:
+  cameras: {min: 1, max: 3}
+  state: observation.state, padded to max_state_dim 24
+  language: required
+  source_ref: ev-lerobot-evo1-docs-data
+notes: >-
+  The LeRobot docs' reference LIBERO training run used two H100 GPUs (DDP, batch 64 per process, global batch 128);
+  no VRAM figure is given and Evo-1 is not listed in the LeRobot compute hardware guide, so requirements are left
+  unset. Camera max is the default `max_views` (3), configurable. peft_supported left unset (not in the PEFT docs).
+  Weights license not stated on the Hub for the MINT-SJTU repos.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-evo1-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/evo1.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: LeRobot EVO1 docs describe an InternVL3 backbone with a continuous flow-matching action head.
+    quote: "EVO1 is a Vision-Language-Action policy for robot control built around an InternVL3 backbone and a continuous flow-matching action head."
+  - id: ev-lerobot-evo1-docs-data
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/evo1.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "EVO1 expects one to `policy.max_views` (default 3) cameras, observation.state, action and a language task."
+    quote: "One to `policy.max_views` visual observations, for example `observation.images.image`"
+  - id: ev-lerobot-evo1-docs-rtc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/evo1.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: EVO1 rollout example enables RTC inference as an option.
+    quote: "--inference.type=rtc \\ # optional"
+  - id: ev-lerobot-evo1-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/evo1/configuration_evo1.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Policy type string is `evo1`; default max_views 3, max_state_dim 24, VLM OpenGVLab/InternVL3-1B-hf."
+    quote: '@PreTrainedConfig.register_subclass("evo1")'
+  - id: ev-lerobot-v060-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.6.0
+    date: 2026-07-06
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.0"}
+    summary: EVO1 was added in LeRobot v0.6.0.
+    quote: "* feat(policies): add EVO1 policy by @imstevenpmwork in https://github.com/huggingface/lerobot/pull/3908"
+  - id: ev-evo1-paper-params
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2511.04555v1
+    date: 2025-11-06
+    verified_on: 2026-10-24
+    summary: Evo-1 paper states 0.77B parameters.
+    quote: "We propose Evo-1, a lightweight VLA architecture with only 0.77B parameters"
+  - id: ev-evo1-upstream-repo
+    tier: community-reported
+    type: source-code
+    url: https://github.com/MINT-SJTU/Evo-1/tree/5fd14b015013c4fd0aacf5f8f48f868ca9b870a2
+    date: 2026-08-18
+    verified_on: 2026-10-24
+    summary: "GitHub API reports the upstream MINT-SJTU/Evo-1 repo license as MIT; README links the MINT-SJTU/Evo1_LIBERO and Evo1_MetaWorld weights."
+  - id: ev-hub-evo1-checkpoints
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/zuoxingdong/evo1_libero
+    verified_on: 2026-10-24
+    summary: "Hub API: zuoxingdong/evo1_libero (license tag 'other'), MINT-SJTU/Evo1_LIBERO and MINT-SJTU/Evo1_MetaWorld (no license tag) exist."

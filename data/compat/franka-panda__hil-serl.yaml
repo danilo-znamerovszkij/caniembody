@@ -1,0 +1,31 @@
+robot: franka-panda
+policy: hil-serl
+state: works-with-caveats
+framework: hil-serl
+caveats:
+  - "Upstream names a Panda only as one arm of its bimanual Panda + FR3 setup. It does not say which single-arm tasks ran on which Franka model."
+  - "Uses the authors' JAX codebase with ROS 1 franka_ros + serl_franka_controllers (impedance control), not LeRobot's hil-serl, whose real-robot docs do not cover Franka."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hilserl-readme, ev-hilserl-infra]
+  inference_real:
+    state: works
+    evidence: [ev-hilserl-readme, ev-hilserl-infra]
+evidence:
+  - id: ev-hilserl-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/rail-berkeley/hil-serl/blob/c32939bccb65f3b8c43a9f9add3d322d4ab0264a/README.md
+    date: 2025-10-27
+    verified_on: 2026-10-24
+    summary: "HIL-SERL authors' repo provides a Franka walkthrough (RAM insertion, USB pick-up and insertion, object handover, egg flip)."
+    quote: "We provide a step-by-step guide to run RL policies with HIL-SERL on a Franka robot."
+  - id: ev-hilserl-infra
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/rail-berkeley/hil-serl/blob/c32939bccb65f3b8c43a9f9add3d322d4ab0264a/serl_robot_infra/README.md
+    date: 2025-10-27
+    verified_on: 2026-10-24
+    summary: "serl_robot_infra README: the authors' bimanual setup pairs a Panda and an FR3, each run by an independent robot server."
+    quote: "For bimmanual setup, you can run completely independent servers for each arm even if they have different firmware version (we have a Panda and a FR3) by using different catkin_ws, ROS_MASTER_URI, and flask_url."

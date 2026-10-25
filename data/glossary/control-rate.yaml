@@ -1,0 +1,40 @@
+id: control-rate
+term: "Control rate"
+aka: ["control frequency", "control loop rate", "control_rate_hz"]
+short: "How many actions per second the robot's controller executes, in Hz; set by the robot and dataset, and distinct from how often the policy model is called."
+body: |
+  Control rate is the frequency, in hertz, at which actions are sent to the robot's actuators: the inverse of the control period Δt. It is a property of the robot and recording setup, not of the model. A dataset recorded at 30 fps trains a policy whose actions are spaced 1/30 s apart, and the policy should be deployed at that rate. The ALOHA setup in the ACT paper (Zhao et al., 2023) teleoperated and recorded at 50 Hz; LeRobot's recording examples for the [SO-101](/robot/so101) use 30 fps.
+
+  With [action chunking](/glossary/action-chunking), control rate and model call rate come apart. The π0 paper (Black et al., 2024) ran its 50 Hz robots by calling the model "every 0.5 seconds (after executing 25 actions)": a 50 Hz control rate from a 2 Hz call rate. This matrix stores the two separately. `control_rate_hz` is executed actions per second after chunking; `inference_hz` is model calls per second. Neither may be derived from the other without stating the number of actions executed per call.
+
+  The deployment rate should match the training data. If a policy trained on 30 fps data is run at 50 Hz, each chunk plays back faster than the motion it imitates, which changes the dynamics the policy was trained on.
+
+  A common misconception is that a high control rate makes a policy reactive at that rate. A [SmolVLA](/policy/smolvla) chunk executed open-loop at 30 Hz reacts to new observations only when the next chunk arrives; reactivity is bounded by [inference latency](/glossary/inference-latency) and the execution [horizon](/glossary/action-horizon), and is improved by [async inference](/glossary/async-inference). Rate matters for demonstrations too: in the ACT paper's user study, cutting teleoperation from 50 Hz to 5 Hz caused "a 62% slowdown in completion time".
+related: [inference-latency, action-chunking, action-horizon, async-inference, lerobot-dataset]
+policies: [act, pi0, smolvla]
+sources:
+  - id: ev-act-paper-full
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/html/2304.13705
+    date: 2023-04-23
+    verified_on: 2026-10-24
+    summary: "ACT/ALOHA teleoperates and records at 50 Hz."
+    quote: "Both the teleoperation and data recording happen at 50Hz."
+  - id: ev-pi0-paper-full
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/html/2410.24164
+    date: 2024-10-31
+    verified_on: 2026-10-24
+    summary: "π0 runs 50 Hz robots with inference every 25 actions."
+    quote: "for all other robots, which run at 50Hz, we run inference every 0.5 seconds (after executing 25 actions)."
+  - id: ev-lerobot-il-robots
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/il_robots.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot recording example uses 30 fps."
+    quote: "FPS = 30"

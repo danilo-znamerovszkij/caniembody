@@ -1,0 +1,39 @@
+id: inference-latency
+term: "Inference latency"
+aka: ["policy latency", "inference time", "inference_latency_ms"]
+short: "Wall-clock time for one policy call from observation to action chunk. Not the same as control rate: action chunking decouples the two."
+body: |
+  Inference latency is the wall-clock time from handing an observation to the policy to receiving its output; for chunked policies, that output is one full [action chunk](/glossary/action-chunking). It includes image encoding, the language-model forward pass, every denoising or decoding step and, if the model runs off-board, network transfer. It is measured in milliseconds and should be reported as a distribution (p50 and p95), not a single best run.
+
+  The most common error in published comparison tables is treating latency and [control rate](/glossary/control-rate) as if one implied the other. Chunking decouples them. The π0 paper (Black et al., 2024) measured 73 ms of on-board inference on an [RTX 4090](/compute/rtx-4090) with three camera images, and ran its robots at 50 Hz by calling the model every 25 actions. 73 ms does not mean "13.7 Hz control", and "50 Hz" does not mean a 20 ms model. Converting between them requires the number of actions executed per call.
+
+  A latency figure is only comparable if it states the conditions that dominate it: hardware, runtime (PyTorch eager, `torch.compile`, TensorRT), numeric precision (see [quantization](/glossary/quantization)), camera count and resolution, and the number of denoising steps. This matrix rejects measurements that omit runtime, precision or camera count.
+
+  Latency matters even when throughput is sufficient. Under synchronous inference the robot idles for the full latency at every chunk boundary. [Async inference](/glossary/async-inference) hides that idle time, and [real-time chunking](/glossary/real-time-chunking) keeps motion continuous when latency is a large fraction of the chunk; the RTC paper reports success with delays above 300 ms. On small devices such as the [Jetson Orin Nano](/compute/jetson-orin-nano-8gb), latency often decides whether a policy is usable at all.
+related: [control-rate, action-chunking, quantization, async-inference, real-time-chunking, action-horizon]
+policies: [pi0, smolvla, pi05]
+sources:
+  - id: ev-pi0-paper-full
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/html/2410.24164
+    date: 2024-10-31
+    verified_on: 2026-10-24
+    summary: "π0 inference timed on an RTX 4090 with 3 camera images (73 ms on-board total, Table I)."
+    quote: "Table I summarizes the computation time for this operation with 3 camera images. The operations were timed on an NVIDIA GeForce RTX 4090 consumer-grade GPU."
+  - id: ev-pi0-paper-full-rate
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/html/2410.24164
+    date: 2024-10-31
+    verified_on: 2026-10-24
+    summary: "π0 runs 50 Hz robots with inference every 25 actions."
+    quote: "for all other robots, which run at 50Hz, we run inference every 0.5 seconds (after executing 25 actions)."
+  - id: ev-rtc-paper-full
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/html/2506.07339
+    date: 2025-06-09
+    verified_on: 2026-10-24
+    summary: "RTC robust to inference delays over 300 ms."
+    quote: "even in the presence of inference delays in excess of 300 milliseconds"

@@ -1,0 +1,10 @@
+id: vla-jepa
+name: VLA-JEPA (ginwind/VLA-JEPA)
+maintainer: VLA-JEPA authors
+repo: ginwind/VLA-JEPA
+docs_url: https://github.com/ginwind/VLA-JEPA
+license: Apache-2.0
+current_version: main
+current_version_date: 2026-09-29
+versioning: none
+notes: "VLA-JEPA authors' official training and simulation-evaluation code (starVLA-based). No tagged releases; pin by commit (main at ec907778b4af, 2026-09-29)."

@@ -1,0 +1,12 @@
+{
+  "ci": {
+    "collect": { "staticDistDir": "./dist", "url": ["/", "/compat/so101/smolvla", "/compute/jetson-orin-nano-8gb", "/coverage"] },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 0.95 }],
+        "categories:accessibility": ["error", { "minScore": 1 }],
+        "categories:seo": ["error", { "minScore": 0.95 }]
+      }
+    }
+  }
+}

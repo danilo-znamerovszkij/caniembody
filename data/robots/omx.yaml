@@ -1,0 +1,90 @@
+id: omx
+name: ROBOTIS OMX
+maker: ROBOTIS
+aliases: [OMX, OMX-F, OMX-L, OMX-AI, omx_follower, omx_leader]
+class: arm
+summary: >-
+  ROBOTIS's entry-level Physical AI arm with five joints plus a gripper, built on DYNAMIXEL-X servos. The OMX-F
+  follower and OMX-L leader ship factory-calibrated. LeRobot supports it natively, and ROBOTIS states official ROS 2
+  support.
+dof: 5
+dof_note: "ROBOTIS spec: 5 + 1 gripper (follower OMX-F and leader OMX-L)."
+arms: 1
+actuators: >-
+  Follower OMX-F: 3x Dynamixel XL430-W250-T (IDs 11-13) + 3x XL330-M288-T (IDs 14-16). Leader OMX-L: XL330-M288-T
+  joints 1-5, XL330-M077-T joint 6.
+payload_g: {min: 100, max: 250}
+specs_source_ref: ev-robotis-omx-hw
+open_source: true
+homepage: https://ai.robotis.com/omx/introduction_omx.html
+frameworks:
+  lerobot:
+    support: native
+    since: "0.4.3"
+    robot_type: [omx_follower]
+    docs_url: https://huggingface.co/docs/lerobot/omx
+    note: "Leader: --teleop.type=omx_leader. Shipped pre-configured, so no motor setup or calibration is needed. Added in PR #2614 (merged 2025-12-15)."
+    source_ref: ev-lerobot-omx-src
+  ros2:
+    support: upstream-repo
+    repo_url: https://github.com/ROBOTIS-GIT/open_manipulator
+    note: "ROBOTIS states official ROS 2 support for OMX. This is ROBOTIS's own OpenMANIPULATOR ROS 2 package repo."
+    source_ref: ev-robotis-omx-intro
+sensors_supported: [rgb-mono, rgb-dual, rgb-multi, realsense-depth]
+teleop_options: ["OMX-L leader arm (omx_leader)"]
+notes: >-
+  Payload per ROBOTIS: 100 g at full reach and 250 g at normal reach. ROBOTIS publishes STEP and STL files for the
+  3D-printed parts. The site footer states that "AI Worker and AI Manipulator" are Apache-2.0, but there is no
+  OMX-specific license statement, so the license is left blank.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/README.md
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot README lists OMX among natively supported hardware."
+    quote: "SO100, LeKiwi, Koch, HopeJR, OMX, EarthRover, Reachy2, Gamepads, Keyboards, Phones, OpenARM, Unitree G1, reBot B601."
+  - id: ev-lerobot-omx-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/omx.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot OMX guide: preconfigured from the factory."
+    quote: "OMX robots are shipped preconfigured from the factory. Motor IDs, communication parameters, and joint offsets are already set, so no additional motor setup or calibration is required before using LeRobot."
+  - id: ev-lerobot-omx-src
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/robots/omx_follower/config_omx_follower.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Registers omx_follower."
+    quote: "@RobotConfig.register_subclass(\"omx_follower\")"
+  - id: ev-lerobot-v043-omx
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.4.3
+    date: 2026-01-22
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.3"}
+    summary: "OMX support first released in v0.4.3 (module absent at v0.4.2)."
+    quote: "feat(robot): Add support for OMX robot by @Woojin-Crive in https://github.com/huggingface/lerobot/pull/2614"
+  - id: ev-robotis-omx-intro
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://ai.robotis.com/omx/introduction_omx.html
+    verified_on: 2026-10-24
+    summary: "ROBOTIS: compact 5-DOF DYNAMIXEL-X platform with official ROS 2 support."
+    quote: "OMX officially supports ROS 2, with compatibility across existing packages."
+  - id: ev-robotis-omx-hw
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://ai.robotis.com/omx/hardware_omx.html
+    verified_on: 2026-10-24
+    summary: "OMX-F spec: 5+1 DOF, XL430/XL330 servos, payload 100 g full reach / 250 g normal reach; STEP/STL published."
+    quote: "Payload Full reach : 100g , Normal reach : 250g"

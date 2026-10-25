@@ -1,0 +1,31 @@
+id: rtx-4090
+name: NVIDIA GeForce RTX 4090
+class: consumer-gpu
+memory_gb: 24
+arch: Ada Lovelace
+ai_tops: 1321 AI TOPS
+power_w: 450 W (total graphics power)
+notes: NVIDIA's AI TOPS headline is a low-precision, sparsity-assisted figure, not FP16/BF16 throughput. The China-market RTX 4090 D is a different, cut-down part and should not be logged against this target.
+verified_on: '2026-10-24'
+sources:
+- id: ev-nvidia-rtx4090-specs
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4090/
+  verified_on: '2026-10-24'
+  summary: 'RTX 4090 full specs: 1321 AI TOPS (4th-gen Tensor Cores), 24 GB GDDR6X.'
+  quote: 'Tensor Cores (AI) 4th Generation 1321 AI TOPS Boost Clock (GHz) 2.52 Base Clock (GHz) 2.23 Memory Specs: Standard Memory Config 24 GB GDDR6X'
+- id: ev-nvidia-rtx4090-power
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4090/
+  verified_on: '2026-10-24'
+  summary: 'RTX 4090 full specs: total graphics power 450 W.'
+  quote: Total Graphics Power (W) 450
+- id: ev-nvidia-rtx4090-arch
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4090/
+  verified_on: '2026-10-24'
+  summary: 'RTX 4090 full specs: NVIDIA architecture Ada Lovelace.'
+  quote: NVIDIA Architecture Ada Lovelace

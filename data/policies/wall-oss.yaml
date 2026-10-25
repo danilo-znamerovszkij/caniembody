@@ -1,0 +1,135 @@
+id: wall-oss
+name: WALL-OSS
+aliases: [wall_x, wallx, Wall-X, WallX, wall-oss-flow, wall-oss-fast, x-square-robot/wall-oss-flow, x-square-robot/wall-oss-fast]
+family: vla
+summary: >-
+  X Square Robot's open embodied foundation model: a Qwen2.5-VL-3B backbone with mixture-of-experts action routing,
+  trained in two stages (discrete FAST action tokens, then flow matching). It ships as two checkpoints, a
+  flow-matching one (wall-oss-flow) and a FAST-token one (wall-oss-fast).
+authors: X Square Robot
+paper_url: https://arxiv.org/abs/2509.11766
+backbone: Qwen2.5-VL-3B with MoE action FFN (flow-matching head or FAST token head)
+action_output: hybrid
+action_chunking: true
+arch_source_ref: ev-walloss-paper-arch
+license: Apache-2.0
+open_weights: true
+frameworks:
+  lerobot:
+    support: native
+    since: "0.4.3"
+    policy_type: wall_x
+    docs_url: https://huggingface.co/docs/lerobot/walloss
+    note: >-
+      Policy type `wall_x` (directory src/lerobot/policies/wall_x, extra `.[wallx]`); docs page and README title it
+      WALL-OSS. `--policy.prediction_mode` selects `diffusion` (flow matching, default) or `fast` (next-token
+      prediction). Default chunk_size 32. Only attn_implementation='eager' is accepted in v0.6.1.
+    source_ref: ev-lerobot-v043-notes
+checkpoints:
+  - hub_id: x-square-robot/wall-oss-flow
+    note: "Flow-matching checkpoint; default `pretrained_name_or_path` in the LeRobot wall_x config. No license tag on the Hub."
+  - hub_id: x-square-robot/wall-oss-fast
+    note: "FAST-token checkpoint."
+  - hub_id: x-square-robot/wall-oss-flow-0.1
+requirements:
+  train:
+    vram_gb: {min: 24, max: 40}
+    batch_size: 8
+    condition: >-
+      Peak training VRAM at batch size 8 with AdamW (LeRobot default), "Large VLA" group (`pi0`, `pi0_fast`, `pi05`,
+      `xvla`, `wall_x`) in the LeRobot compute hardware guide; "A100 40 GB+ (24 GB tight at BS 1)". The guide calls its
+      figures indicative, order-of-magnitude numbers for picking hardware, not exact predictions. Precision not stated.
+    source_ref: ev-lerobot-hw-guide
+observation_space:
+  cameras: {min: 1}
+  state: proprioception, padded to max_state_dim 20
+  source_ref: ev-lerobot-wallx-config
+notes: >-
+  Naming, reconciled: WALL-OSS is the model (paper "Igniting VLMs toward the Embodied Space", Hub org x-square-robot).
+  Wall-X / WallX is X Square Robot's training and inference codebase for the WALL model series
+  (github.com/X-Square-Robot/wall-x, Apache-2.0), which has no framework record here. LeRobot names the policy type,
+  directory and pip extra after the codebase (`wall_x`, `wallx`) and the docs after the model (WALL-OSS).
+  action_output is `hybrid` because one policy offers two selectable heads: flow matching (default) or FAST discrete
+  tokens. Parameter count: the paper states only the 3B backbone, not a total, so params is left out. Weights license:
+  not stated on the Hub model cards, so it is left out. Wall-OSS-0.5 exists only on LeRobot main (unreleased) and is
+  out of scope.
+verified_on: 2026-10-24
+sources:
+  - id: ev-walloss-paper-arch
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2509.11766
+    date: 2025-09-15
+    verified_on: 2026-10-24
+    summary: WALL-OSS uses Qwen2.5-VL-3B as its main backbone.
+    quote: "We adopt QwenVL2.5-3B as the main backbone."
+  - id: ev-walloss-paper-flow
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2509.11766
+    date: 2025-09-15
+    verified_on: 2026-10-24
+    summary: The Integration stage swaps discrete action prediction for flow-matching continuous actions.
+    quote: "we replace discrete action prediction with continuous action modeling via flow matching"
+  - id: ev-lerobot-walloss-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/policy_walloss_README.md
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: LeRobot WALL-OSS README lists both action prediction modes.
+    quote: "| Action Prediction  | Flow Matching (diffusion) or FAST (discrete tokens)   |"
+  - id: ev-lerobot-walloss-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/walloss.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: LeRobot docs describe WALL-OSS as adapted from the WallX repository; license Apache 2.0.
+    quote: "The LeRobot implementation is adapted from their open-source [WallX](https://github.com/X-Square-Robot/wall-x) repository."
+  - id: ev-lerobot-wallx-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/wall_x/configuration_wall_x.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Policy type `wall_x`; requires at least one visual input feature; max_state_dim 20; chunk_size 32."
+    quote: '"Wall-X policy requires at least one visual input feature. "'
+  - id: ev-lerobot-wallx-register
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/wall_x/configuration_wall_x.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Policy type string is `wall_x`."
+    quote: '@PreTrainedConfig.register_subclass("wall_x")'
+  - id: ev-lerobot-v043-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.4.3
+    date: 2026-01-22
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.3"}
+    summary: WALL-OSS (wall_x) was added in LeRobot v0.4.3 (PR #2593); the wall_x directory is absent at v0.4.2.
+    quote: "feat: support wallx model by @wut19"
+  - id: ev-wallx-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/X-Square-Robot/wall-x/blob/ce2a1ae31d9ee1028b97ca40e3f66034cf8c0e5f/README.md
+    date: 2026-09-11
+    verified_on: 2026-10-24
+    summary: Wall-X is the codebase for the WALL model series and lists the WALL-OSS checkpoints.
+    quote: "This repository provides the training and inference code for the WALL series"
+  - id: ev-lerobot-hw-guide
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hardware_guide.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Compute hardware guide: Large VLA group peak VRAM ~24–40GB at BS 8 with AdamW; figures are indicative."
+    quote: "| Large VLA  | `pi0`, `pi0_fast`, `pi05`, `xvla`, `wall_x` |                ~24–40GB | A100 40 GB+ (24 GB tight at BS 1) |"

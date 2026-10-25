@@ -1,0 +1,96 @@
+id: robometer
+name: Robometer
+aliases: [ROBOMETER, Robometer-4B, lerobot/Robometer-4B]
+family: reward-model
+in_grid: false
+summary: >-
+  General-purpose video-language robotic reward model on a Qwen3-VL-4B backbone with progress, success and
+  preference heads. Predicts dense per-frame task progress and success from a trajectory video and task description;
+  in LeRobot it is used zero-shot (inference-only) and returns one scalar reward per sample.
+authors: Anthony Liang, Jesse Zhang et al. (University of Southern California, University of Washington, Ai2, NVIDIA and others)
+paper_url: https://arxiv.org/abs/2603.02115
+backbone: Qwen3-VL-4B-Instruct + progress / success / preference heads
+action_output: scalar-reward
+arch_source_ref: ev-lerobot-robometer-docs
+license: Apache-2.0 (LeRobot integration)
+weights_license: Apache-2.0
+open_weights: true
+frameworks:
+  lerobot:
+    support: native
+    since: "0.6.0"
+    policy_type: robometer
+    docs_url: https://huggingface.co/docs/lerobot/robometer
+    note: >-
+      A reward model, not a policy: lives in src/lerobot/rewards/robometer, registered with
+      RewardModelConfig.register_subclass("robometer") and selected as `reward_model.type=robometer` (not
+      --policy.type). Inference-only in LeRobot (no training or preference-pair training). Ships a
+      compute_rabc_weights module for offline progress labelling.
+    source_ref: ev-lerobot-robometer-config
+checkpoints:
+  - hub_id: lerobot/Robometer-4B
+    note: "Published ROBOMETER checkpoint used by the LeRobot integration (Hub license tag apache-2.0)."
+observation_space:
+  cameras: {min: 1, max: 1}
+  state: not used (video + task description only)
+  language: required
+  source_ref: ev-lerobot-robometer-docs-inputs
+notes: >-
+  in_grid false: reward model, not a robot-control policy. reward_output="progress" (default) returns last-frame
+  progress clamped to [0, 1]; "success" returns a thresholded last-frame success. Default 8 frames from one
+  configured camera key (image_key, default observation.images.top). The docs strongly recommend GPU inference but give
+  no VRAM figure; params not stated as an exact total. Upstream robometer/robometer code: no license detected by the
+  GitHub API on 2026-10-24.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-robometer-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/robometer.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: ROBOMETER builds on Qwen3-VL-4B with progress, success and preference heads; LeRobot integration is inference-only.
+    quote: "ROBOMETER builds on `Qwen/Qwen3-VL-4B-Instruct` and adds three lightweight prediction heads:"
+  - id: ev-lerobot-robometer-docs-inputs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/robometer.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: Video-language only; no privileged robot state.
+    quote: "ROBOMETER is video-language based; it does not use privileged robot state such as contact forces or object poses."
+  - id: ev-lerobot-robometer-docs-inference
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/robometer.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: LeRobot integration is inference-only.
+    quote: "The LeRobot integration is currently **inference-only**."
+  - id: ev-lerobot-robometer-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/rewards/robometer/configuration_robometer.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Registered as reward-model type `robometer`."
+    quote: '@RewardModelConfig.register_subclass("robometer")'
+  - id: ev-lerobot-v060-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.6.0
+    date: 2026-07-06
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.0"}
+    summary: ROBOMETER was added in LeRobot v0.6.0.
+    quote: "* feat(rewards): add ROBOMETER reward model by @s1lent4gnt in https://github.com/huggingface/lerobot/pull/3627"
+  - id: ev-hub-robometer-checkpoint
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/lerobot/Robometer-4B
+    verified_on: 2026-10-24
+    summary: "Hub API: lerobot/Robometer-4B exists, tagged license:apache-2.0."

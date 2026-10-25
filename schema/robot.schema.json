@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "robot.schema.json",
+  "type": "object",
+  "required": ["id", "name", "class", "open_source", "frameworks", "verified_on", "sources"],
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/id" },
+    "name": { "type": "string" },
+    "maker": { "type": "string" },
+    "aliases": { "type": "array", "items": { "type": "string" } },
+    "class": { "enum": ["arm", "bimanual", "mobile-manipulator", "humanoid", "mobile-base", "desktop-social"] },
+    "in_grid": { "type": "boolean", "default": true, "description": "false = gets a page but is excluded from the main matrix" },
+    "out_of_grid_reason": { "type": "string" },
+    "summary": { "type": "string" },
+    "dof": { "type": "integer", "description": "Per arm, excluding gripper unless noted in dof_note" },
+    "dof_note": { "type": "string" },
+    "arms": { "type": "integer", "minimum": 0 },
+    "actuators": { "type": "string" },
+    "payload_g": { "$ref": "common.schema.json#/$defs/range" },
+    "repeatability_mm": { "$ref": "common.schema.json#/$defs/range" },
+    "open_source": { "type": "boolean" },
+    "license": { "type": "string" },
+    "bom_url": { "$ref": "common.schema.json#/$defs/url" },
+    "homepage": { "$ref": "common.schema.json#/$defs/url" },
+    "price_usd": {
+      "type": "object",
+      "properties": { "low": { "type": "number" }, "high": { "type": "number" }, "note": { "type": "string" }, "source_ref": { "type": "string" } },
+      "required": ["source_ref"],
+      "additionalProperties": false
+    },
+    "specs_source_ref": { "type": "string", "description": "Evidence id backing dof/actuators/payload/repeatability" },
+    "frameworks": { "$ref": "framework-support.schema.json" },
+    "sensors_supported": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/id" } },
+    "sensors_builtin": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/id" } },
+    "teleop_options": { "type": "array", "items": { "type": "string" } },
+    "notes": { "type": "string" },
+    "verified_on": { "$ref": "common.schema.json#/$defs/date" },
+    "sources": { "$ref": "common.schema.json#/$defs/sources", "minItems": 1 }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,23 @@
+robot: aloha
+policy: evo1
+state: partial
+partial_scope: "The upstream Evo-1 repo ships a community-contributed real-ALOHA inference client (ROS1 Noetic, Interbotix); no ALOHA training recipe, checkpoint or on-robot results are documented."
+framework: evo-1
+capabilities:
+  inference_real: {state: partial, notes: "Client/server inference scripts only.", evidence: [ev-evo1-readme, ev-evo1-aloha-readme]}
+evidence:
+  - id: ev-evo1-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/MINT-SJTU/Evo-1/blob/5fd14b015013c4fd0aacf5f8f48f868ca9b870a2/README.md
+    date: 2025-12-15
+    verified_on: 2026-10-24
+    summary: "Evo-1 README news entry (2025-12-15) announcing ALOHA dual-arm inference code contributed by a community user."
+    quote: "Added Evo-1 inference code in Aloha dual arm (Implemented by community user @meijie-jesse)"
+  - id: ev-evo1-aloha-readme
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/MINT-SJTU/Evo-1/blob/5fd14b015013c4fd0aacf5f8f48f868ca9b870a2/Evo_1/scripts/README_Aloha.md
+    verified_on: 2026-10-24
+    summary: "Run instructions for Evo1_server.py + Evo1_client_aloha.py on a real ALOHA built per tonyzhaozh/aloha (robot_utils.py uses interbotix_xs_msgs)."
+    quote: "This example demonstrates how to run EVO1 with a real robot using an ALOHA setup."

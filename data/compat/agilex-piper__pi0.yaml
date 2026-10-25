@@ -1,0 +1,17 @@
+robot: agilex-piper
+policy: pi0
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-coport-pi0]
+evidence:
+  - id: ev-hub-coport-pi0
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/coport-uni/piper_pi0_blue_20k
+    date: 2026-02-25
+    verified_on: 2026-10-24
+    summary: "config.json type=pi0; trained on coport-uni/PiPER_pick_blue_colored_marker_to_box whose meta/info.json robot_type=piper_follower."

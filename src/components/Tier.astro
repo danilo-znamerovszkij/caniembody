@@ -1,0 +1,5 @@
+---
+import { TIER_META } from '../lib/ui.ts';
+const { t } = Astro.props as { t: string | null | undefined };
+---
+{t && <span class="tier" data-t={t} title={TIER_META[t].desc}>{TIER_META[t].short} · {TIER_META[t].label}</span>}

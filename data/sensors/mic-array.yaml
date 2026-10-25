@@ -1,0 +1,3 @@
+id: mic-array
+name: "Microphone array"
+description: "Audio input. Few open policies consume audio; listed for completeness."

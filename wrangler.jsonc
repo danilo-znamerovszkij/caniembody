@@ -1,0 +1,8 @@
+// Cloudflare Pages: the built site in ./dist, served at https://caniembody.pages.dev
+// Free plan: 20,000 files, 2,000 static _redirects, 100 _headers rules, static requests free and unlimited.
+// Pages serves /robot/so101 from robot/so101.html and dist/404.html for unknown paths automatically.
+{
+  "name": "caniembody",
+  "pages_build_output_dir": "./dist",
+  "compatibility_date": "2026-10-13"
+}

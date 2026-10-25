@@ -1,0 +1,29 @@
+robot: franka-panda
+policy: vla-jepa
+state: partial
+partial_scope: "Simulation only: LIBERO (simulated Franka Emika Panda); no real-robot training or inference on a Panda is documented. The paper's real-robot experiments use a Franka Research 3 (see the franka-fr3 cell)."
+framework: lerobot
+framework_version_tested: "0.6.1"
+capabilities:
+  inference_sim:
+    state: works
+    notes: "LIBERO (four suites) in the paper; LeRobot v0.6.1 documents fine-tuning on HuggingFaceVLA/libero and evaluating lerobot/VLA-JEPA-LIBERO with lerobot-eval --env.type=libero."
+    evidence: [ev-vlajepa-paper-libero, ev-lerobot-vlajepa-libero]
+evidence:
+  - id: ev-vlajepa-paper-libero
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2602.10098
+    date: 2026-02-10
+    verified_on: 2026-10-25
+    summary: "VLA-JEPA paper, Sec. 4.2: VLA-JEPA is evaluated on the LIBERO simulation benchmark, which the paper states uses the Franka Emika Panda arm."
+    quote: "The LIBERO benchmark employs the Franka Emika Panda arm and comprises four task suites designed to facilitate research on lifelong learning in robotic manipulation."
+  - id: ev-lerobot-vlajepa-libero
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/vla_jepa.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-25
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot v0.6.1 VLA-JEPA doc: 'Reproducing the LIBERO results' section with a lerobot-train command on HuggingFaceVLA/libero and lerobot-eval of lerobot/VLA-JEPA-LIBERO on the LIBERO env."
+    quote: "starts the training from the Pretrain checkpoint, trains for 30k steps on the LIBERO dataset."

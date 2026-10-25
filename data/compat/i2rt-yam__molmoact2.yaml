@@ -1,0 +1,53 @@
+robot: i2rt-yam
+policy: molmoact2
+state: works
+framework: molmoact2
+capabilities:
+  train:
+    state: works
+    notes: "Fine-tuned on the 720-hour MolmoAct2-BimanualYAM dataset and per-task on bimanual YAM data."
+    evidence: [ev-molmoact2-paper-yam, ev-molmoact2-bimanualyam-card]
+  inference_real:
+    state: works
+    notes: "Bimanual YAM setup (two arms, top/left/right cameras). LeRobot v0.6.1 also documents a LeRobot-format checkpoint for lerobot-rollout, but LeRobot has no built-in YAM robot type, so that path needs a third-party YAM plugin."
+    evidence: [ev-molmoact2-paper-yam-eval, ev-molmoact2-yam-example, ev-lerobot-molmoact2-doc]
+evidence:
+  - id: ev-molmoact2-paper-yam
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2605.02881
+    date: 2026-05-04
+    verified_on: 2026-10-24
+    summary: "MolmoAct2 paper: the MolmoAct2-BimanualYAM dataset was collected on the authors' bimanual YAM setup and used to train MolmoAct2."
+    quote: "All data is collected on our custom bimanual YAM (Yet Another Manipulator) setup, shown in Figure 3."
+  - id: ev-molmoact2-paper-yam-eval
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2605.02881
+    date: 2026-05-04
+    verified_on: 2026-10-24
+    summary: "MolmoAct2 paper: real-world fine-tuning evaluation on bimanual and mobile bimanual YAM, 8 tasks x 50 trials (average success 50.1%)."
+    quote: "For real-world evaluation, we conduct a large-scale, systematic study on both a bimanual YAM setup and a mobile bimanual YAM setup, covering 8 tasks"
+  - id: ev-molmoact2-bimanualyam-card
+    tier: upstream-documented
+    type: model-card
+    url: https://huggingface.co/allenai/MolmoAct2-BimanualYAM
+    verified_on: 2026-10-24
+    summary: "Official allenai/MolmoAct2-BimanualYAM checkpoint, fine-tuned for bimanual YAM inference (absolute joint-pose control)."
+    quote: "It is intended for both further fine-tuning and bimanual YAM policy inference."
+  - id: ev-molmoact2-yam-example
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/allenai/molmoact2/blob/6070080a20321b4f498ab30f28e1d09ac465edb7/examples/yam/README.md
+    verified_on: 2026-10-24
+    summary: "Upstream molmoact2 repo ships a closed-loop bimanual YAM eval client that drives real YAM arms through the I2RT driver."
+    quote: "Hardware-coupled example: it talks to real YAM arms over CAN (via `i2rt`) and"
+  - id: ev-lerobot-molmoact2-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/molmoact2.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot v0.6.1 MolmoAct2 doc lists lerobot/MolmoAct2-BimanualYAM-LeRobot under Hardware Deployment (lerobot-rollout) with YAM camera keys."
+    quote: "MolmoAct2-BimanualYAM-LeRobot | `top`, `left`, `right` | YAM 3-camera setup"

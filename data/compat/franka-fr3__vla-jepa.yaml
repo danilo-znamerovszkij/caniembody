@@ -1,0 +1,22 @@
+robot: franka-fr3
+policy: vla-jepa
+state: works-with-caveats
+framework: vla-jepa
+caveats:
+  - "Evidence is the authors' own lab evaluation (100 demonstrations, three pick-and-place tasks); the upstream repo ships training and simulation-evaluation scripts but no FR3 deployment code or FR3 checkpoint."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-vlajepa-paper]
+  inference_real:
+    state: works
+    evidence: [ev-vlajepa-paper]
+evidence:
+  - id: ev-vlajepa-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2602.10098
+    date: 2026-02-10
+    verified_on: 2026-10-24
+    summary: "The VLA-JEPA paper's real-world experiments fine-tune and evaluate VLA-JEPA on a Franka Research 3 with a Robotiq 2F-85 gripper and three RealSense D435 cameras (two third-person, one wrist)."
+    quote: "For real-world experiments, we designed table-top manipulation tasks using a Franka Research 3 arm equipped with a Robotiq 2F-85 gripper. We collected 100 human demonstration trajectories for training, which include 3 picking and placing tasks."

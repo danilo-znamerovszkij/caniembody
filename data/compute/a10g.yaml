@@ -1,0 +1,22 @@
+id: a10g
+name: NVIDIA A10G (AWS)
+class: cloud
+memory_gb: 24
+arch: Ampere
+notes: Cloud-only AWS variant of the A10 (EC2 G5 instances); NVIDIA publishes no standalone A10G spec page, and its specs differ from the retail A10, so no TOPS figure is given here. Available on Hugging Face Jobs (a10g-small, a10g-large, 2x and 4x large).
+verified_on: '2026-10-24'
+sources:
+- id: ev-aws-g5-a10g
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://aws.amazon.com/ec2/instance-types/g5/
+  verified_on: '2026-10-24'
+  summary: 'AWS EC2 G5 page: A10G Tensor Core GPUs with 24 GB memory per GPU.'
+  quote: Each instance features up to 8 A10G Tensor Core GPUs that come with 80 ray tracing cores and 24 GB of memory per GPU.
+- id: ev-hf-jobs-pricing
+  tier: upstream-documented
+  type: official-docs
+  url: https://huggingface.co/docs/hub/jobs-pricing
+  verified_on: '2026-10-24'
+  summary: Hugging Face Jobs pricing lists A10G small/large flavors (24 GB).
+  quote: Nvidia A10G - small 4 vCPU 15 GB 24 GB 110 GB $1.00 Nvidia A10G - large 12 vCPU 46 GB 24 GB 200 GB $1.50

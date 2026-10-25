@@ -1,0 +1,117 @@
+id: unitree-g1
+name: Unitree G1
+maker: Unitree Robotics
+aliases: [G1, G1 EDU, Unitree G1 EDU, unitree_g1]
+class: humanoid
+summary: >-
+  Unitree's 1.32 m bipedal humanoid, about 35 kg, with 23 to 43 joints depending on version. In LeRobot, the lower
+  body is driven by a pretrained RL locomotion controller (GR00T-WholeBodyControl or Holosoma). Data recording and
+  learned policies (e.g. π0.5 with RTC) target upper-body loco-manipulation, teleoperated with the Homunculus
+  exoskeleton and a joystick.
+dof: 7
+dof_note: >-
+  LeRobot config assumes the 29-joint layout: per arm 4 (shoulder pitch/roll/yaw, elbow) + 3 wrist (roll/pitch/yaw).
+  Unitree's base G1 (23 DoF) lists 5 DoF per arm. LeRobot docs state that both 29- and 23-DoF variants are supported.
+arms: 2
+actuators: "Low-inertia internal-rotor PMSM joint motors, dual encoders (per Unitree)"
+payload_g: {max: 3000}
+specs_source_ref: ev-unitree-g1-page
+open_source: false
+homepage: https://www.unitree.com/g1/
+price_usd:
+  low: 13500
+  note: >-
+    Base G1, tax and shipping excluded, per Unitree. The G1 EDU, the version Unitree lists with secondary-development
+    support, is "Contact sales".
+  source_ref: ev-unitree-g1-price
+frameworks:
+  lerobot:
+    support: native
+    since: "0.4.3"
+    robot_type: [unitree_g1]
+    docs_url: https://huggingface.co/docs/lerobot/unitree_g1
+    note: >-
+      Uses unitree_sdk2_python over a ZMQ bridge, with run_g1_server.py on the robot. Locomotion comes from a
+      pretrained lower-body controller (--robot.controller=GrootLocomotionController or HolosomaLocomotionController)
+      steered by gamepad. Loco-manipulation teleop uses the Homunculus exoskeleton (--teleop.type=unitree_g1). MuJoCo
+      sim via --robot.is_simulation=true. Docs show π0.5 fine-tuning and RTC inference via lerobot-rollout. Base
+      support arrived in 0.4.3 (PR #2530), and the whole-body-control implementation in 0.5.0 (PR #2876). Arm IK needs
+      pinocchio from conda-forge.
+    source_ref: ev-lerobot-g1-doc
+sensors_builtin: [mic-array]
+teleop_options: ["Homunculus exoskeleton, 7-DoF arms (unitree_g1 teleoperator)", "Gamepad/joystick for locomotion"]
+notes: >-
+  Unitree marks secondary development as available only on the G1 EDU ("/" for base G1), so low-level SDK control as
+  used by LeRobot implies the EDU. Built-in sensing per Unitree: depth camera + 3D LiDAR + 4-mic array. LeRobot reads
+  the head camera through ZMQ. Arm maximum load is about 2 kg (G1) or 3 kg (G1 EDU) and varies greatly with arm
+  posture.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-readme
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/README.md
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot README lists Unitree G1 among natively supported hardware."
+    quote: "SO100, LeKiwi, Koch, HopeJR, OMX, EarthRover, Reachy2, Gamepads, Keyboards, Phones, OpenARM, Unitree G1, reBot B601."
+  - id: ev-lerobot-g1-doc
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/unitree_g1.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "G1 guide: teleop, locomanipulation training, sim; 29 and 23 DoF; GR00T or Holosoma locomotion controllers."
+    quote: "You can teleoperate, train locomanipulation policies, test in sim, and more. Both 29 and 23 DoF variants are supported."
+  - id: ev-lerobot-g1-controllers
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/unitree_g1.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Lower body is a pluggable locomotion controller; upper-body loco-manipulation via exoskeleton."
+    quote: "We provide a loco-manipulation solution via the Homunculus Exoskeleton — an open-source 7 DoF exoskeleton for whole-body control."
+  - id: ev-lerobot-g1-src
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/robots/unitree_g1/config_unitree_g1.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "unitree_g1 config: 29 default joint positions, 250 Hz control loop, optional lower-body controller."
+    quote: "# Lower-body controller class name, e.g. \"GrootLocomotionController\" or # \"HolosomaLocomotionController\". None disables it. controller: str | None = None"
+  - id: ev-lerobot-v043-g1
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.4.3
+    date: 2026-01-22
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.3"}
+    summary: "Unitree G1 first released in v0.4.3."
+    quote: "Feat/add unitree g1 robot by @nepyope in https://github.com/huggingface/lerobot/pull/2530"
+  - id: ev-lerobot-v050-g1-wbc
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.5.0
+    date: 2026-03-09
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.5.0"}
+    summary: "Whole-body-control implementation for G1 released in v0.5.0."
+    quote: "feat(robots): Unitree G1 WBC implementation by @nepyope in https://github.com/huggingface/lerobot/pull/2876"
+  - id: ev-unitree-g1-page
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://www.unitree.com/g1/
+    verified_on: 2026-10-24
+    summary: "Unitree G1 spec table: 23 (G1) / 23-43 (EDU) DoF, 5 DoF per arm, arm max load ~2 kg / ~3 kg."
+    quote: "Arm Maximum Load【2】 About 2Kg About 3Kg"
+  - id: ev-unitree-g1-price
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://www.unitree.com/g1/
+    verified_on: 2026-10-24
+    summary: "Unitree G1 price US $13.5K (base); EDU contact sales; secondary development EDU only."
+    quote: "Price(Tax and Shipping cost excluded) US $13.5K Contact sales"

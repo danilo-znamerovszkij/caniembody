@@ -1,0 +1,23 @@
+robot: xlerobot
+policy: act
+state: works-with-caveats
+framework: lerobot
+caveats:
+  - "The documented ACT demo is single-arm: one XLeRobot arm is recorded and run as robot.type=so101_follower, not the full xlerobot robot type."
+  - "XLeRobot is not a drop-in LeRobot plugin; dual-arm/VR recording requires copying XLeRobot code into a LeRobot checkout."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-xlerobot-act-doc]
+  inference_real:
+    state: works-with-caveats
+    notes: "Docs show ACT running locally on the robot's Raspberry Pi."
+    evidence: [ev-xlerobot-act-doc]
+evidence:
+  - id: ev-xlerobot-act-doc
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/Vector-Wangel/XLeRobot/blob/b017b5e6354bd9f61f4247a920c72622ca0aade0/docs/en/source/software/getting_started/VLA_ACT.md
+    verified_on: 2026-10-24
+    summary: "XLeRobot project docs: ACT tutorial with a real-robot demo video (single arm, run on the Raspberry Pi), recording via robot.type=so101_follower."
+    quote: "Single arm VLA policy implementation on XLeRobot:"

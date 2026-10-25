@@ -1,0 +1,35 @@
+id: jetson-agx-thor
+name: NVIDIA Jetson AGX Thor 128GB
+aliases:
+- Jetson AGX Thor Developer Kit
+- Jetson T5000
+class: edge
+memory_gb: 128
+unified: true
+arch: Blackwell (2560-core GPU, fifth-gen Tensor Cores)
+ai_tops: 2070 TFLOPS (FP4—Sparse)
+power_w: 40 W–130 W
+notes: Jetson AGX Thor Developer Kit / Jetson T5000 module (128 GB LPDDR5X, 273 GB/s). The smaller Jetson T4000 (64 GB, 1200 FP4-sparse TFLOPS, 40–70 W) is a different target. Headline figure is FP4 with sparsity; BF16/FP16 throughput is far lower. Record power mode (e.g. MAXN) and jetson_clocks state with every run.
+verified_on: '2026-10-24'
+sources:
+- id: ev-nvidia-thor-tops
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-thor/
+  verified_on: '2026-10-24'
+  summary: 'Jetson Thor series spec table: AGX Thor Developer Kit / T5000 = 2070 TFLOPS (FP4, sparse); T4000 = 1200.'
+  quote: Jetson AGX Thor Developer Kit Jetson T5000 Jetson T4000 AI Performance 2070 TFLOPS (FP4—Sparse) 1200 TFLOPS (FP4—Sparse)
+- id: ev-nvidia-thor-memory
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-thor/
+  verified_on: '2026-10-24'
+  summary: 'Spec table Memory row: 128 GB (Dev Kit / T5000) and 64 GB (T4000) LPDDR5X at 273 GB/s.'
+  quote: Memory 128 GB 256-bit LPDDR5X 273 GB/s 64 GB 256-bit LPDDR5X 273 GB/s
+- id: ev-nvidia-thor-power
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-thor/
+  verified_on: '2026-10-24'
+  summary: 'Spec table Power row: 40 W–130 W (Dev Kit, T5000), 40 W–70 W (T4000).'
+  quote: Power 40 W–130 W 40 W–130 W 40 W–70 W

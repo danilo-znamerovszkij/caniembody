@@ -1,0 +1,38 @@
+id: l40s
+name: NVIDIA L40S
+class: datacenter
+memory_gb: 48
+arch: Ada Lovelace
+ai_tops: FP8 Tensor Core 733 I 1,466* (*with sparsity)
+power_w: 350W
+notes: Not the same part as the L40 (see compute "l40"). Available on Hugging Face Jobs (1x, 4x, 8x).
+verified_on: '2026-10-24'
+sources:
+- id: ev-nvidia-l40s-specs
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/data-center/l40s/
+  verified_on: '2026-10-24'
+  summary: 'L40S spec table: Ada Lovelace, 48GB GDDR6 with ECC.'
+  quote: GPU Architecture NVIDIA Ada Lovelace architecture GPU Memory 48GB GDDR6 with ECC
+- id: ev-nvidia-l40s-fp8
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/data-center/l40s/
+  verified_on: '2026-10-24'
+  summary: 'L40S spec table: FP8 Tensor Core 733 dense / 1,466 with sparsity TFLOPS.'
+  quote: FP8 Tensor Core 733 I 1,466*
+- id: ev-nvidia-l40s-power
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/data-center/l40s/
+  verified_on: '2026-10-24'
+  summary: 'L40S spec table: max power consumption 350W.'
+  quote: Max Power Consumption 350W
+- id: ev-hf-jobs-pricing
+  tier: upstream-documented
+  type: official-docs
+  url: https://huggingface.co/docs/hub/jobs-pricing
+  verified_on: '2026-10-24'
+  summary: Hugging Face Jobs pricing lists L40S flavors (48 GB).
+  quote: 1x Nvidia L40S 8 vCPU 62 GB 48 GB 380 GB $1.80

@@ -1,0 +1,23 @@
+---
+import Src from './Src.astro';
+import { loadAll, type FrameworkSupport } from '../lib/data.ts';
+const { fw } = Astro.props as { fw: Record<string, FrameworkSupport> };
+const F = loadAll().byId.framework;
+---
+<div class="tbl-wrap"><table class="tbl">
+  <thead><tr><th>Framework</th><th>Support</th><th>Since</th><th>Type string</th><th>Docs</th></tr></thead>
+  <tbody>
+    {Object.entries(fw).map(([id, s]) => (
+      <tr>
+        <td>{F[id]?.name ?? id}</td>
+        <td class="mono">{s.support}{s.until && ` (until ${s.until})`}<Src r={s.source_ref} /></td>
+        <td class="mono">{s.since ?? '—'}</td>
+        <td class="mono">{s.policy_type ?? s.robot_type?.join(', ') ?? s.package ?? '—'}</td>
+        <td>{s.docs_url ? <a href={s.docs_url}>docs</a> : s.repo_url ? <a href={s.repo_url}>repo</a> : '—'}</td>
+      </tr>
+    ))}
+    {Object.entries(fw).some(([, s]) => s.note) && Object.entries(fw).filter(([, s]) => s.note).map(([id, s]) => (
+      <tr><td colspan="5" class="small muted">{F[id]?.name ?? id}: {s.note}</td></tr>
+    ))}
+  </tbody>
+</table></div>

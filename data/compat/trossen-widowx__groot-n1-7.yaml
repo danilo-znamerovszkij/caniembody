@@ -1,0 +1,19 @@
+robot: trossen-widowx
+policy: groot-n1-7
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+framework_version_tested: "0.6.0"
+capabilities:
+  train:
+    state: works
+    evidence: [ev-trossen-groot-ckpt]
+evidence:
+  - id: ev-trossen-groot-ckpt
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/TrossenRobotics/groot-n17-block-transfer
+    date: 2026-07-17
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.0"}
+    summary: "Trossen-org checkpoint: config.json type=groot, base_model_path nvidia/GR00T-N1.7-3B; train_config dataset TrossenRoboticsCommunity/stationary-block-transfer-lerobot-v3, whose meta/info.json robot_type=bi_widowxai_follower_robot (card: 4 cameras, LeRobot version 0.6.0). Auto-generated card, no on-robot results."

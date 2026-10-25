@@ -1,0 +1,24 @@
+robot: lekiwi
+policy: pi05
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-tinjyuu-pi05-lekiwi
+    - ev-hub-alexppppp-pi05-lekiwi
+evidence:
+- id: ev-hub-tinjyuu-pi05-lekiwi
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/tinjyuu/pi05_lekiwi_exp1
+  verified_on: '2026-10-24'
+  summary: "config.json type=pi05; train_config.json dataset tinjyuu/lekiwi-pink-plush-box1 whose meta/info.json robot_type=lekiwi_client (30 episodes)."
+- id: ev-hub-alexppppp-pi05-lekiwi
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/alexppppp/pi05_base_lekiwi_new_gripper_multitask-3ksteps
+  verified_on: '2026-10-24'
+  summary: "config.json type=pi05; train_config.json dataset alexppppp/lekiwi_new_gripper_multitask whose meta/info.json robot_type=lekiwi_client (29 episodes); initialised from a lerobot/pi05_base snapshot."

@@ -1,0 +1,26 @@
+robot: bi-so
+policy: pi0
+state: partial
+partial_scope: Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source.
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-pepijn-pi0-biso100
+    - ev-hub-wuc1-pi0-biso
+evidence:
+- id: ev-hub-pepijn-pi0-biso100
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/pepijn223/bimanual-so100-handover-cube_pi0
+  date: '2025-10-07'
+  verified_on: '2026-10-24'
+  summary: config.json type=pi0; train_config.json dataset.repo_id=pepijn223/bimanual-so100-handover-cube, whose meta/info.json robot_type=bi_so100_follower (25 episodes).
+- id: ev-hub-wuc1-pi0-biso
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/wuc1/bi_so101_flatten-the-rag-0326-pi0-0329
+  date: '2026-03-30'
+  verified_on: '2026-10-24'
+  summary: config.json type=pi0; train_config.json dataset.repo_id=wuc1/bi_so101_flatten-the-rag-0326, whose meta/info.json robot_type=bi_so_follower (50 episodes).

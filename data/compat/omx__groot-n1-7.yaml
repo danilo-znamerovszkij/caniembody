@@ -1,0 +1,29 @@
+robot: omx
+policy: groot-n1-7
+state: works-with-caveats
+caveats:
+  - "Community-reported only; not documented upstream or maintainer-tested."
+  - "Trained and served with NVIDIA's Isaac-GR00T stack (NEW_EMBODIMENT tag, GR00T policy server), not LeRobot's groot policy; the dataset uses ROBOTIS's robot_type string omx_f rather than LeRobot's omx_follower."
+  - "The authors report that the single top-down-camera model closed the gripper before reaching the object during real-robot deployment (height perception); their 2-camera successor adds a wrist camera to address it."
+framework: isaac-groot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-pseudolab-groot-omx-2cam, ev-hub-pseudolab-groot-omx]
+  inference_real:
+    state: works-with-caveats
+    notes: "Only qualitative real-robot feedback is given (no success rates); reported metrics are open-loop MSE."
+    evidence: [ev-hub-pseudolab-groot-omx-2cam]
+evidence:
+  - id: ev-hub-pseudolab-groot-omx-2cam
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/pseudolab/GR00T-N1.7-3B-OMX-PickupDolls-2Cam
+    verified_on: 2026-10-24
+    summary: "Model card: fine-tune of nvidia/GR00T-N1.7-3B (NEW_EMBODIMENT, frozen backbone) for the 'ROBOTIS Open Manipulator-X' (card wording) 'Pick up dolls' task on pseudolab/omx_f_PickUpDollWith2Cam, whose meta/info.json robot_type=omx_f (94 episodes); state is 5 arm joints + gripper. The card cites real-robot deployment of the 1-camera predecessor."
+  - id: ev-hub-pseudolab-groot-omx
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/pseudolab/GR00T-N1.7-3B-OMX-PickupDolls
+    verified_on: 2026-10-24
+    summary: "Model card: GR00T N1.7-3B fine-tuned (NEW_EMBODIMENT) for the Open Manipulator-X 5-DoF + gripper doll pick-up task on 75 teleoperated episodes plus Cosmos-Transfer2.5 augmentation; open-loop MSE only."

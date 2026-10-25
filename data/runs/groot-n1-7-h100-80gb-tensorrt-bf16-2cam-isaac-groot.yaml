@@ -1,0 +1,45 @@
+id: groot-n1-7-h100-80gb-tensorrt-bf16-2cam-isaac-groot
+policy: groot-n1-7
+compute: h100-80gb
+checkpoint: nvidia/GR00T-N1.7-LIBERO (libero_10)
+date: '2026-10-21'
+runtime: tensorrt
+runtime_note: TensorRT full pipeline (backbone and action head engines), baseline execution profile.
+precision: bf16
+cameras: 2
+resolution: 256x256
+batch_size: 1
+inference_latency_ms:
+  p50: 22.9
+inference_hz: 43.67
+action_chunk: 40
+outcome: runs
+platform:
+  torch_threads: 8 intra-op / 1 inter-op
+note: Inference cost only; not task success. Median of 60 timed calls (3 repetitions x 20 after 10 warmup), fixed inputs, includes preprocessing and action decoding, excludes RPC. Precision is the repo default (unquantized BF16).
+source_ref: ev-groot-deploy-bench
+evidence:
+- id: ev-groot-deploy-bench
+  tier: community-reported
+  type: source-code
+  url: https://github.com/NVIDIA/Isaac-GR00T/blob/944fe70c4fd54e3fcb80a7d7258a328f9c061176/scripts/deployment/README.md
+  date: '2026-10-21'
+  verified_on: '2026-10-24'
+  summary: NVIDIA Isaac-GR00T deployment README benchmark table (GR00T N1.7 LIBERO, median ms, PyTorch eager / torch.compile / TensorRT full pipeline / TensorRT optimized + mixed NVFP4).
+  quote: '| H100 80GB HBM3 | 101.5 | 53.4 | 22.9 | — |'
+- id: ev-groot-deploy-conditions
+  tier: community-reported
+  type: source-code
+  url: https://github.com/NVIDIA/Isaac-GR00T/blob/944fe70c4fd54e3fcb80a7d7258a328f9c061176/scripts/deployment/README.md
+  date: '2026-10-21'
+  verified_on: '2026-10-24'
+  summary: Benchmark conditions for the table.
+  quote: 'Median complete-policy-call latency for the `nvidia/GR00T-N1.7-LIBERO` `libero_10` checkpoint (32 DiT blocks): batch size 1, action horizon 40, four denoising steps, and two 256×256 camera inputs.'
+- id: ev-groot-deploy-bf16-default
+  tier: community-reported
+  type: source-code
+  url: https://github.com/NVIDIA/Isaac-GR00T/blob/944fe70c4fd54e3fcb80a7d7258a328f9c061176/scripts/deployment/README.md
+  date: '2026-10-21'
+  verified_on: '2026-10-24'
+  summary: Unquantized BF16 and baseline execution are the defaults; NVFP4/FP8 are opt-in on Thor.
+  quote: Baseline execution and unquantized BF16 remain the defaults.

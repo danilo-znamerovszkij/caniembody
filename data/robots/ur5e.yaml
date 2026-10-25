@@ -1,0 +1,75 @@
+id: ur5e
+name: Universal Robots UR5e
+maker: Universal Robots (Teradyne Robotics)
+aliases: [UR5e, UR5 e-Series, lerobot_robot_ur5e]
+class: arm
+summary: >-
+  Universal Robots' 6-joint e-Series industrial cobot. LeRobot has no native support. It is reached through a
+  third-party drop-in plugin (lerobot_robot_ur5e, RTDE control with a Robotiq gripper) or through fork-based
+  extensions.
+dof: 6
+dof_note: "e-Series arms have 6 rotating joints; gripper (e.g. Robotiq) is separate."
+payload_g: {max: 5000}
+repeatability_mm: {max: 0.03}
+specs_source_ref: ev-ur5e-datasheet
+open_source: false
+homepage: https://www.universal-robots.com/products/e-series/
+frameworks:
+  lerobot:
+    support: plugin
+    robot_type: [ur5e]
+    package: lerobot_robot_ur5e
+    repo_url: https://github.com/F-Fer/lerobot_ur5e_gello
+    docs_url: https://huggingface.co/docs/lerobot/third_party_robots
+    note: >-
+      Third-party plugin (F-Fer/lerobot_ur5e_gello, Apache-2.0) using ur_rtde with a Robotiq gripper, paired with a
+      GELLO teleoperator plugin (type gello). Not on PyPI as of 2026-10-24, so install editable from the repo. LeRobot
+      also lists fork-based UR5e extensions (UR5e-LeRobot, lerobot_ur5e_auto) that need custom setup.
+    source_ref: ev-ur5e-plugin
+  ros2:
+    support: upstream-repo
+    repo_url: https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver
+    note: "Universal Robots' own ROS 2 driver. ur_type includes ur5e."
+    source_ref: ev-ur-ros2
+teleop_options: ["GELLO (lerobot_teleoperator_gello plugin)"]
+notes: >-
+  The UR5e does not appear on UR's current e-Series page as of 2026-10-24, which lists UR3e, UR7e, UR12e and UR16e.
+  Payload and repeatability are therefore not recorded from a maker page.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-third-party
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/third_party_robots.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot third-party page lists lerobot_robot_ur5e (drop-in) plus two fork-based UR5e extensions."
+    quote: "with a <a href=\"https://robotiq.com/\">Robotiq</a> gripper, over RTDE control."
+  - id: ev-ur5e-plugin
+    tier: community-reported
+    type: source-code
+    url: https://github.com/F-Fer/lerobot_ur5e_gello/blob/3f3532cfc58d81ba12c1582f9c6087d12488269d/lerobot_robot_ur5e/lerobot_robot_ur5e/config_ur5e.py
+    verified_on: 2026-10-24
+    summary: "Plugin registers robot type ur5e; package name lerobot_robot_ur5e (pyproject)."
+  - id: ev-ur-eseries
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://www.universal-robots.com/products/e-series/
+    verified_on: 2026-10-24
+    summary: "UR e-Series page: 6 joints with ±360° range; lineup UR3e/UR7e/UR12e/UR16e."
+    quote: "±360° Working range for all 6 joints"
+  - id: ev-ur-ros2
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver/blob/d8051bf441fbc5237071db0f6f1bc9065bb4e1ae/README.md
+    verified_on: 2026-10-24
+    summary: "UR ROS 2 driver launch example with ur_type:=ur5e."
+    quote: "ros2 launch ur_robot_driver ur_control.launch.py ur_type:=ur5e robot_ip:=192.168.56.101"
+  - id: ev-ur5e-datasheet
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://www.universal-robots.com/media/1807465/ur5e_e-series_datasheets_web.pdf
+    verified_on: 2026-10-25
+    summary: "Official UR5e datasheet. Its spec table lists payload 5 kg, reach 850 mm, 6 rotating joints and pose repeatability ± 0.03 mm (ISO 9283)."
+    quote: "applications with a payload of up to 5 kg and a reach"

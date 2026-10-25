@@ -1,0 +1,10 @@
+id: x-vla
+name: X-VLA (2toinf/X-VLA)
+maintainer: X-VLA authors (Zheng et al.)
+repo: 2toinf/X-VLA
+docs_url: https://github.com/2toinf/X-VLA
+license: Apache-2.0
+current_version: main
+current_version_date: 2026-10-20
+versioning: none
+notes: "X-VLA authors' official code: training, simulation evaluation and a server-client inference API for robots (robot clients are user-written). No tagged releases; pin by commit (main at 6c4ecfb8be45, 2026-10-20)."

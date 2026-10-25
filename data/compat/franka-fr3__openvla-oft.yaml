@@ -1,0 +1,38 @@
+robot: franka-fr3
+policy: openvla-oft
+state: works-with-caveats
+framework: openvla-oft
+caveats:
+  - "Community-reported only (single third-party repo, ww249/Openvla-oft-for-Franka-Research-3); not documented by the OpenVLA-OFT authors or maintainer-tested."
+  - "One task only (pick up the banana and place it into the plate), one third-person camera, Cartesian-delta actions streamed at 10 Hz through the author's own libfranka controller."
+  - "The author reports full-task success only after capping end-effector speed and moving in small steps, and notes manually pausing near the table and above the plate before resuming the policy."
+capabilities:
+  train:
+    state: works
+    notes: "Repo collects FR3 demonstrations, exports RLDS, and serves its own fine-tuned checkpoints (easy50000, hard80000) with unnorm_key franka3_banana_plate_all_success."
+    evidence: [ev-ww249-readme, ev-ww249-runtime]
+  inference_real:
+    state: works-with-caveats
+    evidence: [ev-ww249-runtime, ev-ww249-notes]
+evidence:
+  - id: ev-ww249-readme
+    tier: community-reported
+    type: source-code
+    url: https://github.com/ww249/Openvla-oft-for-Franka-Research-3/blob/3584446bd7191dcb59eaf13bfa50ec1f1f51ff15/README.md
+    verified_on: 2026-10-25
+    summary: "Repo README (Chinese): a real Franka Research 3 data-collection repo producing single third-person-camera OpenVLA-OFT fine-tuning data; action chunk 16 x 7 at 10 Hz in the fr3_link0 frame."
+    quote: "这是 Franka Research 3 真实机械臂数据采集仓库，用于采集单第三视角相机的 OpenVLA-OFT 微调数据。"
+  - id: ev-ww249-runtime
+    tier: community-reported
+    type: source-code
+    url: https://github.com/ww249/Openvla-oft-for-Franka-Research-3/blob/3584446bd7191dcb59eaf13bfa50ec1f1f51ff15/robot_runtime/README.md
+    verified_on: 2026-10-25
+    summary: "robot_runtime README: OpenVLA-OFT Franka runtime queries a policy server and streams Cartesian velocity commands to the FR3 via libfranka (--execute), following the OFT deploy recipe used in training."
+    quote: "The runtime follows the OpenVLA-OFT deploy recipe used during training:"
+  - id: ev-ww249-notes
+    tier: community-reported
+    type: source-code
+    url: https://github.com/ww249/Openvla-oft-for-Franka-Research-3/blob/3584446bd7191dcb59eaf13bfa50ec1f1f51ff15/README.md
+    verified_on: 2026-10-25
+    summary: "README test notes dated 2026.7.19 (Chinese): with an end-effector speed cap and small per-step moves the full task succeeded; author also manually stopped near the table/above the plate before re-running the VLA."
+    quote: "4. 设置机械臂末端执行器执行速度上限，每次移动小步，实现完整任务的成功"

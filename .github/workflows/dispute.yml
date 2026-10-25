@@ -1,0 +1,33 @@
+name: Dispute marker
+on:
+  issues: { types: [opened, closed, reopened] }
+permissions: { contents: write }
+jobs:
+  mark:
+    if: contains(github.event.issue.labels.*.name, 'dispute')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc, cache: npm }
+      - run: npm ci
+      - name: Set or clear `dispute:` on the cell
+        env:
+          BODY: ${{ github.event.issue.body }}
+          URL: ${{ github.event.issue.html_url }}
+          OPEN: ${{ github.event.issue.state == 'open' }}
+        run: |
+          node --input-type=module -e '
+          import { readFileSync, writeFileSync, existsSync } from "node:fs";
+          import { parseDocument } from "yaml";
+          import { parseForm } from "./scripts/issue-to-yaml.ts";
+          const f = parseForm(process.env.BODY ?? "");
+          const r = f["Robot id"], p = f["Policy id"];
+          if (!/^[a-z0-9-]+$/.test(r ?? "") || !/^[a-z0-9-]+$/.test(p ?? "")) process.exit(0);
+          const path = `data/compat/${r}__${p}.yaml`;
+          if (!existsSync(path)) process.exit(0); // disputing an unknown cell = a contribution, nothing to mark
+          const doc = parseDocument(readFileSync(path, "utf8"));
+          if (process.env.OPEN === "true") doc.set("dispute", process.env.URL); else doc.delete("dispute");
+          writeFileSync(path, doc.toString());'
+          git config user.name "caniembody-bot"; git config user.email "bot@users.noreply.github.com"
+          git add data/compat && git diff --cached --quiet || (git commit -m "data: dispute marker for ${{ github.event.issue.html_url }}" && git push)

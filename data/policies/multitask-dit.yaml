@@ -1,0 +1,117 @@
+id: multitask-dit
+name: Multitask DiT
+aliases: [multi_task_dit, Multitask Diffusion Transformer Policy, Multi-Task DiT]
+family: diffusion
+summary: >-
+  Multitask Diffusion Transformer policy: an evolution of Diffusion Policy that conditions a diffusion transformer on
+  CLIP vision features from multiple cameras and a CLIP-encoded language instruction. Diffusion (DDPM/DDIM) is the
+  default objective; flow matching is selectable.
+authors: Bryson Jones (open-source LeRobot implementation), after Toyota Research Institute's Large Behavior Model DiT policy
+paper_url: https://arxiv.org/abs/2507.05331
+params: 450000000
+params_note: >-
+  "~450M" per the LeRobot docs (approximate; the default uses CLIP ViT-B/16 vision and text encoders, and the count
+  changes with encoder choice and num_layers).
+params_source_ref: ev-lerobot-mtdit-docs-params
+backbone: CLIP vision encoder + CLIP text encoder (frozen, learnable projection) + diffusion transformer (DiT)
+action_output: diffusion
+action_chunking: true
+arch_source_ref: ev-lerobot-mtdit-docs-arch
+license: Apache-2.0 (LeRobot implementation)
+frameworks:
+  lerobot:
+    support: native
+    since: "0.5.1"
+    policy_type: multi_task_dit
+    docs_url: https://huggingface.co/docs/lerobot/multi_task_dit
+    note: >-
+      Install with `pip install lerobot[multi_task_dit]`. Defaults: objective diffusion (DDPM), horizon 32,
+      n_action_steps 24, n_obs_steps 2.
+    source_ref: ev-lerobot-mtdit-config
+requirements:
+  train:
+    vram_gb: {min: 8, max: 14}
+    batch_size: 8
+    condition: >-
+      Peak training VRAM at batch size 8 with AdamW (LeRobot default), "Diffusion" group (diffusion, multi_task_dit)
+      in the LeRobot compute hardware guide. The guide calls its figures indicative, order-of-magnitude numbers for
+      picking hardware, not exact predictions. Precision not stated. Note the policy's own docs call batch 64 the
+      minimum for stable training and recommend 256–320, so real runs need more memory than this BS-8 envelope.
+    source_ref: ev-lerobot-hw-guide
+  inference:
+    condition: >-
+      No VRAM figure published. The policy docs recommend at least an RTX 5070 Ti (or equivalent GPU) for reasonable
+      inference speed.
+    source_ref: ev-lerobot-mtdit-docs-gpu
+observation_space:
+  language: optional
+  source_ref: ev-lerobot-mtdit-processor
+notes: >-
+  Family is "diffusion": the docs describe it as "an evolution of the original Diffusion Policy architecture" and
+  diffusion is the default objective (flow matching is an option). Uses multiple camera views (all images must share
+  one shape); separate per-camera encoders are optional.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-mtdit-docs-arch
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/multi_task_dit.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: Multitask DiT is a DiT evolution of Diffusion Policy with text and vision conditioning, supporting diffusion and flow matching.
+    quote: "Multitask Diffusion Transformer (DiT) Policy is an evolution of the original Diffusion Policy architecture, which leverages a large DiT with text and vision conditioning for multitask robot learning."
+  - id: ev-lerobot-mtdit-docs-params
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/multi_task_dit.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: Docs give an approximate parameter count.
+    quote: "VLAs, with only ~450M parameters and significantly less training."
+  - id: ev-lerobot-mtdit-docs-gpu
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/multi_task_dit.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: Docs recommend at least an RTX 5070 Ti for inference and batch sizes >64 for training.
+    quote: "**Inference**: At least an RTX 5070 Ti (or equivalent GPU) is recommended for reasonable speed performance"
+  - id: ev-lerobot-mtdit-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/multi_task_dit/configuration_multi_task_dit.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Policy type string is `multi_task_dit`; default objective is diffusion."
+    quote: '@PreTrainedConfig.register_subclass("multi_task_dit")'
+  - id: ev-lerobot-mtdit-processor
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/multi_task_dit/processor_multi_task_dit.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: The preprocessor tokenizes the language task description only if present.
+    quote: "3. Tokenizing the language task description (if present)."
+  - id: ev-lerobot-v051-release
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.5.1
+    date: 2026-04-07
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.5.1"}
+    summary: Multitask DiT policy was added in v0.5.1 (absent from v0.5.0's policies directory).
+    quote: "Feature/add multitask diffusion transformer policy implementation by @brysonjones"
+  - id: ev-lerobot-hw-guide
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hardware_guide.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Compute hardware guide: Diffusion group (`diffusion`, `multi_task_dit`) peak VRAM ~8–14GB at BS 8 with AdamW; figures are indicative."
+    quote: "| Diffusion  | `diffusion`, `multi_task_dit`               |                 ~8–14GB | RTX 4070+ / L4 / A10G             |"

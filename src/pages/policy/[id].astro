@@ -1,0 +1,133 @@
+---
+import Base from '../../layouts/Base.astro';
+import State from '../../components/State.astro';
+import Tier from '../../components/Tier.astro';
+import Src from '../../components/Src.astro';
+import Evidence from '../../components/Evidence.astro';
+import FwTable from '../../components/FwTable.astro';
+import RunsTable from '../../components/RunsTable.astro';
+import { loadAll, gridRobots, gitDate, inferredPair, type Policy, type Requirement } from '../../lib/data.ts';
+import { FAMILY_LABEL, fmtParams, fmtAge, fmtGB } from '../../lib/ui.ts';
+import { crumbs, pageTitle, clip } from '../../lib/seo.ts';
+
+export function getStaticPaths() {
+  return loadAll().policies.map((p) => ({ params: { id: p.id }, props: { p } }));
+}
+const { p } = Astro.props as { p: Policy };
+const all = loadAll();
+const inGrid = p.in_grid !== false;
+const rows = gridRobots().map((r) => ({ r, c: all.cell(r.id, p.id) }));
+const known = rows.filter((x) => x.c);
+const runs = all.runs.filter((r) => r.policy === p.id);
+const terms = all.glossary.filter((g) => g.policies?.includes(p.id));
+const req = (x?: Requirement) => x?.vram_gb ? [x.vram_gb.min != null && `≥${x.vram_gb.min} GB`, x.vram_gb.max != null && `≤${x.vram_gb.max} GB`, x.vram_gb.measured != null && `${fmtGB(x.vram_gb.measured)} measured`].filter(Boolean).join(' · ') : '—';
+const vr = p.requirements?.inference?.vram_gb, vt = p.requirements?.train?.vram_gb;
+const desc = `${p.name}${p.params ? ` (${fmtParams(p.params)} params)` : ''}: VRAM requirements${vt?.min ? ` (train ≥${vt.min} GB` : ''}${vt?.min && !vr?.min ? ')' : ''}${vr?.min ? `${vt?.min ? ', ' : ' ('}inference ≥${vr.min} GB)` : ''}, ${runs.length} measured inference runs, and which robots it runs on (${known.length} with evidence). Every number sourced. Verified ${p.verified_on}.`;
+---
+<Base title={pageTitle(`${p.name}: VRAM, supported robots, inference speed`)} description={clip(desc)}
+  og={`/og/policy/${p.id}.png`} modified={gitDate(`data/policies/${p.id}.yaml`)}
+  jsonld={[crumbs([['Matrix', '/'], [p.name, `/policy/${p.id}`]])]}>
+  <div class="wrap">
+    <section class="ph">
+      <div class="eyebrow"><a href="/">Matrix</a><span>/</span><span>Policy</span><span>·</span><span>{FAMILY_LABEL[p.family]}</span>{p.authors && <><span>·</span><span>{p.authors}</span></>}</div>
+      <h1>{p.name}</h1>
+      {p.summary && <p class="lede">{p.summary}</p>}
+      <p class="status-line">
+        {p.params && <span class="pill">{fmtParams(p.params)} params</span>}
+        {p.open_weights != null && <span class={`pill${p.open_weights ? ' accent' : ''}`}>{p.open_weights ? 'open weights' : 'closed weights'}</span>}
+        {p.rtc_compatible && <span class="pill">RTC</span>}
+        {p.peft_supported && <span class="pill">PEFT / LoRA</span>}
+        <span>verified <b>{p.verified_on}</b></span>
+        {p.paper_url && <a href={p.paper_url}>paper →</a>}
+      </p>
+    </section>
+
+    {!inGrid && <div class="card" style="padding:14px 16px;margin-bottom:8px">Reward models are not policies you deploy on a robot, so they are listed separately from the matrix.</div>}
+
+    <div class="grid-2">
+      <section>
+        <h2>Architecture</h2>
+        <dl class="kv">
+          <dt>Family</dt><dd>{p.family}</dd>
+          {p.params && <><dt>Parameters</dt><dd>{p.params.toLocaleString('en-US')}{p.params_note && <span class="muted"> ({p.params_note})</span>}<Src r={p.params_source_ref} /></dd></>}
+          {p.backbone && <><dt>Backbone</dt><dd>{p.backbone}<Src r={p.arch_source_ref} /></dd></>}
+          {p.action_output && <><dt>Action head</dt><dd>{p.action_output}<Src r={p.arch_source_ref} /></dd></>}
+          {p.action_chunking != null && <><dt>Action chunking</dt><dd>{p.action_chunking ? 'yes' : 'no'}</dd></>}
+          {p.rtc_compatible != null && <><dt>Real-Time Chunking</dt><dd>{p.rtc_compatible ? 'supported' : 'not supported'}<Src r={p.arch_source_ref} /></dd></>}
+          {p.peft_supported != null && <><dt>PEFT / LoRA</dt><dd>{p.peft_supported ? 'supported' : 'not supported'}</dd></>}
+          {p.license && <><dt>Code license</dt><dd>{p.license}</dd></>}
+          {p.weights_license && <><dt>Weights license</dt><dd>{p.weights_license}</dd></>}
+          {p.observation_space?.cameras && <><dt>Cameras</dt><dd>{Object.entries(p.observation_space.cameras).map(([k, v]) => `${k} ${v}`).join(' · ')}<Src r={p.observation_space.source_ref} /></dd></>}
+          {p.observation_space?.language && <><dt>Language input</dt><dd>{p.observation_space.language}</dd></>}
+          {p.observation_space?.depth && <><dt>Depth</dt><dd>{p.observation_space.depth}</dd></>}
+          {p.observation_space?.tactile && <><dt>Tactile</dt><dd>{p.observation_space.tactile}</dd></>}
+        </dl>
+      </section>
+      <section>
+        <h2>Compute requirements</h2>
+        {p.requirements ? (
+          <div class="tbl-wrap"><table class="tbl">
+            <thead><tr><th></th><th>Memory</th><th>Precision</th><th>Conditions</th></tr></thead>
+            <tbody>
+              {(['train', 'inference'] as const).filter((k) => p.requirements![k]).map((k) => {
+                const x = p.requirements![k]!;
+                return <tr>
+                  <td>{k}</td><td class="mono">{req(x)}<Src r={x.source_ref} /></td><td class="mono">{x.precision ?? '—'}</td>
+                  <td class="small">{[x.condition, x.batch_size && `batch ${x.batch_size}`, x.reference_time].filter(Boolean).join(' · ')}</td>
+                </tr>;
+              })}
+            </tbody>
+          </table></div>
+        ) : <p class="empty">No sourced requirements yet.</p>}
+        <p class="small muted" style="margin-top:10px">Training requirements: see also the <a href="https://huggingface.co/docs/lerobot/hardware_guide">LeRobot compute hardware guide</a>, the authoritative source for LeRobot training envelopes.</p>
+      </section>
+    </div>
+
+    <h2 id="runs">Measured inference <span class="muted small">{runs.length} run{runs.length === 1 ? '' : 's'} · inference cost only, not task success</span></h2>
+    {runs.length ? <RunsTable runs={runs} showCompute /> : <p class="empty">No measured runs yet. <a href="/methodology#contribute">Submit one</a> with its runtime, precision and camera count.</p>}
+
+    {inGrid && (
+      <>
+        <h2 id="robots">Robots running {p.name} <span class="muted small">{known.length} of {rows.length} with evidence</span></h2>
+        {known.length ? (
+          <div class="tbl-wrap"><table class="tbl">
+            <thead><tr><th>Robot</th><th>State</th><th>Tier</th><th>Verified</th><th>Detail</th></tr></thead>
+            <tbody>
+              {known.map(({ r, c }) => (
+                <tr>
+                  <td><a href={`/compat/${r.id}/${p.id}`}><strong>{r.name}</strong></a></td>
+                  <td><State s={c!.state} /></td><td><Tier t={c!.tier} /></td>
+                  <td class="mono">{c!.verified_on} <span class="muted">{fmtAge(c!.age_days)}</span></td>
+                  <td class="small">{c!.caveats?.[0] ?? c!.partial_scope ?? c!.reason ?? ''}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table></div>
+        ) : <p class="empty">No robot has sourced evidence for {p.name} yet.</p>}
+        {rows.some((x) => !x.c && inferredPair(x.r, p)) && (
+          <p class="small muted" style="margin-top:12px"><span class="st" data-s="untested" aria-hidden="true">○</span> Untested, but both sides are in LeRobot (inferred): {rows.filter((x) => !x.c && inferredPair(x.r, p)).map(({ r }, i) => <>{i ? ', ' : ''}<a href={`/compat/${r.id}/${p.id}`}>{r.name}</a></>)}.</p>
+        )}
+      </>
+    )}
+
+    <div class="grid-2">
+      <section>
+        <h2>Framework support</h2>
+        <FwTable fw={p.frameworks} />
+      </section>
+      <section>
+        <h2>Checkpoints</h2>
+        {p.checkpoints?.length ? (
+          <ul class="plain">{p.checkpoints.map((c) => <li><a class="mono" href={`https://huggingface.co/${c.hub_id}`}>{c.hub_id}</a>{c.note && <span class="muted small"> · {c.note}</span>}</li>)}</ul>
+        ) : <p class="empty">None recorded.</p>}
+        {terms.length > 0 && <><h3>Related terms</h3><p class="small">{terms.map((g, i) => <>{i ? ' · ' : ''}<a href={`/glossary/${g.id}`}>{g.term}</a></>)}</p></>}
+      </section>
+    </div>
+
+    <h2 id="sources">Sources</h2>
+    <Evidence items={p.sources} />
+  </div>
+</Base>
+<style>
+  .plain { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; font-size: 13px; }
+</style>

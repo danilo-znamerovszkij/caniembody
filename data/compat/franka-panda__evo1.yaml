@@ -1,0 +1,36 @@
+robot: franka-panda
+policy: evo1
+state: partial
+partial_scope: "Simulation only: LIBERO (simulated Franka Panda); no real-robot training or inference documented."
+framework: lerobot
+framework_version_tested: "0.6.1"
+capabilities:
+  inference_sim:
+    state: works
+    notes: "LeRobot v0.6.1 reports 96.65% overall on LIBERO (2,000 episodes) for its reproduced Stage-2 checkpoint; the Evo-1 paper reports 94.8%."
+    evidence: [ev-lerobot-evo1-libero, ev-evo1-paper-libero, ev-libero-panda-src]
+evidence:
+  - id: ev-lerobot-evo1-libero
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/evo1.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-25
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot v0.6.1 Evo-1 guide: two-stage training on lerobot/libero and a LIBERO evaluation of the released Stage-2 checkpoint (zuoxingdong/evo1_libero)."
+    quote: "| **Overall**    |           **1,933** | **2,000** |   **96.65%** |"
+  - id: ev-evo1-paper-libero
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2511.04555v2
+    verified_on: 2026-10-25
+    summary: "Evo-1 paper (v2): LIBERO is one of its three simulation benchmarks (with Meta-World and RoboTwin)."
+    quote: "and reaches 94.8% on LIBERO, demonstrating its adaptability in both single-arm and dual-arm manipulation tasks."
+  - id: ev-libero-panda-src
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/Lifelong-Robot-Learning/LIBERO/blob/8f1084e3132a39270c3a13ebe37270a43ece2a01/libero/libero/envs/robots/mounted_panda.py
+    date: 2025-03-15
+    verified_on: 2026-10-25
+    summary: "LIBERO's tabletop tasks instantiate a Mounted<robot> model (libero_tabletop_manipulation.py); its MountedPanda robot class is the Franka Panda."
+    quote: "Panda is a sensitive single-arm robot designed by Franka."

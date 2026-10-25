@@ -1,0 +1,5 @@
+---
+import { STATE_META } from '../lib/ui.ts';
+const { s, label = true } = Astro.props as { s: string; label?: boolean };
+---
+<span class="st-row"><span class="st" data-s={s} aria-hidden={label ? 'true' : undefined} title={label ? undefined : STATE_META[s].label}>{STATE_META[s].glyph}</span>{label && <span class="st-label">{STATE_META[s].label}</span>}</span>

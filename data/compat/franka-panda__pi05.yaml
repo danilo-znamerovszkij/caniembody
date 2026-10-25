@@ -1,0 +1,48 @@
+robot: franka-panda
+policy: pi05
+state: works-with-caveats
+framework: openpi
+caveats:
+  - "Documented for the DROID platform (Panda, ZED 2 exterior + ZED Mini wrist cameras, DROID control laptop/NUC), not for an arbitrary Panda setup. The policy uses one exterior camera plus the wrist camera."
+  - "Inference runs on a remote GPU policy server (~RTX 4090). openpi notes that 0.5-1 s latency per action chunk is normal and that the policy fails on more complex manipulation tasks."
+capabilities:
+  train:
+    state: works
+    notes: "openpi documents fine-tuning π0.5 on a custom DROID dataset."
+    evidence: [ev-openpi-readme-pi05-droid]
+  inference_real:
+    state: works
+    evidence: [ev-openpi-droid-example, ev-ki-paper-droid, ev-droid-paper]
+evidence:
+  - id: ev-openpi-droid-example
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/Physical-Intelligence/openpi/blob/215abfb217dbac7d5f1273282331b9b1866c0479/examples/droid/README.md
+    date: 2026-08-24
+    verified_on: 2026-10-24
+    summary: "openpi's DROID example runs pi05_droid on the DROID robot platform via a policy server and the DROID robot client, and calls it PI's strongest generalist DROID policy on RoboArena."
+    quote: 'This example shows how to run the fine-tuned $\pi_{0.5}$-DROID model on the [DROID robot platform](https://github.com/droid-dataset/droid).'
+  - id: ev-openpi-readme-pi05-droid
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/Physical-Intelligence/openpi/blob/215abfb217dbac7d5f1273282331b9b1866c0479/README.md
+    date: 2026-08-24
+    verified_on: 2026-10-24
+    summary: "openpi lists pi05_droid (usage: Inference / Fine-Tuning), a π0.5 fine-tuned on DROID with knowledge insulation."
+    quote: '$\pi_{0.5}$ model fine-tuned on the [DROID dataset](https://droid-dataset.github.io/) with [knowledge insulation](https://www.physicalintelligence.company/research/knowledge_insulation): fast inference and good language-following'
+  - id: ev-ki-paper-droid
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2505.23705
+    date: 2025-05-29
+    verified_on: 2026-10-24
+    summary: "PI's knowledge-insulation paper (the recipe behind pi05_droid per openpi) evaluates a DROID specialist on the real-world DROID benchmark in unseen scenes: 0.55 ± 0.09 task progress."
+    quote: "We evaluate our method on the simulated LIBERO [30] benchmark, as well as the real world DROID [23] benchmark."
+  - id: ev-droid-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2403.12945v2
+    date: 2025-04-22
+    verified_on: 2026-10-24
+    summary: "The DROID platform and dataset are built on the Franka Emika Panda."
+    quote: "We chose the Franka Emika Panda 7 DoF robot arm as the base of our setup since it is widely adopted in the robot research community, reliable, relatively affordable and was available at most participating institutions."

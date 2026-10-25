@@ -1,0 +1,42 @@
+robot: so101
+policy: fastwam
+state: partial
+partial_scope: Upstream docs only give a generic real-robot rollout command for so101_follower; no SO-101 training recipe, real-robot checkpoint or result is published. The only SO-101 checkpoint found
+  is trained on simulated SO-101 data.
+framework: lerobot
+framework_version_tested: 0.6.1
+capabilities:
+  inference_real:
+    state: partial
+    notes: Command only, with a placeholder checkpoint.
+    evidence:
+    - ev-lerobot-fastwam-doc
+  train:
+    state: partial
+    notes: Simulated SO-101 (MuJoCo) data only.
+    evidence:
+    - ev-hub-alexhegit-fastwam-so101-sim
+evidence:
+- id: ev-lerobot-fastwam-doc
+  tier: upstream-documented
+  type: official-docs
+  url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/fastwam.mdx
+  date: '2026-08-03'
+  verified_on: '2026-10-24'
+  versions:
+    lerobot: 0.6.1
+  summary: LeRobot v0.6.1 FastWAM guide gives a real-robot rollout command for so101_follower with a placeholder checkpoint (your-org/fastwam-real-robot); no SO-101 checkpoint, training recipe or result
+    is published.
+  quote: |-
+    For real-robot rollout, use the same checkpoint path:
+
+    ```bash
+    lerobot-rollout \
+      --robot.type=so101_follower \
+- id: ev-hub-alexhegit-fastwam-so101-sim
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/alexhegit/so101-simstudio-lab01-pnp-fastwam
+  date: '2026-09-17'
+  verified_on: '2026-10-24'
+  summary: config.json type=fastwam; train_config.json dataset.repo_id=alexhegit/so101-simstudio-lab01-pnp, whose meta/info.json robot_type=so101_mujoco (50 episodes, simulated SO-101).

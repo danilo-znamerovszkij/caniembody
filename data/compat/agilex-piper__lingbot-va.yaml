@@ -1,0 +1,17 @@
+robot: agilex-piper
+policy: lingbot-va
+state: partial
+partial_scope: "Training evidenced by a public checkpoint (upstream LingBot-VA runtime plus a local patch); only offline validation is documented, no on-robot inference."
+framework: lingbot-va
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-wkrfugs-lingbot]
+evidence:
+  - id: ev-hub-wkrfugs-lingbot
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/wkrfugs/lingbot-va-piper-4task-step30000
+    date: 2026-10-20
+    verified_on: 2026-10-24
+    summary: "Model card: robbyant/lingbot-va-base fine-tuned on four single-arm Piper tasks for 30k steps using the official Robbyant/lingbot-va runtime with a published patch; card describes offline validation and states the adapter is not a robot client or controller."

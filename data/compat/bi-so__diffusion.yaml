@@ -1,0 +1,26 @@
+robot: bi-so
+policy: diffusion
+state: partial
+partial_scope: Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source.
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-thomas-diffusion-biso-push
+    - ev-hub-thomas-diffusion-biso-stack
+evidence:
+- id: ev-hub-thomas-diffusion-biso-push
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/thomas0829/policy-bimanual-diffusion-push-and-grab
+  date: '2025-11-17'
+  verified_on: '2026-10-24'
+  summary: config.json type=diffusion; train_config.json dataset.repo_id=thomas0829/bimanual_so101_push_and_grab, whose meta/info.json robot_type=bi_so100_follower (30 episodes).
+- id: ev-hub-thomas-diffusion-biso-stack
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/thomas0829/policy-bimanual-diffusion-stacking
+  date: '2025-11-11'
+  verified_on: '2026-10-24'
+  summary: config.json type=diffusion; train_config.json dataset.repo_id=thomas0829/bimanual-so101-stacking-blocks-v2, whose meta/info.json robot_type=bi_so100_follower (50 episodes).

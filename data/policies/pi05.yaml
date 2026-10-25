@@ -1,0 +1,156 @@
+id: pi05
+name: π0.5
+aliases: [pi05, pi0.5, pi_05, Pi0.5, π₀.₅, lerobot/pi05_base]
+family: vla
+summary: >-
+  Physical Intelligence's successor to π0, co-trained on heterogeneous robot, web and instruction data for open-world
+  generalization. The open release (openpi, and LeRobot's port) supports only the flow-matching action head.
+authors: Physical Intelligence
+paper_url: https://arxiv.org/abs/2504.16054
+backbone: PaliGemma-based VLM with a 300M-parameter action expert
+action_output: flow-matching
+action_chunking: true
+rtc_compatible: true
+peft_supported: true
+arch_source_ref: ev-openpi-readme-pi05
+license: Apache-2.0
+weights_license: Gemma (Hub license tag `gemma` on lerobot/pi05_base)
+open_weights: true
+frameworks:
+  lerobot:
+    support: native
+    since: "0.4.0"
+    policy_type: pi05
+    docs_url: https://huggingface.co/docs/lerobot/pi05
+    note: >-
+      Added in v0.4.0 ("Add OpenPi, Pi0 and Pi0.5"). Uses the gated google/paligemma-3b-pt-224 tokenizer (accept its
+      license on the Hub). Normalizes STATE/ACTION with quantiles by default, so datasets need q01/q99 stats. RTC per
+      rtc.mdx; PEFT default LoRA targets defined in PI05Policy (source code; not covered by a dedicated doc example).
+    source_ref: ev-lerobot-v040-notes
+  openpi:
+    support: upstream-repo
+    repo_url: https://github.com/Physical-Intelligence/openpi
+    docs_url: https://github.com/Physical-Intelligence/openpi
+    note: "Official release; base checkpoint gs://openpi-assets/checkpoints/pi05_base. openpi supports only the flow-matching head for π0.5."
+    source_ref: ev-openpi-readme-pi05
+checkpoints:
+  - hub_id: lerobot/pi05_base
+    note: "LeRobot-format base model; Hub license tag gemma."
+  - hub_id: lerobot/pi05_libero_base
+    note: "LIBERO-trained base for LIBERO fine-tuning (per the v0.6.1 pi05 docs)."
+  - hub_id: lerobot/pi05_libero_finetuned_v044
+    note: "Checkpoint the docs' LIBERO results (97.5% average) were measured on."
+requirements:
+  train:
+    vram_gb: {min: 24, max: 40}
+    batch_size: 8
+    condition: >-
+      Peak training VRAM at batch size 8 with AdamW (LeRobot default), "Large VLA" group (pi0, pi0_fast, pi05, xvla,
+      wall_x) in the LeRobot compute hardware guide; suggested A100 40 GB+, "24 GB tight at BS 1". The guide calls its
+      figures indicative, order-of-magnitude numbers, not exact predictions. Precision not stated.
+    reference_time: >-
+      ~4–8 h for 5 epochs on a ~45k-frame dataset at batch 4 on a single A100 40 GB (indicative, ±50%); measured 3h 41m
+      for 5000 steps at batch 32 on 4× H100 80 GB with gradient_checkpointing=true, dtype=bfloat16, from lerobot/pi05_base.
+    source_ref: ev-lerobot-hw-guide
+  inference:
+    vram_gb: {min: 8}
+    condition: >-
+      openpi README single-GPU requirement for inference ("> 8 GB", example RTX 4090), stated for all openpi models and
+      the openpi runtime, not LeRobot. Precision not stated. No LeRobot measurement for π0.5 found.
+    source_ref: ev-openpi-requirements
+observation_space:
+  state: proprio/state vector; in the LeRobot implementation it is discretized into 256 bins and written into the prompt
+  language: optional
+  source_ref: ev-pi05-base-card
+notes: >-
+  The v0.6.1 docs size their full LIBERO fine-tune command (batch 64, bf16, gradient checkpointing) "for a single 80 GB
+  GPU"; freezing the VLM (train_expert_only=true) reduces memory at some cost in success rate. openpi README: LoRA
+  fine-tuning >22.5 GB, full fine-tuning >70 GB (openpi runtime).
+verified_on: 2026-10-24
+sources:
+  - id: ev-openpi-readme-pi05
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/Physical-Intelligence/openpi/blob/215abfb217dbac7d5f1273282331b9b1866c0479/README.md
+    verified_on: 2026-10-24
+    versions: {openpi: "215abfb"}
+    summary: openpi (official PI repo) ships π0.5 and supports only its flow-matching head.
+    quote: "Note that, in this repository, we currently only support the flow matching head for both $\\pi_{0.5}$ training and inference."
+  - id: ev-pi05-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2504.16054
+    date: 2025-04-22
+    verified_on: 2026-10-24
+    summary: π0.5 paper (arXiv HTML v1); the final model predicts continuous actions with flow matching, like π0.
+    quote: "we use flow-matching [ 50 ] to predict continuous actions in the final model."
+  - id: ev-lerobot-v040-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.4.0
+    date: 2025-10-23
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.0"}
+    summary: v0.4.0 is the first release with Pi0.5 (`pi05` registered at that tag).
+    quote: "* Add OpenPi, Pi0 and Pi0.5 by @pkooij in https://github.com/huggingface/lerobot/pull/1910"
+  - id: ev-lerobot-pi05-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/pi05/configuration_pi05.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Policy type string is `pi05`."
+    quote: '@PreTrainedConfig.register_subclass("pi05")'
+  - id: ev-lerobot-pi05-peft-code
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/pi05/modeling_pi05.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: PI05Policy defines default PEFT (LoRA) target modules for the generic --peft.* training path.
+    quote: '"""Return default PEFT target modules for PI0.5 fine-tuning."""'
+  - id: ev-lerobot-pi05-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/pi05.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: LeRobot π0.5 docs; state is discretized into the prompt, quantile normalization by default.
+    quote: "| `observation.state`         | 8                    | discretized into 256 bins and written into the prompt   |"
+  - id: ev-openpi-requirements
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/Physical-Intelligence/openpi/blob/215abfb217dbac7d5f1273282331b9b1866c0479/README.md
+    verified_on: 2026-10-24
+    versions: {openpi: "215abfb"}
+    summary: "openpi single-GPU memory requirements: inference >8 GB, LoRA fine-tuning >22.5 GB, full fine-tuning >70 GB."
+    quote: "| Inference          | > 8 GB          | RTX 4090           |"
+  - id: ev-lerobot-rtc-docs
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/rtc.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: LeRobot RTC docs name Pi0.5 as a supported flow-matching policy.
+    quote: "allows large, flow-matching based robotic policies, such as [Pi0](./pi0), [Pi0.5](./pi05), and [SmolVLA](./smolvla), to produce smooth, continuous, and reactive motion"
+  - id: ev-lerobot-hw-guide
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hardware_guide.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Compute hardware guide: Large VLA group (incl. `pi05`) ~24–40GB at BS 8 with AdamW; pi05 4×H100 reference run 3h 41m."
+    quote: "| Large VLA  | `pi0`, `pi0_fast`, `pi05`, `xvla`, `wall_x` |                ~24–40GB | A100 40 GB+ (24 GB tight at BS 1) |"
+  - id: ev-pi05-base-card
+    tier: upstream-documented
+    type: model-card
+    url: https://huggingface.co/lerobot/pi05_base
+    date: 2025-09-09
+    verified_on: 2026-10-24
+    summary: lerobot/pi05_base card lists inputs and notes only the flow-matching head is supported.
+    quote: "- **Inputs:** images (multi-view), proprio/state, optional language instruction"

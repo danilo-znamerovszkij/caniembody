@@ -1,0 +1,24 @@
+id: h100-80gb
+name: NVIDIA H100 80GB
+class: datacenter
+memory_gb: 80
+arch: Hopper
+ai_tops: FP8 Tensor Core* 3,958 teraFLOPS (H100 SXM; *with sparsity)
+power_w: Up to 700W (configurable) (SXM)
+notes: The SXM part is 80GB HBM3; the H100 NVL is a different 94GB part. Not listed as a Hugging Face Jobs flavor in the current pricing table.
+verified_on: '2026-10-24'
+sources:
+- id: ev-nvidia-h100-specs
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/data-center/h100/
+  verified_on: '2026-10-24'
+  summary: 'H100 product page spec table (columns: H100 SXM, H100 NVL): FP8 3,958 TFLOPS sparse; memory 80GB vs 94GB.'
+  quote: FP8 Tensor Core * 3,958 teraFLOPS 3,341 teraFLOPS INT8 Tensor Core * 3,958 TOPS 3,341 TOPS GPU Memory 80GB 94GB
+- id: ev-nvidia-h100-tdp
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/data-center/h100/
+  verified_on: '2026-10-24'
+  summary: 'Same table: Max TDP up to 700W (SXM) and 350-400W (NVL).'
+  quote: Max Thermal Design Power (TDP) Up to 700W (configurable) 350-400W (configurable)

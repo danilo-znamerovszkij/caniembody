@@ -1,0 +1,31 @@
+id: a100-80gb
+name: NVIDIA A100 80GB
+class: datacenter
+memory_gb: 80
+arch: Ampere
+ai_tops: BFLOAT16 Tensor Core 312 TFLOPS | 624 TFLOPS* (*with sparsity)
+power_w: 300W (PCIe) / 400W (SXM)
+notes: HBM2e, PCIe or SXM4. Available on Hugging Face Jobs as the "a100-large" flavor (1x, 4x, 8x).
+verified_on: '2026-10-24'
+sources:
+- id: ev-nvidia-a100-80gb-page
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/data-center/a100/
+  verified_on: '2026-10-24'
+  summary: 'A100 product page spec table (80GB PCIe, 80GB SXM): memory, bandwidth, TDP.'
+  quote: GPU Memory 80GB HBM2e 80GB HBM2e GPU Memory Bandwidth 1,935 GB/s 2,039 GB/s Max Thermal Design Power (TDP) 300W 400W ***
+- id: ev-nvidia-a100-80gb-bf16
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/data-center/a100/
+  verified_on: '2026-10-24'
+  summary: 'A100 product page: BFLOAT16 Tensor Core 312 TFLOPS dense, 624 with sparsity.'
+  quote: BFLOAT16 Tensor Core 312 TFLOPS | 624 TFLOPS*
+- id: ev-hf-jobs-pricing
+  tier: upstream-documented
+  type: official-docs
+  url: https://huggingface.co/docs/hub/jobs-pricing
+  verified_on: '2026-10-24'
+  summary: Hugging Face Jobs pricing lists an A100 flavor with 80 GB GPU memory.
+  quote: Nvidia A100 - large 12 vCPU 142 GB 80 GB 1000 GB $2.50

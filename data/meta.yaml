@@ -1,0 +1,3 @@
+# Bump last_full_review only after every non-unknown cell has been re-checked against its sources.
+last_full_review: 2026-10-24
+dataset_version: 1.0.0-seed

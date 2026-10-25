@@ -1,0 +1,61 @@
+id: mobile-aloha
+name: Mobile ALOHA
+maker: Stanford (Zipeng Fu, Tony Z. Zhao, Chelsea Finn)
+aliases: [Mobile Aloha, aloha_mobile]
+class: mobile-manipulator
+summary: >-
+  ALOHA bimanual rig mounted on a mobile base, with whole-body teleoperation for mobile manipulation. LeRobot has never
+  had a Mobile ALOHA robot type. Its support is dataset-only: lerobot/aloha_mobile_* datasets, one of which is the
+  example dataset in the LeRobot README.
+arms: 2
+open_source: true
+license: MIT (Mobile ALOHA codebase)
+homepage: https://mobile-aloha.github.io/
+frameworks: {}
+notes: >-
+  in_grid because public LeRobot-format Mobile ALOHA datasets exist: lerobot/aloha_mobile_cabinet, _chair, _elevator,
+  _shrimp, _wash_pan and _wipe_wine, listed on the Hub on 2026-10-24. The v0.6.1 README uses
+  lerobot/aloha_mobile_cabinet in both its dataset and lerobot-train examples. No lerobot framework entry is recorded:
+  no Mobile ALOHA robot config existed on main before the v0.3 Hardware API redesign or in any release, so neither
+  "native" nor "removed" applies. The original stack is ROS 1 (Ubuntu 18.04/20.04 + Noetic) with ACT++ for training.
+verified_on: 2026-10-24
+sources:
+  - id: ev-lerobot-readme-dataset
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/README.md
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "LeRobot README uses a Mobile ALOHA dataset as its LeRobotDataset example."
+    quote: "dataset = LeRobotDataset(\"lerobot/aloha_mobile_cabinet\")"
+  - id: ev-lerobot-v032-notes
+    tier: upstream-documented
+    type: release-notes
+    url: https://github.com/huggingface/lerobot/releases/tag/v0.3.2
+    date: 2025-08-01
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.3.2"}
+    summary: "Real-world static + mobile ALOHA datasets were added early in LeRobot's history (PR #133)."
+    quote: "Add 25 real world datasets (static + mobile aloha)  by @Cadene in https://github.com/huggingface/lerobot/pull/133"
+  - id: ev-lerobot-pre-refactor-configs
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/b536f47e3ff8c3b340fc5efa52f0ece0a7212a57/lerobot/common/robot_devices/robots/configs.py
+    date: 2025-06-05
+    verified_on: 2026-10-24
+    summary: "Pre-redesign robot types were aloha, koch, koch_bimanual, moss, so101, so100, stretch, lekiwi (no mobile ALOHA)."
+    quote: "@RobotConfig.register_subclass(\"stretch\")"
+  - id: ev-hub-aloha-mobile
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/datasets/lerobot/aloha_mobile_cabinet
+    verified_on: 2026-10-24
+    summary: "Mobile ALOHA dataset in the lerobot Hub org (six aloha_mobile_* tasks listed via Hub API, 2026-10-24)."
+  - id: ev-mobile-aloha-repo
+    tier: upstream-documented
+    type: vendor-docs
+    url: https://github.com/MarkFzp/mobile-aloha/blob/0e403249c76054a68e757e590d4da4dba401c9e3/README.md
+    verified_on: 2026-10-24
+    summary: "Mobile ALOHA codebase: forked from ALOHA, teleop + data collection, ROS 1."
+    quote: "This codebase is forked from the [ALOHA repo](https://github.com/tonyzhaozh/aloha), and contains implementation for teleoperation and data collection with the Mobile ALOHA hardware."

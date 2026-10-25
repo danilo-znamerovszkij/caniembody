@@ -1,0 +1,109 @@
+id: openvla
+name: OpenVLA
+aliases: [openvla-7b, openvla/openvla-7b, OpenVLA-7B]
+family: vla
+summary: >-
+  Open-source 7B-class VLA from Stanford, UC Berkeley, Google DeepMind and TRI: a Prismatic VLM (fused DINOv2 + SigLIP
+  vision encoder, Llama 2 language model) fine-tuned on Open X-Embodiment to emit robot actions as discrete language
+  tokens (256 bins per action dimension), one 7-DoF end-effector delta per step.
+authors: Stanford, UC Berkeley, Google DeepMind, Toyota Research Institute (OpenVLA team)
+paper_url: https://arxiv.org/abs/2406.09246
+params: 7500000000
+params_note: "README says fully fine-tuning touches 'all 7.5 billion parameters'; the paper calls it a '7B-parameter' VLA."
+params_source_ref: ev-openvla-readme-params
+backbone: Prismatic VLM (DINOv2 + SigLIP fused vision encoder, Llama 2 language model)
+action_output: autoregressive-tokens
+action_chunking: false
+arch_source_ref: ev-openvla-paper-tokens
+license: MIT
+weights_license: "MIT (model card); README notes the weights are derived from Llama 2 and subject to the Llama Community License"
+open_weights: true
+frameworks:
+  openvla:
+    support: upstream-repo
+    repo_url: https://github.com/openvla/openvla
+    note: "Official code and checkpoints; loads through Hugging Face transformers (trust_remote_code). Not part of LeRobot v0.6.1 (no openvla policy directory)."
+    source_ref: ev-openvla-readme-params
+checkpoints:
+  - hub_id: openvla/openvla-7b
+    note: "Flagship model from the paper (MIT tag on the Hub)."
+requirements:
+  train:
+    vram_gb: {min: 27, max: 72}
+    condition: >-
+      Upstream openvla README, LoRA fine-tuning of openvla-7b with vla-scripts/finetune.py (LoRA rank 32): batch_size
+      16 with grad_accumulation_steps 1 needs ~72 GB; a smaller GPU works if it has at least ~27 GB, by reducing the
+      batch size. Full fine-tuning instead uses FSDP (e.g. a node of 8 A100s). Precision not stated in that section.
+    source_ref: ev-openvla-readme-lora
+  inference:
+    vram_gb: {measured: 15}
+    precision: bf16
+    condition: >-
+      OpenVLA paper: 15 GB GPU memory when loaded in bfloat16 without quantization; runs at about 6 Hz on one RTX 4090
+      without compilation or other speed-ups. Batch size not stated.
+    source_ref: ev-openvla-paper-mem
+observation_space:
+  cameras: {min: 1, max: 1}
+  state: not used (inputs are one camera image and a language instruction)
+  language: required
+  source_ref: ev-openvla-card-io
+notes: >-
+  Not integrated in LeRobot v0.6.1 (no `openvla` policy type). Action chunking is not part of the original model;
+  OpenVLA-OFT (separate record) adds parallel decoding and chunking. The README's LoRA section uses Hugging Face PEFT.
+verified_on: 2026-10-24
+sources:
+  - id: ev-openvla-readme-params
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/openvla/openvla/blob/c8f03f48af692657d3060c19588038c7220e9af9/README.md
+    date: 2025-03-23
+    verified_on: 2026-10-24
+    summary: Upstream README states the full model has 7.5 billion parameters.
+    quote: "fully fine-tuning</ins> OpenVLA (all 7.5 billion parameters) via native PyTorch Fully Sharded Data Parallel (FSDP)"
+  - id: ev-openvla-readme-lora
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/openvla/openvla/blob/c8f03f48af692657d3060c19588038c7220e9af9/README.md
+    date: 2025-03-23
+    verified_on: 2026-10-24
+    summary: LoRA fine-tuning needs ~27 GB minimum; batch 16 without accumulation needs ~72 GB.
+    quote: "requires ~72 GB GPU memory. If you have a smaller GPU, you should reduce `--batch_size` and increase `--grad_accumulation_steps`"
+  - id: ev-openvla-readme-lora-min
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/openvla/openvla/blob/c8f03f48af692657d3060c19588038c7220e9af9/README.md
+    date: 2025-03-23
+    verified_on: 2026-10-24
+    summary: LoRA fine-tuning works on GPUs with at least ~27 GB.
+    quote: "(You can also fine-tune with a smaller GPU, as long as it has at least ~27 GB of memory,"
+  - id: ev-openvla-readme-license
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/openvla/openvla/blob/c8f03f48af692657d3060c19588038c7220e9af9/README.md
+    date: 2025-03-23
+    verified_on: 2026-10-24
+    summary: Code is MIT; pretrained models derive from Llama 2 and inherit the Llama Community License restrictions.
+    quote: "above models are derived from Llama-2, and as such are subject to the"
+  - id: ev-openvla-paper-tokens
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2406.09246
+    date: 2024-06-13
+    verified_on: 2026-10-24
+    summary: OpenVLA maps each continuous action dimension to one of 256 discrete token bins.
+    quote: "we discretize each dimension of the robot actions separately into one of 256 bins."
+  - id: ev-openvla-paper-mem
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2406.09246
+    date: 2024-06-13
+    verified_on: 2026-10-24
+    summary: Inference needs 15 GB in bfloat16 and runs at ~6 Hz on an RTX 4090.
+    quote: "During inference, OpenVLA requires 15GB of GPU memory when loaded in bfloat16 precision (i.e., without quantization) and runs at approximately 6Hz on one NVIDIA RTX 4090 GPU"
+  - id: ev-openvla-card-io
+    tier: upstream-documented
+    type: model-card
+    url: https://huggingface.co/openvla/openvla-7b
+    verified_on: 2026-10-24
+    summary: Model card - inputs are a language instruction and one camera image; outputs 7-DoF end-effector deltas.
+    quote: "OpenVLA models take a language instruction and a camera image of a robot workspace as input, and predict (normalized) robot actions consisting of 7-DoF end-effector deltas"

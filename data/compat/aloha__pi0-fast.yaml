@@ -1,0 +1,17 @@
+robot: aloha
+policy: pi0-fast
+state: works-with-caveats
+framework: openpi
+caveats:
+  - "Evidence is Physical Intelligence's own zero-shot evaluation of its generalist π0-FAST on an in-house bimanual Trossen ViperX setup that mirrors ALOHA; openpi ships no π0-FAST ALOHA config or checkpoint."
+capabilities:
+  inference_real: {state: works, evidence: [ev-fast-paper]}
+evidence:
+  - id: ev-fast-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2501.09747
+    date: 2025-01-16
+    verified_on: 2026-10-24
+    summary: "FAST paper: the generalist π0-FAST is evaluated zero-shot on the 'toast out of toaster' task, run on a bimanual Trossen ViperX robot mirroring the ALOHA setup (Section VI-F, Fig. 11)."
+    quote: "This task requires a bi-manual Trossen ViperX robot, mirroring the ALOHA [70] setup, to take two pieces of toast out of a toaster and place them onto a plate. This task was evaluated out-of-the-box on models pretrained with the full mixture detailed in Black et al. [7]."

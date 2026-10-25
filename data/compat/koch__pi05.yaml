@@ -1,0 +1,17 @@
+robot: koch
+policy: pi05
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-ethancsl-pi05-koch
+evidence:
+- id: ev-hub-ethancsl-pi05-koch
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/ethanCSL/pi05_koch_sorting_only_wrist
+  verified_on: '2026-10-24'
+  summary: "config.json type=pi05; train_config.json dataset ethanCSL/svla_koch_sorting_n_stacking_wrist_camera whose meta/info.json robot_type=koch_follower (200 episodes); fine-tuned from lerobot/pi05_base."

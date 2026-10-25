@@ -1,0 +1,28 @@
+robot: ur5e
+policy: pi05
+state: works-with-caveats
+framework: lerobot
+framework_version_tested: "0.5.1"
+caveats:
+  - "Community-reported only; not documented upstream or maintainer-tested."
+  - "Requires the UR5e-LeRobot extension (a LeRobot fork pinned at version 0.5.1, UR5e + PGI gripper), not an unmodified LeRobot install."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-ur5e-lerobot-readme]
+  inference_real:
+    state: works
+    evidence: [ev-ur5e-lerobot-readme]
+  teleop_record:
+    state: works
+    evidence: [ev-ur5e-lerobot-readme]
+evidence:
+  - id: ev-ur5e-lerobot-readme
+    tier: community-reported
+    type: source-code
+    url: https://github.com/yechen056/UR5e-LeRobot/blob/72d41bdae2606f464d3fd0da24cd6a20241ab244/README.md
+    date: 2026-07-02
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.5.1"}
+    summary: "Third-party UR5e LeRobot extension (listed on LeRobot's third-party robots page as a fork/extension) gives lerobot-train commands with --policy.type=pi05 and real-robot lerobot-record eval commands for single-arm and bimanual UR5e, and states the policy was validated and tuned on its hardware."
+    quote: "We have validated and tuned hyperparameters on this hardware stack for five policies: `ACT`, `Diffusion Policy`, `VQ-BeT`, `MultiTaskDiT`, `pi0`, and `pi05`."

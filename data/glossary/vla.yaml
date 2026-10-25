@@ -1,0 +1,37 @@
+id: vla
+term: "Vision-language-action model"
+aka: ["VLA", "VLA model"]
+short: "A robot policy built on a pretrained vision-language model that maps camera images, a language instruction and robot state to actions."
+body: |
+  A vision-language-action model (VLA) is a robot policy that takes camera images and a natural-language instruction, usually with [proprioceptive](/glossary/proprioception) state, and outputs robot actions. It is built by adapting a vision-language model (VLM) pretrained on Internet-scale data. The term comes from the RT-2 paper (Brohan et al., 2023): "We refer to such category of models as vision-language-action models (VLA)". RT-2 co-fine-tuned a VLM on robot trajectories and web data and emitted actions as text tokens.
+
+  VLAs differ mainly in how they produce actions. Autoregressive VLAs such as [OpenVLA](/policy/openvla) and [π0-FAST](/policy/pi0-fast) predict discrete [action tokens](/glossary/action-tokenization). Others attach a continuous action head to the VLM: [π0](/policy/pi0), [π0.5](/policy/pi05), [SmolVLA](/policy/smolvla), [GR00T N1.7](/policy/groot-n1-7), [X-VLA](/policy/xvla), [EO-1](/policy/eo1) and [EVO-1](/policy/evo1) use [flow matching](/glossary/flow-matching), while [OpenVLA-OFT](/policy/openvla-oft) uses parallel decoding with L1 regression. Size varies widely, from OpenVLA's 7B parameters to SmolVLA, which is "designed to be trained on a single GPU and deployed on consumer-grade GPUs or even CPUs".
+
+  Two misconceptions recur. "VLA" names an architecture family, not a capability level. Language conditioning does not mean the model follows arbitrary instructions on a new robot, and deployment on a robot absent from pretraining generally requires fine-tuning (see [embodiment gap](/glossary/embodiment-gap)). Nor does the label imply a size: parameter count, action head and [precision](/glossary/quantization), not the acronym, decide whether a VLA fits on a [Jetson Orin Nano](/compute/jetson-orin-nano-8gb) or needs an [H100](/compute/h100-80gb).
+related: [action-tokenization, flow-matching, embodiment-gap, proprioception, peft-lora]
+policies: [openvla, openvla-oft, pi0, pi0-fast, pi05, smolvla, groot-n1-7, xvla, eo1, evo1]
+sources:
+  - id: ev-rt2-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2307.15818
+    date: 2023-07-28
+    verified_on: 2026-10-24
+    summary: "RT-2 introduces the term vision-language-action model (VLA)."
+    quote: "We refer to such category of models as vision-language-action models (VLA) and instantiate an example of such a model, which we call RT-2."
+  - id: ev-openvla-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2406.09246
+    date: 2024-06-13
+    verified_on: 2026-10-24
+    summary: "OpenVLA is a 7B-parameter open-source VLA."
+    quote: "we introduce OpenVLA, a 7B-parameter open-source VLA trained on a diverse collection of 970k real-world robot demonstrations."
+  - id: ev-smolvla-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2506.01844
+    date: 2025-06-02
+    verified_on: 2026-10-24
+    summary: "SmolVLA targets single-GPU training and consumer-grade deployment."
+    quote: "SmolVLA is designed to be trained on a single GPU and deployed on consumer-grade GPUs or even CPUs."

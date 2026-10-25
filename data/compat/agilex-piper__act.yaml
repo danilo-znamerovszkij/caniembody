@@ -1,0 +1,38 @@
+robot: agilex-piper
+policy: act
+state: works-with-caveats
+framework: lerobot
+caveats:
+  - "Community-reported only; not documented upstream or maintainer-tested."
+  - "LeRobot has no built-in Piper robot type; requires a third-party plugin (e.g. lerobot_robot_piper, robot.type=piper / piper_follower)."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-coport-act]
+  inference_real:
+    state: works-with-caveats
+    evidence: [ev-issue-2942, ev-plugin-agro-readme]
+evidence:
+  - id: ev-hub-coport-act
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/coport-uni/piper_act_blue_200k
+    date: 2026-02-21
+    verified_on: 2026-10-24
+    summary: "config.json type=act; trained on coport-uni/PiPER_pick_blue_colored_marker_to_box whose meta/info.json robot_type=piper_follower."
+  - id: ev-issue-2942
+    tier: community-reported
+    type: github-issue
+    url: https://github.com/huggingface/lerobot/issues/2942
+    date: 2026-02-10
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.4.3"}
+    summary: "User controlling a Piper arm reports an ACT policy trained on their own dataset runs smoothly and completes the target tasks (contrast case for an X-VLA stutter bug)."
+    quote: "The same self-collected dataset was used to train an ACT model, which runs smoothly and successfully completes the target tasks."
+  - id: ev-plugin-agro-readme
+    tier: community-reported
+    type: source-code
+    url: https://github.com/AgRoboticsResearch/lerobot_robot_piper/blob/abf721d9e88ac822b18cb3413a75bb8cc0e3b34f/README.md
+    verified_on: 2026-10-24
+    summary: "Third-party Piper plugin README documents ACT deployment on the Piper via LeRobot async inference (--robot.type=piper --policy_type=act)."
+    quote: "ACT Policy Deployment (Async Inference)"

@@ -1,0 +1,10 @@
+id: openpi
+name: openpi
+maintainer: Physical Intelligence
+repo: Physical-Intelligence/openpi
+docs_url: https://github.com/Physical-Intelligence/openpi
+license: Apache-2.0
+current_version: main
+current_version_date: 2026-08-24
+versioning: none
+notes: "Physical Intelligence's official open-source release of π0, π0-FAST and π0.5 with open weights. No tagged releases; pin by commit."

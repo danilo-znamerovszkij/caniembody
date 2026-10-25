@@ -1,0 +1,73 @@
+id: tdmpc
+name: TD-MPC
+aliases: [Temporal Difference Learning for Model Predictive Control]
+family: rl
+summary: >-
+  Model-based reinforcement learning: a task-oriented latent dynamics model and terminal value function learned jointly
+  by temporal-difference learning, with MPPI trajectory optimisation in latent space at each decision step.
+authors: UC San Diego (Hansen, Wang, Su)
+paper_url: https://arxiv.org/abs/2203.04955
+backbone: Task-oriented latent dynamics model (TOLD) + terminal value function, MPPI planner
+action_output: other
+arch_source_ref: ev-tdmpc-paper-arch
+license: Apache-2.0 (LeRobot implementation)
+frameworks:
+  lerobot:
+    support: native
+    policy_type: tdmpc
+    docs_url: https://huggingface.co/docs/lerobot/policy_tdmpc_README
+    note: >-
+      Present at v0.3.2, the earliest tagged LeRobot release. `since` left blank: the only earlier PyPI release (0.1.0,
+      2024-03, a TD-MPC-centric prototype) was not inspected. Defaults: use_mpc true, horizon 5, n_action_steps 1.
+      action_output is "other": actions come from MPPI planning over the learned model, not a direct policy head.
+    source_ref: ev-lerobot-tdmpc-config
+requirements:
+  train:
+    vram_gb: {min: 2, max: 6}
+    batch_size: 8
+    condition: >-
+      Peak training VRAM at batch size 8 with AdamW (LeRobot default), "Light BC" group (act, vqbet, tdmpc) in the
+      LeRobot compute hardware guide; the guide groups tdmpc with the light BC policies by size. The guide calls its
+      figures indicative, order-of-magnitude numbers for picking hardware, not exact predictions. Precision not stated.
+    source_ref: ev-lerobot-hw-guide
+observation_space:
+  cameras: {min: 0, max: 1}
+  source_ref: ev-lerobot-tdmpc-config-features
+notes: "LeRobot's TD-MPC accepts at most one image, and it must be square."
+verified_on: 2026-10-24
+sources:
+  - id: ev-tdmpc-paper-arch
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2203.04955
+    date: 2022-03-09
+    verified_on: 2026-10-24
+    summary: TD-MPC learns a latent dynamics model and terminal value function by TD learning and plans with them.
+    quote: "a framework for data-driven MPC using a task-oriented latent dynamics model and terminal value function learned jointly by temporal difference (TD) learning."
+  - id: ev-lerobot-tdmpc-config
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/tdmpc/configuration_tdmpc.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Policy type string is `tdmpc`."
+    quote: '@PreTrainedConfig.register_subclass("tdmpc")'
+  - id: ev-lerobot-tdmpc-config-features
+    tier: upstream-documented
+    type: source-code
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/tdmpc/configuration_tdmpc.py
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: Feature validation allows at most one image and requires it to be square.
+    quote: 'f"{self.__class__.__name__} handles at most one image for now. Got image keys {self.image_features}."'
+  - id: ev-lerobot-hw-guide
+    tier: upstream-documented
+    type: official-docs
+    url: https://github.com/huggingface/lerobot/blob/v0.6.1/docs/source/hardware_guide.mdx
+    date: 2026-08-03
+    verified_on: 2026-10-24
+    versions: {lerobot: "0.6.1"}
+    summary: "Compute hardware guide: Light BC (`act`, `vqbet`, `tdmpc`) peak VRAM ~2–6GB at BS 8 with AdamW; figures are indicative."
+    quote: "| Light BC   | `act`, `vqbet`, `tdmpc`                     |                  ~2–6GB | Laptop GPU (RTX 3060), L4, A10G   |"

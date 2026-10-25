@@ -1,0 +1,34 @@
+robot: so100
+policy: act
+state: works
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-smolvla-paper-so100
+  inference_real:
+    state: works
+    evidence:
+    - ev-smolvla-paper-so100
+  teleop_record:
+    state: works
+    evidence:
+    - ev-smolvla-paper-datasets
+evidence:
+- id: ev-smolvla-paper-so100
+  tier: upstream-documented
+  type: paper
+  url: https://arxiv.org/html/2506.01844v1
+  date: '2025-06-02'
+  verified_on: '2026-10-24'
+  summary: 'SmolVLA paper (Hugging Face/LeRobot team), Table 3: real-world SO100 benchmark (pick-place, stacking, sorting) comparing ACT (single-task), pi0 3.5B and SmolVLA (multi-task).'
+  quote: 'Table 3: Real-world benchmarks (SO100). Success rate (%) across three tasks using policies trained in multi-task and single-task settings.'
+- id: ev-smolvla-paper-datasets
+  tier: upstream-documented
+  type: paper
+  url: https://arxiv.org/html/2506.01844v1
+  date: '2025-06-02'
+  verified_on: '2026-10-24'
+  summary: 'SmolVLA paper: real-world evaluation datasets were recorded on SO-100 (three tasks) and SO-101 (one task).'
+  quote: For real-world evaluation, we collected three datasets using the SO-100 robot arm

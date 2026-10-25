@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import { gitLog } from '../lib/data.ts';
+import { pageTitle } from '../lib/seo.ts';
+import { GH } from '../site.ts';
+const log = gitLog('data', 500);
+const byDate = Object.entries(Object.groupBy(log, (l) => l.date));
+---
+<Base title={pageTitle('Changelog: every data change, dated and attributed')} description="Every change to the robot policy compatibility data, generated from git history.">
+  <div class="wrap narrow">
+    <section class="ph">
+      <div class="eyebrow"><a href="/">Matrix</a><span>/</span><span>Changelog</span></div>
+      <h1>Changelog</h1>
+      <p class="lede">Generated from the git history of <a class="mono" href={`${GH}/commits/main/data`}>/data</a>. Every change is dated and attributed.</p>
+    </section>
+    {byDate.length ? byDate.map(([d, items]) => (
+      <section class="day"><h2 class="mono">{d}</h2>
+        <ul>{items!.map((l) => <li><a class="mono" href={`${GH}/commit/${l.hash}`}>{l.hash}</a> {l.subject} <span class="muted">· {l.author}</span></li>)}</ul>
+      </section>
+    )) : <p class="empty">No committed history yet.</p>}
+  </div>
+</Base>
+<style>
+  .day h2 { font-size: 13px; color: var(--fg-3); font-weight: 500; }
+  .day ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 13.5px; }
+</style>

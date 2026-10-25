@@ -1,0 +1,22 @@
+robot: ur5e
+policy: pi0-fast
+state: works-with-caveats
+framework: openpi
+caveats:
+  - "The evidence is the authors' own UR5e evaluation; openpi releases no UR5e π0-FAST checkpoint or UR5e training config."
+capabilities:
+  train:
+    state: works
+    evidence: [ev-fast-paper]
+  inference_real:
+    state: works
+    evidence: [ev-fast-paper]
+evidence:
+  - id: ev-fast-paper
+    tier: upstream-documented
+    type: paper
+    url: https://arxiv.org/abs/2501.09747
+    date: 2025-01-16
+    verified_on: 2026-10-24
+    summary: "The FAST paper trains and evaluates π0-FAST on a single-arm UR5e table-bussing task and evaluates grocery bagging on a UR5e out of the box."
+    quote: "This task requires a single UR5e robot arm to clean a table by bussing objects (a mixture of trash, plates, and dishes) into a trash can or bussing bin."

@@ -1,0 +1,41 @@
+robot: so100
+policy: evo1
+state: works
+framework: evo-1
+capabilities:
+  train:
+    state: works
+    notes: Also trainable through LeRobot's native evo1 policy (community checkpoint).
+    evidence:
+    - ev-evo1-paper-so100
+    - ev-hub-beilinghamburger-evo1-so100
+  inference_real:
+    state: works
+    evidence:
+    - ev-evo1-paper-so100
+    - ev-evo1-readme-so100-so101
+evidence:
+- id: ev-evo1-paper-so100
+  tier: upstream-documented
+  type: paper
+  url: https://arxiv.org/html/2511.04555v2
+  date: '2025-12-05'
+  verified_on: '2026-10-24'
+  summary: 'Evo-1 paper (v2), appendix ''Deployment on LeRobot SO-100 robot'': Evo-1 deployed on an SO-100 for a real-world cube pick-and-place task.'
+  quote: We deploy our policy on the LeRobot SO-100 platform, a compact desktop manipulator designed for fine-grained tabletop manipulation.
+- id: ev-evo1-readme-so100-so101
+  tier: upstream-documented
+  type: source-code
+  url: https://github.com/MINT-SJTU/Evo-1/blob/5fd14b015013c4fd0aacf5f8f48f868ca9b870a2/README.md
+  date: '2026-08-18'
+  verified_on: '2026-10-24'
+  summary: 'Official Evo-1 repo README: SO100/SO101 inference via the LeRobot framework (instructions on its evo1-lerobot branch).'
+  quote: Added Evo-1 inference in the LeRobot framework for SO100/SO101
+- id: ev-hub-beilinghamburger-evo1-so100
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/Beilinghamburger/evo1_so100_vla
+  date: '2025-12-11'
+  verified_on: '2026-10-24'
+  summary: config.json type=evo1; train_config.json dataset.repo_id=Beilinghamburger/so100_vla_dataset, whose meta/info.json robot_type=so100_follower (100 episodes). Trained with LeRobot's native evo1
+    policy.

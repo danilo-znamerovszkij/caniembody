@@ -1,0 +1,20 @@
+robot: aloha
+policy: diffusion
+state: works-with-caveats
+framework: droid-policy-learning
+caveats:
+  - "Community-reported only; not documented upstream or maintainer-tested."
+  - "Run by the OpenVLA-OFT authors as a from-scratch baseline using the DROID Diffusion Policy implementation (language-conditioned, modified for bimanual control), not LeRobot's diffusion policy."
+  - "Struggled on the 'put X into pot' task, which had the largest training set."
+capabilities:
+  train: {state: works, evidence: [ev-oft-paper]}
+  inference_real: {state: works, evidence: [ev-oft-paper]}
+evidence:
+  - id: ev-oft-paper
+    tier: community-reported
+    type: paper
+    url: https://arxiv.org/abs/2502.19645
+    date: 2025-02-27
+    verified_on: 2026-10-24
+    summary: "OpenVLA-OFT paper trains Diffusion Policy from scratch on four real tasks on the original ALOHA (two ViperX 300 S arms) and reports it matching or exceeding RDT-1B on clothes folding and scooping."
+    quote: "Diffusion Policy demonstrates stronger capabilities, matching or exceeding RDT-1B’s reliability on the clothes folding and scooping tasks. However, it struggles with the “put X into pot” task which has a larger training dataset"

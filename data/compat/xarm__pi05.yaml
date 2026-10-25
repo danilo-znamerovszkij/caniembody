@@ -1,0 +1,17 @@
+robot: xarm
+policy: pi05
+state: partial
+partial_scope: "Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source."
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence: [ev-hub-ys903-pi05]
+evidence:
+  - id: ev-hub-ys903-pi05
+    tier: community-reported
+    type: hub-checkpoint
+    url: https://huggingface.co/ys903/pi05_xarm6_pick_place_50ep
+    date: 2026-09-03
+    verified_on: 2026-10-24
+    summary: "config.json type=pi05 (pretrained_path lerobot/pi05_base); train_config dataset ys903/xarm6_pick_place_50_episodes (50 episodes), whose meta/info.json robot_type='UFACTORY Robot' (xArm6). Card lists LeRobot version 0.6.2, i.e. an unreleased main build. Auto-generated card, no rollout results."

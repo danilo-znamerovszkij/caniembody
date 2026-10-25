@@ -1,0 +1,26 @@
+robot: bi-so
+policy: multitask-dit
+state: partial
+partial_scope: Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source.
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-chihhan-dit-biso101
+    - ev-hub-notstrober-dit-biso
+evidence:
+- id: ev-hub-chihhan-dit-biso101
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/ChihHanShen/multitask-dit-so101
+  date: '2026-09-08'
+  verified_on: '2026-10-24'
+  summary: config.json type=multi_task_dit; train_config.json dataset.repo_id=ChihHanShen/bimanual-so101-pickvials-real, whose meta/info.json robot_type=bi_so101_follower (101 episodes).
+- id: ev-hub-notstrober-dit-biso
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/notstrober/desk-stationery-to-drawer-bimanual_v2-multitask-dit-bs24-50k
+  date: '2026-05-14'
+  verified_on: '2026-10-24'
+  summary: config.json type=multi_task_dit; train_config.json dataset.repo_id=notstrober/desk-stationery-to-drawer-bimanual_v2, whose meta/info.json robot_type=bi_so_follower (356 episodes).

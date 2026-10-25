@@ -1,0 +1,106 @@
+---
+import Base from '../layouts/Base.astro';
+import { loadAll, stats, gridRobots, gridPolicies, STATES, TIERS, STALE_DAYS } from '../lib/data.ts';
+import { STATE_META, TIER_META } from '../lib/ui.ts';
+import { pageTitle, crumbs } from '../lib/seo.ts';
+import { SITE } from '../site.ts';
+const all = loadAll();
+const s = stats();
+const R = gridRobots(), P = gridPolicies();
+const bins = [[0, 30], [31, 90], [91, 180], [181, 365], [366, Infinity]] as const;
+const hist = bins.map(([a, b]) => ({ label: b === Infinity ? `>${a - 1} d` : `${a}–${b} d`, n: s.ages.filter((x) => x >= a && x <= b).length }));
+const hmax = Math.max(1, ...hist.map((h) => h.n));
+const emptyRobots = R.filter((r) => !all.compat.some((c) => c.robot === r.id));
+const emptyPolicies = P.filter((p) => !all.compat.some((c) => c.policy === p.id));
+const noRuns = all.compute.filter((c) => !all.runs.some((r) => r.compute === c.id));
+const outOfGrid = [...all.robots.filter((r) => r.in_grid === false)];
+const OUT = [
+  ['Autonomous driving stacks', 'Different problem, different evaluation culture, mature dedicated references exist.'],
+  ['Drones / UAV', 'Flight-control policies share almost no interface with manipulation policies.'],
+  ['Industrial PLC integration', 'Deterministic control, not learned policies.'],
+  ['Surgical robotics', 'Regulated; no public policy configurations to verify.'],
+  ['Soft robotics', 'No standard policy interface exists yet.'],
+  ['Closed commercial humanoids (Optimus, Figure, 1X NEO)', 'No public configuration to verify. See /closed-humanoids.'],
+  ['Benchmark success rates of any kind', 'This is a compatibility reference, not a leaderboard. Use LeRobot eval, RoboArena or vla-eval.'],
+  ['Policies only on LeRobot main (unreleased)', 'FineART-VLA, LingBot-VLA 2.0, Wall-OSS-0.5, DM05, LaWAM, FLUX 3 Action are tracked once released.'],
+];
+const pct = (n: number, d: number) => (d ? (100 * n) / d : 0);
+---
+<Base title={pageTitle('Coverage: what this matrix knows and what it does not')}
+  description={`${s.known} of ${s.total} robot×policy cells have sourced evidence (${s.pctKnown.toFixed(0)}%). ${s.pctStale.toFixed(0)}% stale. What is deliberately out of scope, and where coverage is weak.`}
+  jsonld={[crumbs([['Matrix', '/'], ['Coverage', '/coverage']])]}>
+  <div class="wrap narrow">
+    <section class="ph">
+      <div class="eyebrow"><a href="/">Matrix</a><span>/</span><span>Coverage</span></div>
+      <h1>Coverage</h1>
+      <p class="lede">{SITE.scope}. {s.pctKnown.toFixed(0)}% of the grid has evidence and the rest is unknown. This page is generated from the data at build time.</p>
+      <p class="status-line"><span>Last full review <b>{s.last_full_review}</b></span><span>dataset <b>{s.dataset_version}</b></span></p>
+    </section>
+
+    <div class="stats">
+      <div><b>{s.total}</b><span>grid cells ({s.robots} robots × {s.policies} policies)</span></div>
+      <div><b>{s.known}</b><span>with evidence ({s.pctKnown.toFixed(1)}%)</span></div>
+      <div><b>{s.pctT12.toFixed(0)}%</b><span>of filled cells have T1 or T2 evidence</span></div>
+      <div><b>{s.inferred}</b><span>of the unknown cells are untested but have both sides in LeRobot (inferred, not evidence)</span></div>
+      <div><b>{s.stale}</b><span>stale (&gt;{STALE_DAYS} days) · {s.drift} version drift</span></div>
+      <div><b>{all.runs.length}</b><span>measured runs across {new Set(all.runs.map((r) => r.compute)).size} compute targets</span></div>
+    </div>
+
+    <h2>Cells by state</h2>
+    <div class="bar" role="img" aria-label={STATES.map((k) => `${STATE_META[k].label} ${s.byState[k]}`).join(', ')}>
+      {STATES.map((k) => s.byState[k] ? <span class="seg" data-s={k} style={`flex:${s.byState[k]}`} title={`${STATE_META[k].label}: ${s.byState[k]}`}></span> : null)}
+    </div>
+    <table class="tbl mini">
+      <tbody>{STATES.map((k) => <tr><td><span class="st" data-s={k} aria-hidden="true">{STATE_META[k].glyph}</span> {STATE_META[k].label}</td><td class="num">{s.byState[k]}</td><td class="num muted">{pct(s.byState[k], s.total).toFixed(1)}%</td></tr>)}</tbody>
+    </table>
+
+    <h2>Filled cells by highest evidence tier</h2>
+    <table class="tbl mini">
+      <tbody>{TIERS.map((t) => <tr><td><span class="tier" data-t={t}>{TIER_META[t].short} · {TIER_META[t].label}</span></td><td class="num">{s.byTier[t]}</td><td class="small muted">{TIER_META[t].desc}</td></tr>)}</tbody>
+    </table>
+
+    <h2>Evidence age</h2>
+    <div class="hist" role="img" aria-label={hist.map((h) => `${h.label}: ${h.n}`).join(', ')}>
+      {hist.map((h) => <div class="col"><span class="n mono">{h.n}</span><span class="b" style={`height:${(100 * h.n) / hmax}%`} data-stale={h.label.startsWith('181') || h.label.startsWith('>') ? '' : undefined}></span><span class="l mono">{h.label}</span></div>)}
+    </div>
+
+    <h2 id="weak">Known-weak areas</h2>
+    <ul class="prose">
+      <li><strong>Tactile and force sensing</strong> is thin because the data barely exists: few public policies consume tactile input, and almost no runs are published.</li>
+      <li><strong>Deployment vs training.</strong> Many cells are evidenced only by a public checkpoint (training works); on-robot inference is rarely documented by a primary source. Those cells are <em>partial</em>, not <em>works</em>.</li>
+      <li><strong>SO-100 vs SO-101 attribution.</strong> Since LeRobot v0.6, both arms share one config class and new datasets record <span class="mono">robot_type=so_follower</span>, so a checkpoint trained on them cannot be attributed to either arm. Only datasets recorded with the older <span class="mono">so100_follower</span> / <span class="mono">so101_follower</span> strings count as evidence; some real SO usage is therefore not shown.</li>
+      <li><strong>Edge measurements</strong> come from few independent sources. Treat single-source Jetson numbers as indicative of that exact runtime, precision, camera count and power mode.</li>
+      {emptyRobots.length > 0 && <li><strong>Robots with no evidence yet:</strong> {emptyRobots.map((r, i) => <>{i ? ', ' : ''}<a href={`/robot/${r.id}`}>{r.name}</a></>)}.</li>}
+      {emptyPolicies.length > 0 && <li><strong>Policies with no robot evidence yet:</strong> {emptyPolicies.map((p, i) => <>{i ? ', ' : ''}<a href={`/policy/${p.id}`}>{p.name}</a></>)}.</li>}
+      {noRuns.length > 0 && <li><strong>Compute targets with no measured runs:</strong> {noRuns.map((c, i) => <>{i ? ', ' : ''}<a href={`/compute/${c.id}`}>{c.name}</a></>)}.</li>}
+    </ul>
+
+    <h2 id="out-of-scope">What this does not cover</h2>
+    <div class="tbl-wrap"><table class="tbl">
+      <tbody>
+        {OUT.map(([what, why]) => <tr><td><strong>{what}</strong></td><td class="small">{why}</td></tr>)}
+        {outOfGrid.map((r) => <tr><td><a href={`/robot/${r.id}`}><strong>{r.name}</strong></a></td><td class="small">{r.out_of_grid_reason}</td></tr>)}
+      </tbody>
+    </table></div>
+    <p class="small muted" style="margin-top:12px">Scope expands beyond LeRobot (ROS 2, openpi-native, Isaac Lab) only after grid coverage passes 70%, and that change will be announced here.</p>
+  </div>
+</Base>
+<style>
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden; }
+  .stats div { background: var(--bg-elev); padding: 14px; display: grid; gap: 2px; }
+  .stats b { font: 600 22px var(--mono); letter-spacing: -.02em; }
+  .stats span { font-size: 12px; color: var(--fg-3); }
+  .bar { display: flex; height: 12px; border-radius: 99px; overflow: hidden; gap: 2px; margin-bottom: 12px; }
+  .seg { min-width: 3px; background: var(--fg-4); }
+  .seg[data-s='works'] { background: var(--works); } .seg[data-s='works-with-caveats'] { background: var(--caveat); }
+  .seg[data-s='partial'] { background: var(--partial); } .seg[data-s='not-supported'] { background: var(--nosupport); }
+  .seg[data-s='planned'] { background: var(--planned); } .seg[data-s='unknown'] { background: var(--line-2); }
+  .tbl.mini { width: auto; min-width: 320px; }
+  .tbl.mini td { padding: 6px 16px 6px 0; border-bottom: 1px solid var(--line); }
+  .hist { display: flex; gap: 10px; height: 160px; align-items: stretch; }
+  .hist .col { flex: 1; display: grid; grid-template-rows: auto 1fr auto; text-align: center; gap: 4px; }
+  .hist .b { align-self: end; background: var(--works); border-radius: 4px 4px 0 0; min-height: 2px; }
+  .hist .b[data-stale] { background: var(--partial); }
+  .hist .n, .hist .l { font-size: 11.5px; color: var(--fg-3); }
+  ul.prose { padding-left: 18px; font-size: 14px; }
+</style>

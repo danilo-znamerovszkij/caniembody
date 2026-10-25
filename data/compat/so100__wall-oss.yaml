@@ -1,0 +1,18 @@
+robot: so100
+policy: wall-oss
+state: partial
+partial_scope: Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source.
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-sosolaris-wallx-so100
+evidence:
+- id: ev-hub-sosolaris-wallx-so100
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/SoSolaris/wallx_socks_clean
+  date: '2026-02-04'
+  verified_on: '2026-10-24'
+  summary: config.json type=wall_x; train_config.json dataset.repo_id=SoSolaris/socks_clean, whose meta/info.json robot_type=so100_follower (200 episodes).

@@ -1,0 +1,31 @@
+id: rtx-5090
+name: NVIDIA GeForce RTX 5090
+class: consumer-gpu
+memory_gb: 32
+arch: Blackwell
+ai_tops: 3352 AI TOPS
+power_w: 575 W (total graphics power)
+notes: NVIDIA's AI TOPS headline is an FP4, sparsity-assisted figure, not FP16/BF16 throughput.
+verified_on: '2026-10-24'
+sources:
+- id: ev-nvidia-rtx5090-specs
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/
+  verified_on: '2026-10-24'
+  summary: 'RTX 5090 full specs: 3352 AI TOPS (5th-gen Tensor Cores), 32 GB GDDR7.'
+  quote: 'Tensor Cores (AI) 5th Generation 3352 AI TOPS Ray Tracing Cores 4th Generation 318 TFLOPS Boost Clock (GHz) 2.41 Base Clock (GHz) 2.01 Memory Specs: Standard Memory Config 32 GB GDDR7'
+- id: ev-nvidia-rtx5090-power
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/
+  verified_on: '2026-10-24'
+  summary: 'RTX 5090 full specs: total graphics power 575 W.'
+  quote: Total Graphics Power (W) 575
+- id: ev-nvidia-rtx5090-arch
+  tier: upstream-documented
+  type: vendor-docs
+  url: https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/
+  verified_on: '2026-10-24'
+  summary: 'RTX 5090 full specs: NVIDIA architecture Blackwell.'
+  quote: NVIDIA Architecture Blackwell

@@ -1,0 +1,26 @@
+robot: bi-so
+policy: smolvla
+state: partial
+partial_scope: Training evidenced by public checkpoint(s); on-robot inference not documented by a primary source.
+framework: lerobot
+capabilities:
+  train:
+    state: works
+    evidence:
+    - ev-hub-tinkhireeva-smolvla-biso101
+    - ev-hub-wuc1-smolvla-biso
+evidence:
+- id: ev-hub-tinkhireeva-smolvla-biso101
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/tinkhireeva/bimanual-so101-stack-yellow-ring-fast-V2-smolvla
+  date: '2025-10-06'
+  verified_on: '2026-10-24'
+  summary: config.json type=smolvla; train_config.json dataset.repo_id=nbirukov/bimanual-so101-stack-yellow-ring-fast-V2, whose meta/info.json robot_type=bi_so101_follower (300 episodes).
+- id: ev-hub-wuc1-smolvla-biso
+  tier: community-reported
+  type: hub-checkpoint
+  url: https://huggingface.co/wuc1/bi_so101_flatten-and-fold-the-rag-0413-model
+  date: '2026-04-13'
+  verified_on: '2026-10-24'
+  summary: config.json type=smolvla; train_config.json dataset.repo_id=wuc1/bi_so101_flatten-and-fold-the-rag-0331, whose meta/info.json robot_type=bi_so_follower (51 episodes).
